@@ -23,6 +23,11 @@ import {
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
+
+import {MatTableModule} from '@angular/material/table';
+
+
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
