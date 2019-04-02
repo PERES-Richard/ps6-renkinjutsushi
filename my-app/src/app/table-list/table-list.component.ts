@@ -30,6 +30,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./table-list.component.css']
 })
 
+// app.controller('registrosController', function($scope, $http) {
+//   $http.get('/getData').then(function(data) {
+//       $scope.registros = data;
+//   });
+// });
+
 export class TableListComponent {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
