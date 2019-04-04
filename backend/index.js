@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 
 app.use((request, response, next) => {
-  console.log(request.headers)
+  // console.log(request.headers)
   next()
 })
 
@@ -17,9 +17,11 @@ app.get('/', (request, response) => {
 })
 
 app.get('/getData', function (req, res) {
-  var param = req.params
-  // TODO les params
-  res.send({param})
+
+  var urlQuery = req.query;
+
+  var hasParams = Object.keys(urlQuery).length > 0
+
   var mysql = require('mysql');
   var con = mysql.createConnection({ 
     port: "3333",
@@ -30,12 +32,32 @@ app.get('/getData', function (req, res) {
   
   con.connect(function(err) {
     if (err) throw err;
-    con.query("SELECT * FROM test", function (err, result, fields) {
+    var queryStr = "SELECT * FROM test";
+
+    con.query(queryStr, function (err, result, fields) {
+      if (err) throw err;
+      console.log(result);
+    });
+
+    if(hasParams) {
+      queryStr += " WHERE "
+
+      for(i = 0; i < Object.keys(urlQuery).length; i++)
+
+        if(Array.isArray(Object.values(urlQuery)[i])) {
+          queryStr += Object.keys(urlQuery)[i] + " in ( ? ) and ";
+        }
+        else queryStr += Object.keys(urlQuery)[i] + " like ? and "
+  
+      queryStr = queryStr.substring(0, queryStr.length-4)
+      console.log(queryStr)
+    }
+
+    con.query(queryStr, Object.values(urlQuery), function (err, result, fields) {
       if (err) throw err;
       console.log(result);
       res.send({result})
     });
-
   });
 
   
