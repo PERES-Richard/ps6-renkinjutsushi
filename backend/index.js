@@ -32,7 +32,7 @@ app.get('/getData', function (req, res) {
   
   con.connect(function(err) {
     if (err) throw err;
-    var queryStr = "SELECT * FROM test";
+    var queryStr = "SELECT * FROM etudiant";
 
     con.query(queryStr, function (err, result, fields) {
       if (err) throw err;
@@ -56,7 +56,18 @@ app.get('/getData', function (req, res) {
     con.query(queryStr, Object.values(urlQuery), function (err, result, fields) {
       if (err) throw err;
       console.log(result);
-      res.send({result})
+      var affichage = JSON.stringify(result)
+
+      var idSpe = result[0].specialite
+      console.log(idSpe)
+      // res.send(result);
+
+      con.query("select * from specialite where idSpecialite = ?", idSpe , function (err, result, fields) {
+        if (err) throw err;
+        console.log(result);
+        affichage += "\n\n\n" + JSON.stringify(result)
+        res.send(affichage)
+      });
     });
   });
 
