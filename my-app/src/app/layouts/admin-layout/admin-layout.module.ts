@@ -18,7 +18,7 @@ import {
   MatRippleModule,
   MatFormFieldModule,
   MatTooltipModule,
-  MatSelectModule, MatTableModule
+  MatSelectModule, MatTableModule, MatSortModule, MatPaginatorModule
 } from '@angular/material';
 @NgModule({
   imports: [
@@ -32,6 +32,8 @@ import {
     MatSelectModule,
     MatTooltipModule,
     MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
   declarations: [
     DashboardComponent,

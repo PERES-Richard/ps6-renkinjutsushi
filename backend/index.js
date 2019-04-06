@@ -1,14 +1,27 @@
 const express = require('express')
 const app = express()
+var cors = require('cors')
+var mysql = require('mysql');
+var con = mysql.createConnection({
+  port: "3333",
+  user: 'ps6_team',
+  password: 'ps6_sushi',
+  database: 'renkinjutsushi',
+});
 
-app.use((request, response, next) => {
-  // console.log(request.headers)
-  next()
-})
+app.use(cors());
 
-app.use((request, response, next) => {
-  next()
-})
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header(
+    "Access-Control-Allow-Header",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+
+  next();
+});
+
 
 app.get('/', (request, response) => {
   response.send(
@@ -16,63 +29,74 @@ app.get('/', (request, response) => {
   )
 })
 
+app.get('/getData/specialite', function (req, res) {
+      con.query("select * from specialite", function (err, result, fields) {
+        if (err) {
+          console.log('Error 2 =\n', err);
+        } else {
+          // console.log(result);
+          res.status(200).json(result);
+        }
+      });
+});
+
+
+app.get('/getData/pays', function (req, res) {
+  con.query("select id as idPays, nom_fr_fr as nomPays from pays", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.1 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+
+app.get('/getData/etat', function (req, res) {
+  con.query("select * from etat", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+
 app.get('/getData', function (req, res) {
 
   var urlQuery = req.query;
 
   var hasParams = Object.keys(urlQuery).length > 0
 
-  var mysql = require('mysql');
-  var con = mysql.createConnection({ 
-    port: "3333",
-    user      : 'ps6_team',
-    password  : 'ps6_sushi',
-    database  : 'renkinjutsushi',
-  });
-  
-  con.connect(function(err) {
-    if (err) throw err;
-    var queryStr = "SELECT * FROM etudiant";
+  var queryStr = "SELECT * FROM etudiant"
 
-    con.query(queryStr, function (err, result, fields) {
-      if (err) throw err;
-      console.log(result);
-    });
+  if (hasParams) {
+    queryStr += " WHERE "
 
-    if(hasParams) {
-      queryStr += " WHERE "
+    for (i = 0; i < Object.keys(urlQuery).length; i++)
 
-      for(i = 0; i < Object.keys(urlQuery).length; i++)
+      if (Array.isArray(Object.values(urlQuery)[i])) {
+        queryStr += Object.keys(urlQuery)[i] + " in ( ? ) and ";
+      }
+    else queryStr += Object.keys(urlQuery)[i] + " like ? and "
 
-        if(Array.isArray(Object.values(urlQuery)[i])) {
-          queryStr += Object.keys(urlQuery)[i] + " in ( ? ) and ";
-        }
-        else queryStr += Object.keys(urlQuery)[i] + " like ? and "
-  
-      queryStr = queryStr.substring(0, queryStr.length-4)
-      console.log(queryStr)
+    queryStr = queryStr.substring(0, queryStr.length - 4)
+    console.log(queryStr)
+  }
+
+  con.query(queryStr, Object.values(urlQuery), function (err, result, fields) {
+    if (err) {
+      console.log('Error 3 =\n');
+      // console.log(err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
     }
-
-    con.query(queryStr, Object.values(urlQuery), function (err, result, fields) {
-      if (err) throw err;
-      console.log(result);
-      var affichage = JSON.stringify(result)
-
-      var idSpe = result[0].specialite
-      console.log(idSpe)
-      // res.send(result);
-
-      con.query("select * from specialite where idSpecialite = ?", idSpe , function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-        affichage += "\n\n\n" + JSON.stringify(result)
-        res.send(affichage)
-      });
-    });
   });
-
-  
 });
 
 app.listen(3000)
-console.log("Saaba-sama wa sanzen no pooto o kiiteru")
+console.log("Saaba-sama wa sanzen no pooto o kiiteru");

@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppRoutingModule } from './app.routing';
@@ -33,6 +35,8 @@ import {MatTableModule} from '@angular/material/table';
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    BrowserModule,
+    HttpClientModule,
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
