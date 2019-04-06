@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
 import { TableListService, Etudiant, EtudiantSimp } from './table-list.service';
+import { filter } from 'rxjs-compat/operator/filter';
 
 
 @Component({
@@ -34,6 +35,12 @@ export class TableListComponent implements OnInit {
     this.tableListService.getEtudiantObs().subscribe(rep => {
 
       const etuS: EtudiantSimp[] = rep;
+      // console.log(etuS);
+      // etuS.forEach(etuST => {
+      //   if (etuST.commentaire === null) {
+      //     etuST.commentaire = '';
+      //   }
+      // })
       this.etudiant = []
 
       this.tableListService.getSpecialiteObs().subscribe(spe => {
@@ -47,7 +54,7 @@ export class TableListComponent implements OnInit {
                 idEtudiant: etu.idEtudiant,
                 nom: etu.nom,
                 prenom: etu.prenom,
-                filiere: etu.filiere,
+                promo: etu.promo,
                 specialite: spe.find(function (element) {
                   return element.idSpecialite === etu.specialite;
                 }),
@@ -61,7 +68,8 @@ export class TableListComponent implements OnInit {
                 pays: pays.find(function (element) {
                   return element.idPays === etu.pays;
                 }),
-                obtenuVia: etu.obtenuVia
+                obtenuVia: etu.obtenuVia,
+                annee: etu.annee
               }
 
               if (etudiant.pays === undefined) {
@@ -70,7 +78,7 @@ export class TableListComponent implements OnInit {
                   nomPays: null
                 };
               }
-              // console.log(etudiant);
+              console.log(etudiant);
               this.etudiant.push(etudiant);
             });
 
@@ -81,30 +89,36 @@ export class TableListComponent implements OnInit {
 
             this.dataSource.sortingDataAccessor = (item, property) => {
 
-              console.log(item, property);
+              // console.log(item, property);
               // return new Date(item.date);
 
               switch (property) {
-
                 case 'specialite': {
-                  console.log(property);
                   return item.specialite.nomSpecialite;
                 }
-
                 case 'etat': {
-                  console.log(property);
                   return item.etat.nomEtat;
                 }
-
                 case 'pays': {
-                  console.log(property);
                   return item.pays.nomPays;
                 }
-
                 default: {
                   return item[property];
                 }
               }
+            };
+
+            this.paginator._intl.itemsPerPageLabel = 'Nombre d\'étudiants par page';
+            this.paginator._intl.getRangeLabel = function (page, pageSize, length) {
+              if (length === 0 || pageSize === 0) {
+                return '0 sur ' + length;
+              }
+              length = Math.max(length, 0);
+              const startIndex = page * pageSize;
+              const endIndex = startIndex < length ?
+                Math.min(startIndex + pageSize, length) :
+                startIndex + pageSize;
+              return startIndex + 1 + ' - ' + endIndex + ' sur ' + length;
             };
 
             this.dataSource.paginator = this.paginator;
@@ -118,21 +132,34 @@ export class TableListComponent implements OnInit {
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filterPredicate = (item, filtre) => {
+      let str = item.nom + ' ' +
+        item.prenom + ' ' +
+        item.commentaire + ' ' +
+        item.promo + ' ' +
+        item.semestresRestants.toString() + ' ' +
+        item.obtenuVia + ' ' +
+        item.specialite.nomSpecialite + ' ' +
+        item.etat.nomEtat + ' ' +
+        item.pays.nomPays + ' ' +
+        item.dateDebut + ' ' + // TODO date ?
+        item.dateDebut + ' ' + // TODO date ?
+        item.annee;
+
+      str = str.replace(/null/g, '').trim().toLowerCase();
+      const strArr = str.split(' ');
+
+      // console.log(strArr);
+      let matched = false;
+      strArr.forEach(strT => {
+        if (strT.match(filtre.trim().toLocaleLowerCase())) {
+          matched = true;
+        }
+      });
+      return matched;
+    }
   }
 
-  constructor(private tableListService: TableListService) {
-    //   this.tableListService.getEtudiant()
-    //     .subscribe(resp => {
-    //       const keys = resp.headers.keys();
-    //       this.headers = keys.map(key =>
-    //         `${key}: ${resp.headers.get(key)}`);
-
-    //       this.etudiant = [ ... resp.body ];
-    //       console.log(this.etudiant)
-
-    //       this.dataSource = new MatTableDataSource<Etudiant>(this.etudiant);
-    //       // this.dataSource = this.etudiant
-    //     });
-  }
+  constructor(private tableListService: TableListService) { }
 
 }

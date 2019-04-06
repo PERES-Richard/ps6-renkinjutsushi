@@ -9,7 +9,7 @@ export interface Etudiant {
   idEtudiant: number,
   nom: string,
   prenom: string,
-  filiere: string,
+  promo: string,
   specialite: Specialite,
   // specialite: number,
   commentaire: string,
@@ -20,14 +20,15 @@ export interface Etudiant {
   dateFin: Date,
   pays: Pays,
   // pays: number,
-  obtenuVia: string
+  obtenuVia: string,
+  annee: number
 }
 
 export interface EtudiantSimp {
   idEtudiant: number,
   nom: string,
   prenom: string,
-  filiere: string,
+  promo: string,
   // specialite: Specialite,
   specialite: number,
   commentaire: string,
@@ -38,7 +39,8 @@ export interface EtudiantSimp {
   dateFin: Date,
   // pays: Pays,
   pays: number,
-  obtenuVia: string
+  obtenuVia: string,
+  annee: number
 }
 
 export interface Specialite {
