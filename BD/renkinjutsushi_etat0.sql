@@ -16,28 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `specialite`
+-- Table structure for table `etat`
 --
 
-DROP TABLE IF EXISTS `specialite`;
+DROP TABLE IF EXISTS `etat`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `specialite` (
-  `idSpecialite` int(11) NOT NULL AUTO_INCREMENT,
-  `nomSpecialite` varchar(45) NOT NULL,
-  `envisagee` tinyint(4) NOT NULL,
-  PRIMARY KEY (`idSpecialite`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `etat` (
+  `idEtat` int(11) NOT NULL AUTO_INCREMENT,
+  `nomEtat` varchar(45) NOT NULL,
+  `degre` int(11) NOT NULL,
+  PRIMARY KEY (`idEtat`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='degré :\n0 = validé\n1 = en cours\n2 = non validé\n3 = non validé problème';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `specialite`
+-- Dumping data for table `etat`
 --
 
-LOCK TABLES `specialite` WRITE;
-/*!40000 ALTER TABLE `specialite` DISABLE KEYS */;
-INSERT INTO `specialite` VALUES (1,'AL',1),(2,'IHM',1);
-/*!40000 ALTER TABLE `specialite` ENABLE KEYS */;
+LOCK TABLES `etat` WRITE;
+/*!40000 ALTER TABLE `etat` DISABLE KEYS */;
+INSERT INTO `etat` VALUES (1,'Non validé',2),(2,'En cours de validation',1),(3,'Validé',0);
+/*!40000 ALTER TABLE `etat` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-04 13:34:28
+-- Dump completed on 2019-04-08 18:37:10

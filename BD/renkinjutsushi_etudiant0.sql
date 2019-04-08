@@ -29,24 +29,22 @@ CREATE TABLE `etudiant` (
   `photo` blob,
   `promo` varchar(3) NOT NULL DEFAULT 'SI3',
   `specialite` int(11) NOT NULL,
-  `commentaire` varchar(255) DEFAULT NULL,
+  `commentaire` varchar(255) DEFAULT '',
   `etat` int(11) NOT NULL DEFAULT '1',
   `semestresRestants` int(11) NOT NULL DEFAULT '8',
   `dateDebut` datetime DEFAULT NULL,
   `dateFin` datetime DEFAULT NULL,
   `pays` int(10) unsigned DEFAULT NULL,
-  `obtenuVia` varchar(45) DEFAULT NULL,
+  `obtenuVia` varchar(45) DEFAULT '',
   `annee` int(11) NOT NULL DEFAULT '2018',
   PRIMARY KEY (`idEtudiant`),
   KEY `_idx` (`etat`),
   KEY `paysEtu_idx` (`pays`),
-  KEY `promoEtu_idx` (`promo`),
   KEY `specialiteEtu_idx` (`specialite`),
   CONSTRAINT `etatEtu` FOREIGN KEY (`etat`) REFERENCES `etat` (`idEtat`),
   CONSTRAINT `paysb` FOREIGN KEY (`pays`) REFERENCES `pays` (`id`),
-  CONSTRAINT `promoEtu` FOREIGN KEY (`promo`) REFERENCES `promo` (`idPromo`),
   CONSTRAINT `specialiteEtu` FOREIGN KEY (`specialite`) REFERENCES `specialite` (`idSpecialite`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -55,7 +53,7 @@ CREATE TABLE `etudiant` (
 
 LOCK TABLES `etudiant` WRITE;
 /*!40000 ALTER TABLE `etudiant` DISABLE KEYS */;
-INSERT INTO `etudiant` VALUES (1,'Peres','Richard',NULL,'SI3',1,NULL,1,8,NULL,NULL,NULL,NULL,2018),(2,'Colomban','Thomas',NULL,'SI3',2,NULL,1,8,NULL,NULL,NULL,NULL,2018);
+INSERT INTO `etudiant` VALUES (1,'Peres','Richard',NULL,'SI3',1,'Le boss',3,0,'2018-05-14 00:00:00','2019-05-14 00:00:00',112,'Contact',2018),(2,'Colomban','Thomas',NULL,'SI4',2,'nulman',2,7,NULL,NULL,4,'',2019),(3,'Sanchez','Ricardo',NULL,'SI5',3,'issou',1,8,NULL,NULL,69,'',2018);
 /*!40000 ALTER TABLE `etudiant` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -68,4 +66,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-04 13:34:28
+-- Dump completed on 2019-04-08 18:37:11
