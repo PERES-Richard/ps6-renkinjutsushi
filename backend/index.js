@@ -79,7 +79,6 @@ app.get('/getData', function (req, res) {
     for (i = 0; i < Object.keys(urlQuery).length; i++)
 
       switch (Object.keys(urlQuery)[i]) {
-// PROMO
         case 'pays':
           {
             queryStr += 'pays.nom_fr_fr';
@@ -111,8 +110,8 @@ app.get('/getData', function (req, res) {
           {
             queryStr += 'etu.';
             if (Array.isArray(Object.values(urlQuery)[i])) {
-              queryStr += " in ( ? ) and ";
-            } else queryStr += " like ? and ";
+              queryStr += Object.keys(urlQuery)[i] + " in ( ? ) and ";
+            } else queryStr +=  Object.keys(urlQuery)[i] + " like ? and ";
             break;
           }
       }

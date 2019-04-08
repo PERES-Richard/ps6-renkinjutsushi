@@ -27,8 +27,6 @@ export class TableListComponent implements OnInit {
 
 
   ngOnInit() {
-    // ?prenom[]=richard&prenom[]=Thomas
-    console.log('url = ', this.route.snapshot.queryParams);
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
       const etuS: EtudiantSimp[] = rep;
@@ -75,7 +73,7 @@ export class TableListComponent implements OnInit {
                   nomPays: null
                 };
               }
-              // console.log(etudiant);
+              console.log(etudiant);
               this.etudiant.push(etudiant);
             });
 
