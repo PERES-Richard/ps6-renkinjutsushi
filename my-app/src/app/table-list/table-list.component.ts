@@ -19,7 +19,19 @@ export class TableListComponent implements OnInit {
   error: any;
   headers: string[];
 
-  displayedColumns: string[] = ['nom', 'prenom', 'promo', 'specialite', 'etat', 'pays', 'semestresRestants', 'commentaire', 'annee'];
+  displayedColumns: string[] = [
+    'nom',
+    'prenom',
+    'promo',
+    'specialite',
+    'etat',
+    'semestresRestants',
+    'pays',
+    'dateDebut',
+    'dateFin',
+    'commentaire',
+    'annee'
+  ];
   dataSource = new MatTableDataSource<Etudiant>();
 
   @ViewChild(MatSort) sort: MatSort;
