@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
 import { TableListService, Etudiant, EtudiantSimp } from './table-list.service';
 import { filter } from 'rxjs-compat/operator/filter';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -10,12 +11,6 @@ import { filter } from 'rxjs-compat/operator/filter';
   templateUrl: './table-list.component.html',
   styleUrls: ['./table-list.component.css']
 })
-
-// app.controller('registrosController', function($scope, $http) {
-//   $http.get('/getData').then(function(data) {
-//       $scope.registros = data;
-//   });
-// });
 
 
 export class TableListComponent implements OnInit {
@@ -32,7 +27,9 @@ export class TableListComponent implements OnInit {
 
 
   ngOnInit() {
-    this.tableListService.getEtudiantObs().subscribe(rep => {
+    // ?prenom[]=richard&prenom[]=Thomas
+    console.log('url = ', this.route.snapshot.queryParams);
+    this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
       const etuS: EtudiantSimp[] = rep;
       // console.log(etuS);
@@ -78,14 +75,13 @@ export class TableListComponent implements OnInit {
                   nomPays: null
                 };
               }
-              console.log(etudiant);
+              // console.log(etudiant);
               this.etudiant.push(etudiant);
             });
 
             this.dataSource = new MatTableDataSource<Etudiant>(this.etudiant);
             // this.dataSource = this.etudiant
             this.dataSource.sort = this.sort;
-            this.dataSource.sortingDataAccessor = (data, header) => data[header];
 
             this.dataSource.sortingDataAccessor = (item, property) => {
 
@@ -160,6 +156,6 @@ export class TableListComponent implements OnInit {
     }
   }
 
-  constructor(private tableListService: TableListService) { }
+  constructor(private tableListService: TableListService, private route: ActivatedRoute) { }
 
 }

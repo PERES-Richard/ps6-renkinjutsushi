@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { from } from 'rxjs';
 import { template } from '@angular/core/src/render3';
+import { ParamMap, Params } from '@angular/router';
 
 
 
@@ -74,8 +75,8 @@ export class TableListService {
 
   constructor(private http: HttpClient) { }
 
-  getEtudiantObs() {
-    const rep = this.http.get<EtudiantSimp[]>(this.etudiantURL);
+  getEtudiantObs(params?: Params) {
+    const rep = this.http.get<EtudiantSimp[]>(this.etudiantURL, { params: params });
     // const rep = from(fetch(this.etudiantURL));
     return rep;
   }
@@ -97,7 +98,6 @@ export class TableListService {
     // const rep = from(fetch(this.specialiteURL + idSpe));
     return rep;
   }
-
 
   // setEtu(etudiantSimp: EtudiantSimp[]): Etudiant[] {
   //   if (etudiantSimp === null) {

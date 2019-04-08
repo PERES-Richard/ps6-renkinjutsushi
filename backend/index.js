@@ -30,14 +30,14 @@ app.get('/', (request, response) => {
 })
 
 app.get('/getData/specialite', function (req, res) {
-      con.query("select * from specialite", function (err, result, fields) {
-        if (err) {
-          console.log('Error 2 =\n', err);
-        } else {
-          // console.log(result);
-          res.status(200).json(result);
-        }
-      });
+  con.query("select * from specialite", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
 });
 
 
@@ -71,26 +71,67 @@ app.get('/getData', function (req, res) {
 
   var hasParams = Object.keys(urlQuery).length > 0
 
-  var queryStr = "SELECT * FROM etudiant"
+  var queryStr = "SELECT * FROM etudiant as etu, pays, specialite as spe, etat"
+  queryStr += " WHERE "
 
   if (hasParams) {
-    queryStr += " WHERE "
 
     for (i = 0; i < Object.keys(urlQuery).length; i++)
 
-      if (Array.isArray(Object.values(urlQuery)[i])) {
-        queryStr += Object.keys(urlQuery)[i] + " in ( ? ) and ";
+      switch (Object.keys(urlQuery)[i]) {
+// PROMO
+        case 'pays':
+          {
+            queryStr += 'pays.nom_fr_fr';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " in ( ? ) and ";
+            } else queryStr += " like ? and ";
+            break;
+          }
+
+        case 'specialite':
+          {
+            queryStr += 'spe.nomSpecialite';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " in ( ? ) and ";
+            } else queryStr += " like ? and ";
+            break;
+          }
+
+        case 'etat':
+          {
+            queryStr += 'etat.nomEtat';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " in ( ? ) and ";
+            } else queryStr += " like ? and ";
+            break;
+          }
+
+        default:
+          {
+            queryStr += 'etu.';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " in ( ? ) and ";
+            } else queryStr += " like ? and ";
+            break;
+          }
       }
-    else queryStr += Object.keys(urlQuery)[i] + " like ? and "
+
+    //   if (Array.isArray(Object.values(urlQuery)[i])) {
+    //     queryStr += Object.keys(urlQuery)[i] + " in ( ? ) and ";
+    //   }
+    // else queryStr += Object.keys(urlQuery)[i] + " like ? and ";
 
     queryStr = queryStr.substring(0, queryStr.length - 4)
+    queryStr += ' AND ';
     console.log(queryStr)
   }
+  queryStr += ' pays.id = etu.pays AND spe.idSpecialite = etu.specialite AND etat.idEtat = etu.etat';
 
   con.query(queryStr, Object.values(urlQuery), function (err, result, fields) {
     if (err) {
       console.log('Error 3 =\n');
-      // console.log(err);
+      console.log(err);
     } else {
       // console.log(result);
       res.status(200).json(result);
