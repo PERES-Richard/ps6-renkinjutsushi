@@ -1,0 +1,96 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  width: 80%;
+  margin: 50px auto;
+  color: rgba(255, 255, 255, 0.7);
+  font: 16px/1 "Open Sans", sans-serif;
+  background: #0BAAD4;
+}
+
+body:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+h1 {
+  margin: 0 0 50px;
+  font-weight: normal;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+h1:hover {
+  text-shadow: 1px 1px 0 #37cdf5, 2px 2px 0 #1fc7f3, 3px 3px 0 #0cbdec;
+  transform: translate(-3px, -3px);
+}
+
+h2 {
+  float: left;
+  width: 50%;
+  height: 44px;
+  margin: 30px 0;
+  line-height: 24px;
+  text-align: center;
+  font-weight: normal;
+}
+
+@media screen and (max-width: 768px) {
+  h2 {
+    width: 100%;
+  }
+}
+
+a,
+a>span {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  line-height: 24px;
+}
+
+a:before,
+a:after,
+a>span:before,
+a>span:after {
+  content: "";
+  position: absolute;
+  transition: transform 0.5s ease;
+}
+
+.tesuto {
+  padding-top: 10px;
+}
+
+.tesuto:before {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #da1313;
+  transform: scaleX(0);
+}
+
+.tesuto:hover:before {
+  transform: scaleX(1);
+}
+
+.tesuto:hover {
+  color: #da1313;
+}
+
+.tesutoni {
+  transition: all .25s ease-in-out;
+  margin-right: 15px;
+}
+
+.tesutoni:hover {
+  transform: scale(1.3);
+}
