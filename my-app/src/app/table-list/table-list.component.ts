@@ -57,9 +57,6 @@ export class TableListComponent implements OnInit {
 
           this.tableListService.getEtatObs().subscribe(etat => {
             etuS.forEach(etu => {
-              if (etu.annee === 2000)
-                console.log(etu.photo.data);
-
 
               const etudiant: Etudiant = {
                 idEtudiant: etu.idEtudiant,
