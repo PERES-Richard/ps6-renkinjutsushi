@@ -135,7 +135,6 @@ material-dashboard-angular
 │   │       └── user-profile.component.ts
 │   ├── assets
 │   │   ├── css
-│   │   │   └── demo.css
 │   │   ├── img
 │   │   └── scss
 │   │       ├── core

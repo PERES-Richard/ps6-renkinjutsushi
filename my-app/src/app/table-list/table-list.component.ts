@@ -3,6 +3,7 @@ import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular
 import { TableListService, Etudiant, EtudiantSimp } from './table-list.service';
 import { filter } from 'rxjs-compat/operator/filter';
 import { ActivatedRoute } from '@angular/router';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class TableListComponent implements OnInit {
   headers: string[];
 
   displayedColumns: string[] = [
+    'photo',
     'nom',
     'prenom',
     'promo',
@@ -36,7 +38,6 @@ export class TableListComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
 
   ngOnInit() {
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
@@ -57,10 +58,14 @@ export class TableListComponent implements OnInit {
           this.tableListService.getEtatObs().subscribe(etat => {
             etuS.forEach(etu => {
 
+              console.log(etu.photo);
+
+
               const etudiant: Etudiant = {
                 idEtudiant: etu.idEtudiant,
                 nom: etu.nom,
                 prenom: etu.prenom,
+                photo: this.buildPhoto(etu.photo.data),
                 promo: etu.promo,
                 specialite: spe.find(function (element) {
                   return element.idSpecialite === etu.specialite;
@@ -135,6 +140,12 @@ export class TableListComponent implements OnInit {
     });
 
   }
+  buildPhoto(data: Array<number>): SafeUrl {
+    const TYPED_ARRAY = new Uint8Array(data);
+    const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
+    const base64String = btoa(STRING_CHAR);
+    return this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + base64String);
+  }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -172,6 +183,6 @@ export class TableListComponent implements OnInit {
     }
   }
 
-  constructor(private tableListService: TableListService, private route: ActivatedRoute) { }
+  constructor(private tableListService: TableListService, private route: ActivatedRoute, private domSanitizer: DomSanitizer) { }
 
 }

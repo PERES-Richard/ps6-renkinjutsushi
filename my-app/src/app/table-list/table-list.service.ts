@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { from } from 'rxjs';
 import { template } from '@angular/core/src/render3';
 import { ParamMap, Params } from '@angular/router';
+import { SafeUrl } from '@angular/platform-browser';
 
 
 
@@ -10,6 +11,7 @@ export interface Etudiant {
   idEtudiant: number,
   nom: string,
   prenom: string,
+  photo: SafeUrl,
   promo: string,
   specialite: Specialite,
   // specialite: number,
@@ -30,6 +32,7 @@ export interface EtudiantSimp {
   nom: string,
   prenom: string,
   promo: string,
+  photo: {type: string, data: number[]},
   // specialite: Specialite,
   specialite: number,
   commentaire: string,
