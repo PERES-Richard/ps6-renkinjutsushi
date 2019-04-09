@@ -70,8 +70,8 @@ export class TableListComponent implements OnInit {
                   return element.idEtat === etu.etat;
                 }),
                 semestresRestants: etu.semestresRestants,
-                dateDebut: etu.dateDebut,
-                dateFin: etu.dateFin,
+                dateDebut: etu.dateDebut === null ? null : new Date(etu.dateDebut.toString()),
+                dateFin: etu.dateFin === null ? null : new Date(etu.dateFin.toString()),
                 pays: pays.find(function (element) {
                   return element.idPays === etu.pays;
                 }),
@@ -139,25 +139,31 @@ export class TableListComponent implements OnInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     this.dataSource.filterPredicate = (item, filtre) => {
-      let str = item.nom + ' ' +
-        item.prenom + ' ' +
-        item.commentaire + ' ' +
-        item.promo + ' ' +
-        item.semestresRestants.toString() + ' ' +
-        item.obtenuVia + ' ' +
-        item.specialite.nomSpecialite + ' ' +
-        item.etat.nomEtat + ' ' +
-        item.pays.nomPays + ' ' +
-        item.dateDebut + ' ' + // TODO date ?
-        item.dateDebut + ' ' + // TODO date ?
-        item.annee;
+      const str: string[] = [item.nom,
+      item.prenom,
+      item.commentaire,
+      item.promo,
+      item.semestresRestants.toString(),
+      item.obtenuVia,
+      item.specialite.nomSpecialite,
+      item.etat.nomEtat,
+      item.pays.nomPays,
+      item.annee.toString()];
 
-      str = str.replace(/null/g, '').trim().toLowerCase();
-      const strArr = str.split(' ');
+      if (item.dateDebut != null) {
+        str.push(
+          item.dateDebut.toLocaleDateString());
+      }
+      if (item.dateFin != null) {
+        str.push(
+          item.dateFin.toLocaleDateString())
+      }
 
-      // console.log(strArr);
+      // console.log(str);
+
       let matched = false;
-      strArr.forEach(strT => {
+      str.forEach(strT => {
+        strT = strT.replace(/null/g, '').trim().toLowerCase();
         if (strT.match(filtre.trim().toLocaleLowerCase())) {
           matched = true;
         }
