@@ -57,15 +57,15 @@ export class TableListComponent implements OnInit {
 
           this.tableListService.getEtatObs().subscribe(etat => {
             etuS.forEach(etu => {
-
-              console.log(etu.photo);
+              if (etu.annee === 2000)
+                console.log(etu.photo.data);
 
 
               const etudiant: Etudiant = {
                 idEtudiant: etu.idEtudiant,
                 nom: etu.nom,
                 prenom: etu.prenom,
-                photo: this.buildPhoto(etu.photo.data),
+                photo: etu.photo === null ? './assets/img/faces/no_pic.gif' : this.buildPhoto(etu.photo.data),
                 promo: etu.promo,
                 specialite: spe.find(function (element) {
                   return element.idSpecialite === etu.specialite;
