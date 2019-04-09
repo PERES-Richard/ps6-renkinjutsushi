@@ -67,6 +67,7 @@ a>span:after {
 
 .tesuto {
   padding-top: 10px;
+  font-size: 1.35em;
 }
 
 .tesuto:before {
@@ -74,7 +75,7 @@ a>span:after {
   bottom: 0;
   width: 100%;
   height: 2px;
-  background: #da1313;
+  background: #000000;
   transform: scaleX(0);
 }
 
@@ -83,7 +84,7 @@ a>span:after {
 }
 
 .tesuto:hover {
-  color: #da1313;
+  color: #000000;
 }
 
 .tesutoni {
@@ -93,4 +94,12 @@ a>span:after {
 
 .tesutoni:hover {
   transform: scale(1.3);
+}
+
+.meniu {
+  color: #fff;
+  background-color: #e53a36 !important;
+  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(244, 67, 54, 0.4);
+  /* border-radius: 0 0 6px 6px; */
+  padding-bottom: 8px;
 }
