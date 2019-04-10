@@ -87,7 +87,8 @@ export class TableListComponent implements OnInit {
                   nomPays: null
                 };
               }
-              console.log(etudiant);
+
+              // console.log(etudiant);
               this.etudiant.push(etudiant);
             });
 
@@ -138,9 +139,11 @@ export class TableListComponent implements OnInit {
 
   }
   buildPhoto(data: Array<number>): SafeUrl {
-    const TYPED_ARRAY = new Uint8Array(data);
-    const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
-    const base64String = btoa(STRING_CHAR);
+
+    const base64String = btoa(new Uint8Array(data).reduce(function (data2, byte) {
+      return data2 + String.fromCharCode(byte);
+    }, ''));
+
     return this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + base64String);
   }
 
