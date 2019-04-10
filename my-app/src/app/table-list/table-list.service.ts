@@ -24,6 +24,7 @@ export interface Etudiant {
   pays: Pays,
   // pays: number,
   obtenuVia: string,
+  mail: string,
   annee: number
 }
 
@@ -32,7 +33,7 @@ export interface EtudiantSimp {
   nom: string,
   prenom: string,
   promo: string,
-  photo: {type: string, data: number[]},
+  photo: { type: string, data: number[] },
   // specialite: Specialite,
   specialite: number,
   commentaire: string,
@@ -44,6 +45,7 @@ export interface EtudiantSimp {
   // pays: Pays,
   pays: number,
   obtenuVia: string,
+  mail: string,
   annee: number
 }
 

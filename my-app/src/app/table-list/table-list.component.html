@@ -18,7 +18,8 @@
 
                 <ng-container matColumnDef="photo">
                   <th mat-header-cell *matHeaderCellDef class=" text-primary"> Photo </th>
-                  <td mat-cell *matCellDef="let element"> <img [src]="element.photo" class="rounded-circle" width="45" height="45"> </td>
+                  <td mat-cell *matCellDef="let element"> <img [src]="element.photo" class="rounded-circle" width="45"
+                      height="45"> </td>
                 </ng-container>
 
                 <ng-container matColumnDef="nom">
@@ -39,7 +40,9 @@
 
                 <ng-container matColumnDef="specialite">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Spécialité </th>
-                  <td mat-cell *matCellDef="let element"> {{element.specialite.nomSpecialite}} <span *ngIf="element.specialite.envisagee" style="color: mediumvioletred;"><strong> * </strong></span> </td>
+                  <td mat-cell *matCellDef="let element"> {{element.specialite.nomSpecialite}} <span
+                      *ngIf="element.specialite.envisagee" style="color: mediumvioletred;"><strong> * </strong></span>
+                  </td>
                 </ng-container>
 
                 <ng-container matColumnDef="etat">
@@ -51,7 +54,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Sem. restants </th>
                   <td mat-cell *matCellDef="let element"> {{element.semestresRestants}} </td>
                 </ng-container>
-                 
+
                 <ng-container matColumnDef="pays">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Pays </th>
                   <td mat-cell *matCellDef="let element"> {{element.pays.nomPays}} </td>
@@ -78,6 +81,21 @@
                   <td mat-cell *matCellDef="let element"> {{element.annee}} </td>
                 </ng-container>
 
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef class=" text-primary"> Actions </th>
+                  <td mat-cell *matCellDef>
+                    <button mat-raised-button type="button" matTooltip="Modifier l'étudiant"
+                      [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
+                      <i class="material-icons">edit</i>
+                    </button>
+                    <a href="mailto:riri@gg.co">
+                      <button mat-raised-button type="button" matTooltip="Envoyer un mail à l'étudiant"
+                        [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
+                        <i class="material-icons">mail</i>
+                      </button>
+                    </a>
+                  </td>
+                </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

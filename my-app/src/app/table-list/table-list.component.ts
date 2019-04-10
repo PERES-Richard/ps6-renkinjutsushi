@@ -32,7 +32,8 @@ export class TableListComponent implements OnInit {
     'dateDebut',
     'dateFin',
     'commentaire',
-    'annee'
+    'annee',
+    'actions'
   ];
   dataSource = new MatTableDataSource<Etudiant>();
 
@@ -43,12 +44,7 @@ export class TableListComponent implements OnInit {
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
       const etuS: EtudiantSimp[] = rep;
-      // console.log(etuS);
-      // etuS.forEach(etuST => {
-      //   if (etuST.commentaire === null) {
-      //     etuST.commentaire = '';
-      //   }
-      // })
+
       this.etudiant = []
 
       this.tableListService.getSpecialiteObs().subscribe(spe => {
@@ -78,6 +74,7 @@ export class TableListComponent implements OnInit {
                   return element.idPays === etu.pays;
                 }),
                 obtenuVia: etu.obtenuVia,
+                mail: etu.mail,
                 annee: etu.annee
               }
 
