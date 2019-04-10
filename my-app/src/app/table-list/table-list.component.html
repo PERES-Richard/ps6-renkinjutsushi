@@ -14,7 +14,7 @@
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrer">
               </mat-form-field>
 
-              <table mat-table [dataSource]="dataSource" matSort class="table">
+              <table mat-table [dataSource]="dataSource" matSort class="table" style="text-align: center;">
 
                 <ng-container matColumnDef="photo">
                   <th mat-header-cell *matHeaderCellDef class=" text-primary"> Photo </th>
@@ -82,7 +82,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef class=" text-primary"> Actions </th>
+                  <th mat-header-cell *matHeaderCellDef class=" text-primary" style="text-align: center;"> Actions </th>
                   <td mat-cell *matCellDef>
                     <button mat-raised-button type="button" matTooltip="Modifier l'étudiant"
                       [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
 import { TableListService, Etudiant, EtudiantSimp } from './table-list.service';
 import { filter } from 'rxjs-compat/operator/filter';
@@ -10,6 +10,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   selector: 'app-table-list',
   providers: [TableListService],
   templateUrl: './table-list.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./table-list.component.css']
 })
 

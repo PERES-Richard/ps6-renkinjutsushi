@@ -1,3 +1,8 @@
 th.mat-sort-header-sorted {
-    color: black;
-  }
+  color: black;
+}
+
+.mat-sort-header-button {
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
