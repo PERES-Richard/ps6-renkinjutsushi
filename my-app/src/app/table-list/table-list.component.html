@@ -84,7 +84,7 @@
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef class=" text-primary" style="text-align: center;"> Actions </th>
                   <td mat-cell *matCellDef="let element">
-                    <button mat-raised-button type="button" (click)="swap(element)" matTooltip="Modifier l'étudiant"
+                    <button mat-raised-button type="button" (click)="edit(element)" matTooltip="Modifier l'étudiant"
                       [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
                       <i class="material-icons">edit</i>
                     </button>

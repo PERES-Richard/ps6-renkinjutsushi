@@ -64,7 +64,6 @@ app.get('/getData/etat', function (req, res) {
   });
 });
 
-
 app.get('/getData', function (req, res) {
 
   var urlQuery = req.query;

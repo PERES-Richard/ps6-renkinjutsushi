@@ -1,4 +1,6 @@
-<div class="main-content">
+
+<p *ngIf="!loaded">Chargement...</p>
+<div class="main-content" *ngIf="loaded | async">
   <div class="container-fluid">
     <div class="row">
 
@@ -18,7 +20,7 @@
             <div class="row">
               <div class="col-md-5">
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Nom">
+                  <input matInput placeholder="Nom" value="{{etudiant.nom}}">
                 </mat-form-field>
               </div>
               <div class="col-md-3">

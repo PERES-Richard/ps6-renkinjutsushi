@@ -49,7 +49,7 @@ export class AdminLayoutComponent implements OnInit {
          }
       });
       this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
-           elemMainPanel.scrollTop = 0;
+        //    elemMainPanel.scrollTop = 0;
         //    elemSidebar.scrollTop = 0;
       });
       if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {

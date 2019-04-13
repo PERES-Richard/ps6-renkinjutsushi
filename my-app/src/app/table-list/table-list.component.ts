@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, Output } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
 import { TableListService, Etudiant, EtudiantSimp } from './table-list.service';
 import { filter } from 'rxjs-compat/operator/filter';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { RouterModule, Routes } from '@angular/router';
+import { UserProfileComponent } from 'app/user-profile/user-profile.component';
 
 
 @Component({
@@ -13,7 +15,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./table-list.component.css']
 })
-
 
 export class TableListComponent implements OnInit {
 
@@ -183,10 +184,14 @@ export class TableListComponent implements OnInit {
     }
   }
 
-  swap(etu: Etudiant) {
-    console.log(etu);
+  edit(etu: Etudiant) {
+    // console.log(etu);
+    this.router.navigate(['user-profile', {idEtudiant: etu.idEtudiant}]);
   }
 
-  constructor(private tableListService: TableListService, private route: ActivatedRoute, private domSanitizer: DomSanitizer) { }
+  constructor(private tableListService: TableListService,
+    private route: ActivatedRoute,
+    private domSanitizer: DomSanitizer,
+    private router: Router) { }
 
 }
