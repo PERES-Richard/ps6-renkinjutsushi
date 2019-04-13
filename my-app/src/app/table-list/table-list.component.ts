@@ -134,8 +134,9 @@ export class TableListComponent implements OnInit {
       });
 
     });
-
   }
+
+
   buildPhoto(data: Array<number>): SafeUrl {
 
     const base64String = btoa(new Uint8Array(data).reduce(function (data2, byte) {
@@ -144,6 +145,7 @@ export class TableListComponent implements OnInit {
 
     return this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + base64String);
   }
+
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -179,6 +181,10 @@ export class TableListComponent implements OnInit {
       });
       return matched;
     }
+  }
+
+  swap(etu: Etudiant) {
+    console.log(etu);
   }
 
   constructor(private tableListService: TableListService, private route: ActivatedRoute, private domSanitizer: DomSanitizer) { }
