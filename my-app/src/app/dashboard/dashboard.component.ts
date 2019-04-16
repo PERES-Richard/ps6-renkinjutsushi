@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
+import { ChartType } from "chart.js";
+import { MultiDataSet, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,6 +9,9 @@ import * as Chartist from 'chartist';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  private doughnutChartType: ChartType;
+  private doughnutChartLabels: Label[];
+  private doughnutChartData: MultiDataSet;
 
   constructor() {
   }
@@ -42,14 +47,14 @@ export class DashboardComponent implements OnInit {
      *   Validation Donut Init
      */
 
-    const validationDonut = new Chartist.Pie('#ct-chart-donut', {
-      series: [ {value: 50,className: "test"},{value: 20,className: "test2"}]
+    const validationDonut = new Chartist.Pie('#ct-chart-pie', {
+      series: [50,20,40]
     }, {
-      donut: true,
-      donutWidth: 60,
       startAngle: 270,
       showLabel: true
     });
+
+
 
 
     /**
