@@ -5,7 +5,7 @@ import { MultiDataSet, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: '../../../../../../WebstormProjects/ps6-renkinjutsushi/my-app/src/app/dashboard/dashboard.component.html',
+  templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
