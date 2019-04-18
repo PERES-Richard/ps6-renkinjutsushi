@@ -1,4 +1,3 @@
-
 <p *ngIf="!loaded">Chargement...</p>
 <div class="main-content" *ngIf="loaded | async">
   <div class="container-fluid">
@@ -74,16 +73,16 @@
               <div class="col-md-12">
                 <label>About Me</label>
                 <mat-form-field class="example-full-width">
-                  <textarea matInput
-                    placeholder="Commentaire"></textarea>
+                  <textarea matInput placeholder="Commentaire"></textarea>
                 </mat-form-field>
-                <!-- <div class="form-group">
-
-                                      <div class="form-group">
-                                          <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                                          <textarea class="form-control" rows="5"></textarea>
-                                      </div>
-                                  </div> -->
+                <!--
+                  <div class="form-group">
+                    <div class="form-group">
+                        <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
+                        <textarea class="form-control" rows="5"></textarea>
+                    </div>
+                  </div>
+                -->
               </div>
             </div>
             <button mat-raised-button type="submit" class="btn btn-danger pull-right">Update Profile</button>

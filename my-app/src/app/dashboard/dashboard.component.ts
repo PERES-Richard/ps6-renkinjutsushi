@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
-import { ChartType } from "chart.js";
+import { ChartType } from 'chart.js';
 import { MultiDataSet, Label } from 'ng2-charts';
 
 @Component({
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
      */
 
     const validationDonut = new Chartist.Pie('#ct-chart-pie', {
-      series: [50,20,40]
+      series: [50, 20, 40]
     }, {
       startAngle: 270,
       showLabel: true
@@ -101,7 +101,7 @@ export class DashboardComponent implements OnInit {
         }
       }
     }).on('draw', function(data) {
-      if(data.type === 'bar') {
+      if (data.type === 'bar') {
         data.element.attr({
           style: 'stroke-width: 30px'
         });

@@ -20,7 +20,7 @@ export class UserProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    let id = this.route.snapshot.paramMap.get('idEtudiant');
+    const id = this.route.snapshot.paramMap.get('idEtudiant');
     console.log(id);
 
     this.tableListService.getEtudiantObs(this.route.snapshot.params).subscribe(rep => {
