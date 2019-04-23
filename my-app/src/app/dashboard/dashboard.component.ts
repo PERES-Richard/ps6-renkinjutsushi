@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import * as Chartist from 'chartist';
 import { ChartType } from 'chart.js';
 import { MultiDataSet, Label } from 'ng2-charts';
@@ -6,6 +6,7 @@ import { MultiDataSet, Label } from 'ng2-charts';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
