@@ -49,91 +49,87 @@ export class TableListComponent implements OnInit {
 
       this.etudiant = []
 
-      this.tableListService.getSpecialiteObs().subscribe(spe => {
 
-        this.tableListService.getPaysObs().subscribe(pays => {
+      const spePromise = this.tableListService.getSpecialiteObs().toPromise();
+      const paysPromise = this.tableListService.getPaysObs().toPromise();
+      const etatPromise = this.tableListService.getEtatObs().toPromise();
 
-          this.tableListService.getEtatObs().subscribe(etat => {
-            etuS.forEach(etu => {
+      Promise.all([spePromise, paysPromise, etatPromise]).then( (values) => {
+        const spe = values[0];
+        const pays = values[1];
+        const etat = values[2];
 
-              const etudiant: Etudiant = {
-                idEtudiant: etu.idEtudiant,
-                nom: etu.nom,
-                prenom: etu.prenom,
-                photo: etu.photo === null ? './assets/img/faces/no_pic.gif' : this.buildPhoto(etu.photo.data),
-                promo: etu.promo,
-                specialite: spe.find(function (element) {
-                  return element.idSpecialite === etu.specialite;
-                }),
-                commentaire: etu.commentaire,
-                etat: etat.find(function (element) {
-                  return element.idEtat === etu.etat;
-                }),
-                semestresRestants: etu.semestresRestants,
-                dateDebut: etu.dateDebut === null ? null : new Date(etu.dateDebut.toString()),
-                dateFin: etu.dateFin === null ? null : new Date(etu.dateFin.toString()),
-                pays: pays.find(function (element) {
-                  return element.idPays === etu.pays;
-                }),
-                obtenuVia: etu.obtenuVia,
-                mail: etu.mail,
-                annee: etu.annee
-              }
+        etuS.forEach(etu => {
 
-              if (etudiant.pays === undefined) {
-                etudiant.pays = {
-                  idPays: null,
-                  nomPays: null
-                };
-              }
 
-              // console.log(etudiant);
-              this.etudiant.push(etudiant);
-            });
+          const etudiant: Etudiant = {
+            idEtudiant: etu.idEtudiant,
+            nom: etu.nom,
+            prenom: etu.prenom,
+            photo: etu.photo === null ? './assets/img/faces/no_pic.gif' : this.buildPhoto(etu.photo.data),
+            promo: etu.promo,
+            specialite: spe.find(function (element) {
+              return element.idSpecialite === etu.specialite;
+            }),
+            commentaire: etu.commentaire,
+            etat: etat.find(function (element) {
+              return element.idEtat === etu.etat;
+            }),
+            semestresRestants: etu.semestresRestants,
+            dateDebut: etu.dateDebut === null ? null : new Date(etu.dateDebut.toString()),
+            dateFin: etu.dateFin === null ? null : new Date(etu.dateFin.toString()),
+            pays: pays.find(function (element) {
+              return element.idPays === etu.pays;
+            }),
+            obtenuVia: etu.obtenuVia,
+            mail: etu.mail,
+            annee: etu.annee
+          }
 
-            this.dataSource = new MatTableDataSource<Etudiant>(this.etudiant);
-            // this.dataSource = this.etudiant
-            this.dataSource.sort = this.sort;
-
-            this.dataSource.sortingDataAccessor = (item, property) => {
-
-              // console.log(item, property);
-              // return new Date(item.date);
-
-              switch (property) {
-                case 'specialite': {
-                  return item.specialite.nomSpecialite;
-                }
-                case 'etat': {
-                  return item.etat.nomEtat;
-                }
-                case 'pays': {
-                  return item.pays.nomPays;
-                }
-                default: {
-                  return item[property];
-                }
-              }
-            };
-
-            this.paginator._intl.itemsPerPageLabel = 'Nombre d\'étudiants par page';
-            this.paginator._intl.getRangeLabel = function (page, pageSize, length) {
-              if (length === 0 || pageSize === 0) {
-                return '0 sur ' + length;
-              }
-              length = Math.max(length, 0);
-              const startIndex = page * pageSize;
-              const endIndex = startIndex < length ?
-                Math.min(startIndex + pageSize, length) :
-                startIndex + pageSize;
-              return startIndex + 1 + ' - ' + endIndex + ' sur ' + length;
-            };
-
-            this.dataSource.paginator = this.paginator;
-          })
+          // console.log(etudiant);
+          this.etudiant.push(etudiant);
         });
-      });
 
+        this.dataSource = new MatTableDataSource<Etudiant>(this.etudiant);
+        // this.dataSource = this.etudiant
+        this.dataSource.sort = this.sort;
+
+        this.dataSource.sortingDataAccessor = (item, property) => {
+
+          // console.log(item, property);
+          // return new Date(item.date);
+
+          switch (property) {
+            case 'specialite': {
+              return item.specialite.nomSpecialite;
+            }
+            case 'etat': {
+              return item.etat.nomEtat;
+            }
+            case 'pays': {
+              return item.pays.nomPays;
+            }
+            default: {
+              return item[property];
+            }
+          }
+        };
+
+        this.paginator._intl.itemsPerPageLabel = 'Nombre d\'étudiants par page';
+        this.paginator._intl.getRangeLabel = function (page, pageSize, length) {
+          if (length === 0 || pageSize === 0) {
+            return '0 sur ' + length;
+          }
+          length = Math.max(length, 0);
+          const startIndex = page * pageSize;
+          const endIndex = startIndex < length ?
+            Math.min(startIndex + pageSize, length) :
+            startIndex + pageSize;
+          return startIndex + 1 + ' - ' + endIndex + ' sur ' + length;
+        };
+
+        this.dataSource.paginator = this.paginator;
+      })
     });
   }
 
@@ -186,7 +182,7 @@ export class TableListComponent implements OnInit {
 
   edit(etu: Etudiant) {
     // console.log(etu);
-    this.router.navigate(['user-profile', {idEtudiant: etu.idEtudiant}]);
+    this.router.navigate(['user-profile', { idEtudiant: etu.idEtudiant }]);
   }
 
   constructor(private tableListService: TableListService,
