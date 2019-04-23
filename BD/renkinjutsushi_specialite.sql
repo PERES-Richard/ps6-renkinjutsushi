@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `renkinjutsushi` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `renkinjutsushi`;
 -- MySQL dump 10.13  Distrib 8.0.15, for Win64 (x86_64)
 --
 -- Host: localhost    Database: renkinjutsushi
@@ -27,7 +29,7 @@ CREATE TABLE `specialite` (
   `nomSpecialite` varchar(45) NOT NULL,
   `envisagee` tinyint(4) NOT NULL,
   PRIMARY KEY (`idSpecialite`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +38,7 @@ CREATE TABLE `specialite` (
 
 LOCK TABLES `specialite` WRITE;
 /*!40000 ALTER TABLE `specialite` DISABLE KEYS */;
-INSERT INTO `specialite` VALUES (1,'AL',1),(2,'IHM',1),(3,'IOT',0);
+INSERT INTO `specialite` VALUES (1,'AL',1),(2,'AL',0),(3,'IAM',1),(4,'IAM',0),(5,'C&S',1),(6,'C&S',0),(7,'STRAW',1),(8,'STRAW',0);
 /*!40000 ALTER TABLE `specialite` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-08 18:37:12
+-- Dump completed on 2019-04-23 11:33:03

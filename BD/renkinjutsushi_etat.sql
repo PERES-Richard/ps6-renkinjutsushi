@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `renkinjutsushi` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `renkinjutsushi`;
 -- MySQL dump 10.13  Distrib 8.0.15, for Win64 (x86_64)
 --
 -- Host: localhost    Database: renkinjutsushi
@@ -27,7 +29,7 @@ CREATE TABLE `etat` (
   `nomEtat` varchar(45) NOT NULL,
   `degre` int(11) NOT NULL,
   PRIMARY KEY (`idEtat`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='degré :\n0 = validé\n1 = en cours\n2 = non validé\n3 = non validé problème';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='degré :\n0 = validé\n1 = en cours\n2 = non validé\n3 = non validé problème';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,7 +38,7 @@ CREATE TABLE `etat` (
 
 LOCK TABLES `etat` WRITE;
 /*!40000 ALTER TABLE `etat` DISABLE KEYS */;
-INSERT INTO `etat` VALUES (1,'Non validé',2),(2,'En cours de validation',1),(3,'Validé',0);
+INSERT INTO `etat` VALUES (1,'Non validé',3),(2,'En cours de validation',1),(3,'Validé',0),(4,'Dossier en cours',2),(5,'Dossier annulée',3),(6,'En attente du dossier',3);
 /*!40000 ALTER TABLE `etat` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-08 18:37:10
+-- Dump completed on 2019-04-23 11:33:02
