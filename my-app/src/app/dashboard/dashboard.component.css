@@ -27,3 +27,13 @@ h3{
 .ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {
   stroke: goldenrod;
 }
+
+
+#legende, #legende2, #legende3{
+  width: 25%;
+  float: left;
+}
+#ct-chart-pie, #numberSucceedFailure, #numberOfStudents{
+  margin-left:25%
+}
+
