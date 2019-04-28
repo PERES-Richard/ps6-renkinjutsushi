@@ -22,6 +22,7 @@ import {
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import {ChartsModule} from 'ng2-charts';
+import {SidebarComponent} from "./components/sidebar/sidebar.component";
 
 
 @NgModule({

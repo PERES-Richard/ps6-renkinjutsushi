@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Etudiant, TableListService, EtudiantSimp } from 'app/table-list/table-list.service';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import {TableListService} from "../service/table-list/table-list.service";
+import {Etudiant} from "../models/Etudiant";
+import {EtudiantSimp} from "../models/EtudiantSimp";
 
 @Component({
   selector: 'app-user-profile',

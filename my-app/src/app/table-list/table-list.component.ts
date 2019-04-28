@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation, Output } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
-import { TableListService, Etudiant, EtudiantSimp } from './table-list.service';
+import { TableListService} from '../service/table-list/table-list.service';
 import { filter } from 'rxjs-compat/operator/filter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { UserProfileComponent } from 'app/user-profile/user-profile.component';
+import {Etudiant} from "../models/Etudiant";
+import {EtudiantSimp} from "../models/EtudiantSimp";
 
 
 @Component({

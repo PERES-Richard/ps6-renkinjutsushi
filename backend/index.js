@@ -3,7 +3,7 @@ const app = express()
 var cors = require('cors')
 var mysql = require('mysql');
 var con = mysql.createConnection({
-  port: "3333",
+  port: "3306",
   user: 'ps6_team',
   password: 'ps6_sushi',
   database: 'renkinjutsushi',
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 app.get('/', (request, response) => {
   response.send(
-    '<h1>Sore saaba wa Ekusupuresu no okage de arukimasu !</h1><h2> <a href="/getData">localhost:3000/getData</a></h2>'
+    '<h1>Sore saaba wa Ekusupuresu no okage de arukimasu !</h1><h2> <a href="/getData">localhost:3306/getData</a></h2>'
   )
 })
 
@@ -55,6 +55,144 @@ app.get('/getData/pays', function (req, res) {
 
 app.get('/getData/etat', function (req, res) {
   con.query("select * from etat", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/numbersucceed', function (req, res) {
+  con.query("select annee, count(*) as number from etudiant group by annee;", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/piechartvalide', function (req, res) {
+  con.query("select count(*) as valide from etudiant where etat=3;", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/piechartencours', function (req, res) {
+  con.query("select count(*) as encours from etudiant where etat=4 or etat=2;", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/piechartnonvalide', function (req, res) {
+  con.query("select count(*) as nonvalide from etudiant where (etat=1 or etat=5 or etat=6);", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/numberstudentsjapon2016', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='japon' and etudiant.annee='2016';", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/numberstudentsjapon2017', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='japon' and etudiant.annee='2017';", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/numberstudentsjapon2018', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='japon' and etudiant.annee='2018';", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/numberstudentscanada2016', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='canada' and etudiant.annee='2016';", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+app.get('/getData/numberstudentscanada2017', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='canada' and etudiant.annee='2017';", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+app.get('/getData/numberstudentscanada2018', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='canada' and etudiant.annee='2018';", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+app.get('/getData/numberstudentscolombie2016', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='colombie' and etudiant.annee='2016';", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+app.get('/getData/numberstudentscolombie2017', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='colombie' and etudiant.annee='2017';", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+app.get('/getData/numberstudentscolombie2018', function (req, res) {
+  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='colombie' and etudiant.annee='2018';", function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {

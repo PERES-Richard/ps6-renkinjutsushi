@@ -4,56 +4,13 @@ import { from } from 'rxjs';
 import { template } from '@angular/core/src/render3';
 import { ParamMap, Params } from '@angular/router';
 import { SafeUrl } from '@angular/platform-browser';
+import {Pays} from "../../models/Pays";
+import {Etudiant} from "../../models/Etudiant";
+import {EtudiantSimp} from "../../models/EtudiantSimp";
+import {Specialite} from "../../models/Specialite";
+import {Data} from "../../models/Data";
 
 
-
-export interface Etudiant {
-  idEtudiant: number,
-  nom: string,
-  prenom: string,
-  photo: SafeUrl,
-  promo: string,
-  specialite: Specialite,
-  // specialite: number,
-  commentaire: string,
-  etat: Etat,
-  // etat: number,
-  semainesRestantes: number,
-  dateDebut: Date,
-  dateFin: Date,
-  pays: Pays,
-  // pays: number,
-  obtenuVia: string,
-  mail: string,
-  annee: number
-}
-
-export interface EtudiantSimp {
-  idEtudiant: number,
-  nom: string,
-  prenom: string,
-  promo: string,
-  photo: { type: string, data: number[] },
-  // specialite: Specialite,
-  specialite: number,
-  commentaire: string,
-  // etat: Etat,
-  etat: number,
-  semainesRestantes: number,
-  dateDebut: Date,
-  dateFin: Date,
-  // pays: Pays,
-  pays: number,
-  obtenuVia: string,
-  mail: string,
-  annee: number
-}
-
-export interface Specialite {
-  idSpecialite: number,
-  nomSpecialite: string,
-  envisagee: boolean
-}
 
 export interface Etat {
   idEtat: number,
@@ -61,10 +18,6 @@ export interface Etat {
   degre: number
 }
 
-export interface Pays {
-  idPays: number,
-  nomPays: string
-}
 
 @Injectable(
   // {providedIn: 'root'}
