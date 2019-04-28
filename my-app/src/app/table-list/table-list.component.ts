@@ -29,7 +29,7 @@ export class TableListComponent implements OnInit {
     'promo',
     'specialite',
     'etat',
-    'semestresRestants',
+    'semainesRestantes',
     'pays',
     'dateDebut',
     'dateFin',
@@ -75,7 +75,7 @@ export class TableListComponent implements OnInit {
             etat: etat.find(function (element) {
               return element.idEtat === etu.etat;
             }),
-            semestresRestants: etu.semestresRestants,
+            semainesRestantes: etu.semainesRestantes,
             dateDebut: etu.dateDebut === null ? null : new Date(etu.dateDebut.toString()),
             dateFin: etu.dateFin === null ? null : new Date(etu.dateFin.toString()),
             pays: pays.find(function (element) {
@@ -151,7 +151,7 @@ export class TableListComponent implements OnInit {
       item.prenom,
       item.commentaire,
       item.promo,
-      item.semestresRestants.toString(),
+      item.semainesRestantes.toString(),
       item.obtenuVia,
       item.specialite.nomSpecialite,
       item.etat.nomEtat,
