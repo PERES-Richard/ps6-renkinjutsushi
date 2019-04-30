@@ -24,7 +24,7 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('idEtudiant');
     console.log(id);
-
+    
     this.tableListService.getEtudiantObs(this.route.snapshot.params).subscribe(rep => {
       const etu: EtudiantSimp = rep[0];
 
