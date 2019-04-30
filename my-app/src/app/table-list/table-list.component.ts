@@ -6,8 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { UserProfileComponent } from 'app/user-profile/user-profile.component';
-import { Etudiant } from "../models/Etudiant";
-import { EtudiantSimp } from "../models/EtudiantSimp";
+import { Etudiant } from '../models/Etudiant';
+import { EtudiantSimp } from '../models/EtudiantSimp';
 
 
 @Component({

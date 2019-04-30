@@ -1,7 +1,7 @@
-import {SafeUrl} from "@angular/platform-browser";
-import {Pays} from "./Pays";
-import {Specialite} from "./Specialite";
-import {Etat} from "../service/table-list/table-list.service";
+import {SafeUrl} from '@angular/platform-browser';
+import {Pays} from './Pays';
+import {Specialite} from './Specialite';
+import {Etat} from './Etat';
 
 export interface Etudiant {
   idEtudiant: number,
