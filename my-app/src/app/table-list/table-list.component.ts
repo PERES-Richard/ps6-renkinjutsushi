@@ -76,6 +76,7 @@ export class TableListComponent implements OnInit {
             etat: etat.find(function (element) {
               return element.idEtat === etu.etat;
             }),
+            typeValidation: etu.typeValidation,
             semainesRestantes: etu.semainesRestantes,
             dateDebut: etu.dateDebut === null ? null : new Date(etu.dateDebut.toString()),
             dateFin: etu.dateFin === null ? null : new Date(etu.dateFin.toString()),
@@ -182,7 +183,6 @@ export class TableListComponent implements OnInit {
   }
 
   edit(etu: Etudiant) {
-    // console.log(etu);
     this.router.navigate(['user-profile', { idEtudiant: etu.idEtudiant }]);
   }
 
