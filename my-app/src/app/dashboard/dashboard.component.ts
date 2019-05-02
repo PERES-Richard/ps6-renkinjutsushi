@@ -3,7 +3,7 @@ import * as Chartist from 'chartist';
 import { ChartType } from 'chart.js';
 import { MultiDataSet, Label } from 'ng2-charts';
 import {StatistiquesService} from "../service/statistiques/statistiques.service";
-import {Data} from "../models/Data";
+import {Degre} from "../models/Degre";
 
 @Component({
   selector: 'app-dashboard',
@@ -15,11 +15,10 @@ import {Data} from "../models/Data";
 export class DashboardComponent implements OnInit {
   private doughnutChartType: ChartType;
   private doughnutChartLabels: Label[];
-  private doughnutChartData: MultiDataSet;
-  private variable3: Data[]=[];
-  private nbValide: Number[]=[0];
-  private nbEnCours: Number[]=[0];
-  private nbNonValide: Number[]=[0];
+  private doughnutChartDegre: MultiDataSet;
+  private nbValide: Degre[];
+  private nbEnCours: Degre[];
+  private nbNonValide: Degre[];
   private nbCanada2016: Number[];
   private nbCanada2017: Number[];
   private nbCanada2018: Number[];
@@ -37,18 +36,23 @@ export class DashboardComponent implements OnInit {
 
 
     const variable2 = this.statistiquesService.getNumberStudents().subscribe( (tmp) => {
-      this.variable3=tmp
+      //this.variable3=tmp
     });
 
-    const variable3 = this.statistiquesService.getValide().subscribe((tmp) => {
-      this.nbValide=tmp
-    });
-    const variable4 = this.statistiquesService.getEnCours().subscribe((tmp) => {
-      this.nbEnCours=tmp
-    });
-    const variable5 = this.statistiquesService.getNonValide().subscribe((tmp) => {
-      this.nbNonValide=tmp
-    });
+    // const spePromise = this.tableListService.getSpecialiteObs().toPromise();
+    //
+    // spePromise.then( (values) => {
+    //   const spe = values;
+
+
+
+
+    this.initPieChart('SI3');
+
+    this.initSucceedRateChart();
+
+
+/*
     const variable6 = this.statistiquesService.getStudentsCanada2016().subscribe((tmp) => {
       this.nbCanada2016=tmp
     });
@@ -76,28 +80,12 @@ export class DashboardComponent implements OnInit {
     const variable14 = this.statistiquesService.getStudentsJapon2018().subscribe((tmp) => {
       this.nbJapon2018=tmp
     });
+    */
 
     /**
      *   Succeed Graph Init
      */
 
-    const dataDailySalesChart: any = {
-      labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018'],
-      series: [
-        [80, 82, 75, 85, 80, 76, 70]
-      ]
-    };
-
-    const optionsDailySalesChart: any = {
-      lineSmooth: Chartist.Interpolation.cardinal({
-        tension: 0
-      }),
-      low: 50,
-      high: 100,
-      chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
-    }
-
-    const sucessRate = new Chartist.Line('#sucessRate', dataDailySalesChart, optionsDailySalesChart);
 
 
 
@@ -107,12 +95,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-    const validationDonut = new Chartist.Pie('#ct-chart-pie', {
-      series: [20,50,30]
-    }, {
-      startAngle: 270,
-      showLabel: true
-    });
+
 
 
 
@@ -160,13 +143,50 @@ export class DashboardComponent implements OnInit {
           return value;
         }
       }
-    }).on('draw', function(data) {
-      if (data.type === 'bar') {
-        data.element.attr({
+    }).on('draw', function(Degre) {
+      if (Degre.type === 'bar') {
+        Degre.element.attr({
           style: 'stroke-width: 30px'
         });
       }
     });
+
+  }
+
+  initPieChart(promo: string){
+    const variable3 = this.statistiquesService.getPieChart(promo).toPromise();
+
+    variable3.then((value) => {
+      const validationDonut = new Chartist.Pie('#ct-chart-pie', {
+        series: [value[0].degre,value[1].degre,value[2].degre]
+      }, {
+        startAngle: 270,
+        showLabel: true
+      });
+    });
+  }
+
+
+  initSucceedRateChart(){
+
+
+    const DataDailySalesChart: any = {
+      labels: ['2016', '2017', '2018'],
+      series: [
+        [80, 76, 70]
+      ]
+    };
+
+    const optionsDailySalesChart: any = {
+      lineSmooth: Chartist.Interpolation.cardinal({
+        tension: 0
+      }),
+      low: 50,
+      high: 100,
+      chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+    }
+
+    const sucessRate = new Chartist.Line('#sucessRate', DataDailySalesChart, optionsDailySalesChart);
 
   }
 

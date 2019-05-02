@@ -49,3 +49,7 @@ h3{
   margin-left:25%
 }
 
+.card .card-header {
+  z-index: 0 !important;
+}
+

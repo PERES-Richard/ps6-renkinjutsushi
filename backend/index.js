@@ -75,8 +75,9 @@ app.get('/getData/numbersucceed', function (req, res) {
   });
 });
 
-app.get('/getData/piechartvalide', function (req, res) {
-  con.query("select count(*) as valide from etudiant where etat=3;", function (err, result, fields) {
+app.get('/getData/piechart/:promo', function (req, res) {
+  let promo = req.param('promo');
+  con.query("select count(*) as degre from etudiant inner join etat on etudiant.etat = etat.idEtat where etudiant.promo= ? group by etat.degre having degre >0 and degre <4 ;",promo, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
