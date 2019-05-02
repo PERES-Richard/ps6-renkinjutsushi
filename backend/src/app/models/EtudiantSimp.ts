@@ -10,7 +10,6 @@ export interface EtudiantSimp {
   // etat: Etat,
   etat: number,
   semainesRestantes: number,
-  typeValidation: string,
   dateDebut: Date,
   dateFin: Date,
   // pays: Pays,

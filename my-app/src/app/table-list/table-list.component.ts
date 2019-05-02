@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation, Output } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
-import { TableListService} from '../service/table-list/table-list.service';
+import { TableListService } from '../service/table-list/table-list.service';
 import { filter } from 'rxjs-compat/operator/filter';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { UserProfileComponent } from 'app/user-profile/user-profile.component';
-import {Etudiant} from "../models/Etudiant";
-import {EtudiantSimp} from "../models/EtudiantSimp";
+import { Etudiant } from '../models/Etudiant';
+import { EtudiantSimp } from '../models/EtudiantSimp';
 
 
 @Component({
@@ -45,24 +45,23 @@ export class TableListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
+
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
       const etuS: EtudiantSimp[] = rep;
 
-      this.etudiant = []
-
+      this.etudiant = [];
 
       const spePromise = this.tableListService.getSpecialiteObs().toPromise();
       const paysPromise = this.tableListService.getPaysObs().toPromise();
       const etatPromise = this.tableListService.getEtatObs().toPromise();
 
-      Promise.all([spePromise, paysPromise, etatPromise]).then( (values) => {
+      Promise.all([spePromise, paysPromise, etatPromise]).then((values) => {
         const spe = values[0];
         const pays = values[1];
         const etat = values[2];
 
         etuS.forEach(etu => {
-
 
           const etudiant: Etudiant = {
             idEtudiant: etu.idEtudiant,
@@ -77,6 +76,7 @@ export class TableListComponent implements OnInit {
             etat: etat.find(function (element) {
               return element.idEtat === etu.etat;
             }),
+            typeValidation: etu.typeValidation,
             semainesRestantes: etu.semainesRestantes,
             dateDebut: etu.dateDebut === null ? null : new Date(etu.dateDebut.toString()),
             dateFin: etu.dateFin === null ? null : new Date(etu.dateFin.toString()),
@@ -84,7 +84,7 @@ export class TableListComponent implements OnInit {
               return element.idPays === etu.pays;
             }),
             obtenuVia: etu.obtenuVia,
-            mail: etu.mail,
+            mail: etu.mail.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
             annee: etu.annee
           }
 
@@ -183,7 +183,6 @@ export class TableListComponent implements OnInit {
   }
 
   edit(etu: Etudiant) {
-    // console.log(etu);
     this.router.navigate(['user-profile', { idEtudiant: etu.idEtudiant }]);
   }
 

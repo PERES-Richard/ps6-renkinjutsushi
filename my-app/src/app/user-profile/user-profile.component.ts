@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import {TableListService} from "../service/table-list/table-list.service";
-import {Etudiant} from "../models/Etudiant";
-import {EtudiantSimp} from "../models/EtudiantSimp";
+import {TableListService} from '../service/table-list/table-list.service';
+import {Etudiant} from '../models/Etudiant';
+import {EtudiantSimp} from '../models/EtudiantSimp';
 
 @Component({
   selector: 'app-user-profile',
@@ -47,6 +47,7 @@ export class UserProfileComponent implements OnInit {
                 etat: etat.find(function (element) {
                   return element.idEtat === etu.etat;
                 }),
+                typeValidation: etu.typeValidation,
                 semainesRestantes: etu.semainesRestantes,
                 dateDebut: etu.dateDebut === null ? null : new Date(etu.dateDebut.toString()),
                 dateFin: etu.dateFin === null ? null : new Date(etu.dateFin.toString()),

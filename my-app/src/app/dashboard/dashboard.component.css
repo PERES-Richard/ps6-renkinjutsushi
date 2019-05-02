@@ -49,7 +49,15 @@ h3{
   margin-left:25%
 }
 
-.card .card-header {
-  z-index: 0 !important;
+.card .card-header-info .card-icon, .card .card-header-info .card-text, .card .card-header-info:not(.card-header-icon):not(.card-header-text), .card.bg-info, .card.card-rotate.bg-info .front, .card.card-rotate.bg-info .back {
+  background: linear-gradient(60deg, #9c4747, #d01919);
 }
 
+.ct-chart .ct-label {
+  fill: rgb(255, 255, 255);
+}
+
+.card [class*="card-header-"] .ct-chart .ct-label {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+}

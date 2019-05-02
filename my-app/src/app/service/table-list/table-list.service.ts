@@ -4,18 +4,12 @@ import { from } from 'rxjs';
 import { template } from '@angular/core/src/render3';
 import { ParamMap, Params } from '@angular/router';
 import { SafeUrl } from '@angular/platform-browser';
-import {Pays} from "../../models/Pays";
-import {Etudiant} from "../../models/Etudiant";
-import {EtudiantSimp} from "../../models/EtudiantSimp";
-import {Specialite} from "../../models/Specialite";
-
-
-
-export interface Etat {
-  idEtat: number,
-  nomEtat: string,
-  degre: number
-}
+import { Pays } from '../../models/Pays';
+import { Etudiant } from '../../models/Etudiant';
+import { EtudiantSimp } from '../../models/EtudiantSimp';
+import { Specialite } from '../../models/Specialite';
+import { Data } from '../../models/Data';
+import { Etat } from '../../models/Etat';
 
 
 @Injectable(
