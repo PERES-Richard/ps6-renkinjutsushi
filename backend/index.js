@@ -88,56 +88,14 @@ app.get('/getData/piechart/:promo', function (req, res) {
   });
 });
 
-app.get('/getData/piechartencours', function (req, res) {
-  con.query("select count(*) as encours from etudiant where etat=4 or etat=2;", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
+
 
 app.get('/getData/piechartnonvalide', function (req, res) {
   con.query("select count(*) as nonvalide from etudiant where (etat=1 or etat=5 or etat=6);", function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
-
-app.get('/getData/numberstudentsjapon2016', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='japon' and etudiant.annee='2016';", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
-
-app.get('/getData/numberstudentsjapon2017', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='japon' and etudiant.annee='2017';", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
-
-app.get('/getData/numberstudentsjapon2018', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='japon' and etudiant.annee='2018';", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
+      console.log(result);
       res.status(200).json(result);
     }
   });

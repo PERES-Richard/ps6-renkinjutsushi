@@ -98,12 +98,14 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  initPieChart(promo: string){
-    const variable3 = this.statistiquesService.getPieChart(promo).toPromise();
+  initPieChart(promo: string) {
+    const promotionPro = this.statistiquesService.getPieChart(promo).toPromise();
 
-    variable3.then((value) => {
+    promotionPro.then((value) => {
+
+
       const validationDonut = new Chartist.Pie('#ct-chart-pie', {
-        series: [value[0].degre,value[1].degre,value[2].degre]
+        series: [value[0].degre, value[1].degre, value[2].degre]
       }, {
         startAngle: 270,
         showLabel: true
