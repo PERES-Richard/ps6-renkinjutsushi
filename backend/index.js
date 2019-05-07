@@ -90,8 +90,10 @@ app.get('/getData/piechart/:promo', function (req, res) {
 
 
 
-app.get('/getData/piechartnonvalide', function (req, res) {
-  con.query("select count(*) as nonvalide from etudiant where (etat=1 or etat=5 or etat=6);", function (err, result, fields) {
+
+app.get('/getData/numberstudents/:pays', function (req, res) {
+  let pays = req.param('pays');
+  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? group by etudiant.annee having annee<2020 and annee>2015 ;",pays, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
@@ -161,6 +163,10 @@ app.get('/getData/numberstudentscolombie2018', function (req, res) {
     }
   });
 });
+
+
+
+
 
 app.get('/getData', function (req, res) {
 

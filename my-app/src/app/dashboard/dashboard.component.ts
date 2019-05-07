@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit {
     this.initPieChart('SI3');
 
     this.initSucceedRateChart();
+    this.initStudentByCountry();
 
 
     /*
@@ -145,6 +146,43 @@ export class DashboardComponent implements OnInit {
 
       const sucessRate = new Chartist.Line('#sucessRate', DataDailySalesChart, optionsDailySalesChart);
 
+    });
+
+  }
+
+  initStudentByCountry() {
+    const japonPro = this.statistiquesService.getNumberStudents('japon').toPromise();
+    const canadaPro = this.statistiquesService.getNumberStudents('canada').toPromise();
+    const colombiePro = this.statistiquesService.getNumberStudents('colombie').toPromise();
+
+    Promise.all([japonPro, canadaPro, colombiePro]).then((values) => {
+      const japon = values[0];
+      const canada = values[1];
+      const colombie = values[2];
+
+
+      const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
+        labels: ['Japon', 'Canada', 'Colombie'],
+        series: [
+          [japon[0].degre, canada[0].degre, colombie[0].degre],
+          [japon[2].degre, canada[1].degre, colombie[1].degre],
+          [japon[1].degre, canada[2].degre, colombie[2].degre]
+        ]
+      }, {
+        seriesBarDistance: 15,
+        axisX: {
+          offset: 20
+        },
+        axisY: {
+          offset: 25,
+          labelInterpolationFnc: function (value) {
+            return value
+          },
+          scaleMinSpace: 20
+        }
+      });
+
+    });
   }
 
 }

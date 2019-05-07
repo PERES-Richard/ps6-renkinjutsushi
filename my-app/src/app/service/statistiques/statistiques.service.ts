@@ -16,8 +16,8 @@ export class StatistiquesService {
   constructor(private http: HttpClient) {
   }
 
-  getNumberStudents() {
-    const rep = this.http.get<Degre[]>(this.etudiantURL + '/numbersucceed');
+  getNumberStudents(pays: string) {
+    const rep = this.http.get<Degre[]>(this.etudiantURL + '/numberstudents/' + pays);
     return rep;
   }
 
