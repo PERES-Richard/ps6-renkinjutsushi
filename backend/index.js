@@ -64,8 +64,9 @@ app.get('/getData/etat', function (req, res) {
   });
 });
 
-app.get('/getData/numbersucceed', function (req, res) {
-  con.query("select annee, count(*) as number from etudiant group by annee;", function (err, result, fields) {
+app.get('/getData/numbersucceed/:annee', function (req, res) {
+  let annee = req.param('annee');
+  con.query("select count(*) as degre from etudiant where annee= ? group by etudiant.semestreValide ;",annee, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {

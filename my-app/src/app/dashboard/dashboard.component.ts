@@ -35,16 +35,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
 
 
-    const variable2 = this.statistiquesService.getNumberStudents().subscribe( (tmp) => {
-      //this.variable3=tmp
-    });
-
     // const spePromise = this.tableListService.getSpecialiteObs().toPromise();
     //
     // spePromise.then( (values) => {
     //   const spe = values;
-
-
 
 
     this.initPieChart('SI3');
@@ -52,41 +46,39 @@ export class DashboardComponent implements OnInit {
     this.initSucceedRateChart();
 
 
-/*
-    const variable6 = this.statistiquesService.getStudentsCanada2016().subscribe((tmp) => {
-      this.nbCanada2016=tmp
-    });
-    const variable7 = this.statistiquesService.getStudentsCanada2017().subscribe((tmp) => {
-      this.nbCanada2017=tmp
-    });
-    const variable8 = this.statistiquesService.getStudentsCanada2018().subscribe((tmp) => {
-      this.nbCanada2018=tmp
-    });
-    const variable9 = this.statistiquesService.getStudentsColombie2016().subscribe((tmp) => {
-      this.nbColombie2016=tmp
-    });
-    const variable10 = this.statistiquesService.getStudentsColombie2017().subscribe((tmp) => {
-      this.nbColombie2017=tmp
-    });
-    const variable11 = this.statistiquesService.getStudentsColombie2018().subscribe((tmp) => {
-      this.nbColombie2018=tmp
-    });
-    const variable12 = this.statistiquesService.getStudentsJapon2016().subscribe((tmp) => {
-      this.nbJapon2016=tmp
-    });
-    const variable13 = this.statistiquesService.getStudentsJapon2017().subscribe((tmp) => {
-      this.nbJapon2017=tmp
-    });
-    const variable14 = this.statistiquesService.getStudentsJapon2018().subscribe((tmp) => {
-      this.nbJapon2018=tmp
-    });
-    */
+    /*
+        const variable6 = this.statistiquesService.getStudentsCanada2016().subscribe((tmp) => {
+          this.nbCanada2016=tmp
+        });
+        const variable7 = this.statistiquesService.getStudentsCanada2017().subscribe((tmp) => {
+          this.nbCanada2017=tmp
+        });
+        const variable8 = this.statistiquesService.getStudentsCanada2018().subscribe((tmp) => {
+          this.nbCanada2018=tmp
+        });
+        const variable9 = this.statistiquesService.getStudentsColombie2016().subscribe((tmp) => {
+          this.nbColombie2016=tmp
+        });
+        const variable10 = this.statistiquesService.getStudentsColombie2017().subscribe((tmp) => {
+          this.nbColombie2017=tmp
+        });
+        const variable11 = this.statistiquesService.getStudentsColombie2018().subscribe((tmp) => {
+          this.nbColombie2018=tmp
+        });
+        const variable12 = this.statistiquesService.getStudentsJapon2016().subscribe((tmp) => {
+          this.nbJapon2016=tmp
+        });
+        const variable13 = this.statistiquesService.getStudentsJapon2017().subscribe((tmp) => {
+          this.nbJapon2017=tmp
+        });
+        const variable14 = this.statistiquesService.getStudentsJapon2018().subscribe((tmp) => {
+          this.nbJapon2018=tmp
+        });
+        */
 
     /**
      *   Succeed Graph Init
      */
-
-
 
 
     /**
@@ -94,62 +86,15 @@ export class DashboardComponent implements OnInit {
      */
 
 
-
-
-
-
-
-
     /**
      *   Number Of Students For Every Country
      */
-
-    const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
-      labels: ['Country 1', 'Country 2', 'Country 3', 'Country 4'],
-      series: [
-        [6, 4, 8, 7],
-        [4, 3, 7, 12],
-        [8, 3, 1, 6]
-      ]
-    }, {
-      seriesBarDistance: 15,
-      axisX: {
-        offset: 20
-      },
-      axisY: {
-        offset: 25,
-        labelInterpolationFnc: function(value) {
-          return value
-        },
-        scaleMinSpace: 20
-      }
-    });
 
 
     /**
      *   Number Of Succeed And Failure For Every Country
      */
 
-      const numberSucceedFailure = new Chartist.Bar('#numberSucceedFailure', {
-      labels: ['Country 1', 'Country 2', 'Country 3', 'Country 4'],
-      series: [
-        [8, 12, 14, 13],
-        [2, 4, 5, 3],
-      ]
-    }, {
-      stackBars: true,
-      axisY: {
-        labelInterpolationFnc: function(value) {
-          return value;
-        }
-      }
-    }).on('draw', function(Degre) {
-      if (Degre.type === 'bar') {
-        Degre.element.attr({
-          style: 'stroke-width: 30px'
-        });
-      }
-    });
 
   }
 
@@ -167,26 +112,36 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  initSucceedRateChart(){
+  initSucceedRateChart() {
+
+    const succeed2016Pro = this.statistiquesService.getNumberSucceed('2016').toPromise();
+    const succeed2017Pro = this.statistiquesService.getNumberSucceed('2017').toPromise();
+    const succeed2018Pro = this.statistiquesService.getNumberSucceed('2018').toPromise();
+
+    Promise.all([succeed2016Pro, succeed2017Pro, succeed2018Pro]).then((values) => {
+
+      const succeed2016 = values[0];
+      const succeed2017 = values[1];
+      const succeed2018 = values[2];
 
 
-    const DataDailySalesChart: any = {
-      labels: ['2016', '2017', '2018'],
-      series: [
-        [80, 76, 70]
-      ]
-    };
+      const DataDailySalesChart: any = {
+        labels: ['2016', '2017', '2018'],
+        series: [
+          [(succeed2016[1].degre * 100) / (succeed2016[1].degre + succeed2016[0].degre), (succeed2017[1].degre * 100) / (succeed2017[1].degre + succeed2017[0].degre), (succeed2018[1].degre * 100) / (succeed2018[1].degre + succeed2018[0].degre)]
+        ]
+      };
 
-    const optionsDailySalesChart: any = {
-      lineSmooth: Chartist.Interpolation.cardinal({
-        tension: 0
-      }),
-      low: 50,
-      high: 100,
-      chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
-    }
+      const optionsDailySalesChart: any = {
+        lineSmooth: Chartist.Interpolation.cardinal({
+          tension: 0
+        }),
+        low: 0,
+        high: 110,
+        chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+      }
 
-    const sucessRate = new Chartist.Line('#sucessRate', DataDailySalesChart, optionsDailySalesChart);
+      const sucessRate = new Chartist.Line('#sucessRate', DataDailySalesChart, optionsDailySalesChart);
 
   }
 
