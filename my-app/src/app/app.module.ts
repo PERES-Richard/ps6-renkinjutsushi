@@ -12,11 +12,6 @@ import { ComponentsModule } from './components/components.module';
 
 import { AppComponent } from './app.component';
 
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { TableListComponent } from './table-list/table-list.component';
-import { EtudiantValideComponent } from './etudiant-valide/etudiant-valide.component';
-
 
 import {
   AgmCoreModule

@@ -11,14 +11,14 @@ import { EtudiantSimp } from '../models/EtudiantSimp';
 
 
 @Component({
-  selector: 'app-etudiant-valide',
+  selector: 'app-etudiant-non-valide',
   providers: [TableListService],
-  templateUrl: './etudiant-valide.component.html',
+  templateUrl: './etudiant-non-valide.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./etudiant-valide.component.css']
+  styleUrls: ['./etudiant-non-valide.component.css']
 })
 
-export class EtudiantValideComponent implements OnInit {
+export class EtudiantNonValideComponent implements OnInit {
 
   etudiant: Etudiant[];
   error: any;
@@ -30,6 +30,8 @@ export class EtudiantValideComponent implements OnInit {
     'prenom',
     'promo',
     'specialite',
+    'etat',
+    'semainesRestantes',
     'commentaire',
     'actions'
   ];

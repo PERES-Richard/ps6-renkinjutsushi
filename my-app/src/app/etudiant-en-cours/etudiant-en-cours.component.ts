@@ -11,14 +11,14 @@ import { EtudiantSimp } from '../models/EtudiantSimp';
 
 
 @Component({
-  selector: 'app-etudiant-valide',
+  selector: 'app-etudiant-en-cours',
   providers: [TableListService],
-  templateUrl: './etudiant-valide.component.html',
+  templateUrl: './etudiant-en-cours.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./etudiant-valide.component.css']
+  styleUrls: ['./etudiant-en-cours.component.css']
 })
 
-export class EtudiantValideComponent implements OnInit {
+export class EtudiantEnCoursComponent implements OnInit {
 
   etudiant: Etudiant[];
   error: any;
@@ -30,6 +30,11 @@ export class EtudiantValideComponent implements OnInit {
     'prenom',
     'promo',
     'specialite',
+    'etat',
+    'semainesRestantes',
+    'pays',
+    'dateDebut',
+    'dateFin',
     'commentaire',
     'actions'
   ];

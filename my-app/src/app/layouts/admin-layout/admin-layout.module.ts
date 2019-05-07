@@ -6,6 +6,9 @@ import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { TableListComponent } from '../../table-list/table-list.component';
+import { EtudiantValideComponent } from 'app/etudiant-valide/etudiant-valide.component';
+import { EtudiantNonValideComponent } from 'app/etudiant-non-valide/etudiant-non-valide.component';
+import { EtudiantEnCoursComponent } from 'app/etudiant-en-cours/etudiant-en-cours.component';
 
 import {
   MatButtonModule,
@@ -15,7 +18,6 @@ import {
   MatTooltipModule,
   MatSelectModule, MatTableModule, MatSortModule, MatPaginatorModule
 } from '@angular/material';
-import { EtudiantValideComponent } from 'app/etudiant-valide/etudiant-valide.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -36,6 +38,8 @@ import { EtudiantValideComponent } from 'app/etudiant-valide/etudiant-valide.com
     UserProfileComponent,
     TableListComponent,
     EtudiantValideComponent,
+    EtudiantNonValideComponent,
+    EtudiantEnCoursComponent,
   ]
 })
 
