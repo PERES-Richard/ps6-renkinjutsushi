@@ -15,6 +15,7 @@ import {
   MatTooltipModule,
   MatSelectModule, MatTableModule, MatSortModule, MatPaginatorModule
 } from '@angular/material';
+import { EtudiantValideComponent } from 'app/etudiant-valide/etudiant-valide.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,6 +35,7 @@ import {
     DashboardComponent,
     UserProfileComponent,
     TableListComponent,
+    EtudiantValideComponent,
   ]
 })
 
