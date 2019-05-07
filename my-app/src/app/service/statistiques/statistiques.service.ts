@@ -31,4 +31,11 @@ export class StatistiquesService {
     return rep;
   }
 
+  getNumberSucceedCountry(pays: string){
+    const rep = this.http.get<Degre[]>(this.etudiantURL + '/numbersucceedcountry/' + pays);
+    return rep;
+  }
+
+
+
 }

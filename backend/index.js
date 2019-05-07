@@ -103,58 +103,9 @@ app.get('/getData/numberstudents/:pays', function (req, res) {
   });
 });
 
-app.get('/getData/numberstudentscanada2016', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='canada' and etudiant.annee='2016';", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
-app.get('/getData/numberstudentscanada2017', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='canada' and etudiant.annee='2017';", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
-app.get('/getData/numberstudentscanada2018', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='canada' and etudiant.annee='2018';", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
-app.get('/getData/numberstudentscolombie2016', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='colombie' and etudiant.annee='2016';", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
-app.get('/getData/numberstudentscolombie2017', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='colombie' and etudiant.annee='2017';", function (err, result, fields) {
-    if (err) {
-      console.log('Error 2.2 =\n', err);
-    } else {
-      // console.log(result);
-      res.status(200).json(result);
-    }
-  });
-});
-app.get('/getData/numberstudentscolombie2018', function (req, res) {
-  con.query("select count(*) as nbstudents from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr='colombie' and etudiant.annee='2018';", function (err, result, fields) {
+app.get('/getData/numbersucceedcountry/:pays', function (req, res) {
+  let pays = req.param('pays');
+  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? and etudiant.annee=2016 group by etudiant.semestreValide;\n\n",pays, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
