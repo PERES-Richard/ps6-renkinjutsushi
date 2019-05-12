@@ -45,9 +45,9 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="etat">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> État </th>
-                  <td mat-cell *matCellDef="let element"> {{element.etat.nomEtat}} </td>
+                <ng-container matColumnDef="typeValidation">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Type de validation </th>
+                  <td mat-cell *matCellDef="let element"> {{element.typeValidation}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="semainesRestantes">
@@ -62,13 +62,33 @@
 
                 <ng-container matColumnDef="dateDebut">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Date début </th>
-                  <td mat-cell *matCellDef="let element"> {{element.dateDebut | date:'dd - MM - yyyy'}} </td>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="(element.dateDebut > dateDebutMin && element.dateDebut < dateDebutMax) ||
+                     (element.dateDebut > dateDebutMin2 && element.dateDebut < dateDebutMax2);
+                     then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>
+                      <span style="color: red;">
+                        <strong> {{element.dateDebut | date:'dd - MM - yyyy'}}</strong>
+                      </span>
+                    </ng-template>
+                    <ng-template #elseBlock>{{element.dateDebut | date:'dd - MM - yyyy'}}.</ng-template>
+                  </td>
                 </ng-container>
 
 
                 <ng-container matColumnDef="dateFin">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Date fin </th>
-                  <td mat-cell *matCellDef="let element"> {{element.dateFin | date:'dd - MM - yyyy'}} </td>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="(element.dateFin > dateFinMin && element.dateFin < dateFinMax) ||
+                     (element.dateFin > dateFinMin2 && element.dateFin < dateFinMax2);
+                     then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>
+                      <span style="color: red;">
+                        <strong> {{element.dateFin | date:'dd - MM - yyyy'}}</strong>
+                      </span>
+                    </ng-template>
+                    <ng-template #elseBlock>{{element.dateFin | date:'dd - MM - yyyy'}}.</ng-template>
+                  </td>
                 </ng-container>
 
                 <ng-container matColumnDef="commentaire">

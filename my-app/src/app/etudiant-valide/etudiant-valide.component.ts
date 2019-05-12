@@ -30,6 +30,8 @@ export class EtudiantValideComponent implements OnInit {
     'prenom',
     'promo',
     'specialite',
+    'typeValidation',
+    'obtenuVia',
     'commentaire',
     'actions'
   ];
@@ -147,21 +149,9 @@ export class EtudiantValideComponent implements OnInit {
       item.prenom,
       item.commentaire,
       item.promo,
-      item.semainesRestantes.toString(),
       item.obtenuVia,
-      item.specialite.nomSpecialite,
-      item.etat.nomEtat,
-      item.pays.nomPays,
-      item.annee.toString()];
-
-      if (item.dateDebut != null) {
-        str.push(
-          item.dateDebut.toLocaleDateString());
-      }
-      if (item.dateFin != null) {
-        str.push(
-          item.dateFin.toLocaleDateString())
-      }
+      item.typeValidation,
+      item.specialite.nomSpecialite];
 
       // console.log(str);
 

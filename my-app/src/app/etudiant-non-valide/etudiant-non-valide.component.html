@@ -47,7 +47,30 @@
 
                 <ng-container matColumnDef="etat">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> État </th>
-                  <td mat-cell *matCellDef="let element"> {{element.etat.nomEtat}} </td>
+                  <td mat-cell *matCellDef="let element">
+                    <div *ngIf="element.etat.degre == 4; then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>
+                      <span style="color: red; font-weight: 900;">
+                        <strong> {{element.etat.nomEtat}}</strong>
+                      </span>
+                    </ng-template>
+                    <ng-template #elseBlock>
+                      <div *ngIf="element.etat.degre == 3; then thenBlock else elseBlock"></div>
+                      <ng-template #thenBlock>
+                        <span style="color: orange; font-weight: 900;">
+                          <strong> {{element.etat.nomEtat}}</strong>
+                        </span>
+                      </ng-template>
+                      <ng-template #elseBlock>
+                        <div *ngIf="element.etat.degre == 2; then thenBlock"></div>
+                        <ng-template #thenBlock>
+                          <span style="color: #2f8f1b; font-weight: 900;">
+                            <strong> {{element.etat.nomEtat}}</strong>
+                          </span>
+                        </ng-template>
+                      </ng-template>
+                    </ng-template>
+                  </td>
                 </ng-container>
 
                 <ng-container matColumnDef="semainesRestantes">

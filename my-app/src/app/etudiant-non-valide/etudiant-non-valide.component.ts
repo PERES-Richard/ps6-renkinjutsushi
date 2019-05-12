@@ -150,20 +150,8 @@ export class EtudiantNonValideComponent implements OnInit {
       item.commentaire,
       item.promo,
       item.semainesRestantes.toString(),
-      item.obtenuVia,
       item.specialite.nomSpecialite,
-      item.etat.nomEtat,
-      item.pays.nomPays,
-      item.annee.toString()];
-
-      if (item.dateDebut != null) {
-        str.push(
-          item.dateDebut.toLocaleDateString());
-      }
-      if (item.dateFin != null) {
-        str.push(
-          item.dateFin.toLocaleDateString())
-      }
+      item.etat.nomEtat];
 
       // console.log(str);
 

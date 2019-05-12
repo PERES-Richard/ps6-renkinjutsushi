@@ -24,13 +24,26 @@ export class EtudiantEnCoursComponent implements OnInit {
   error: any;
   headers: string[];
 
+  // si le debut est avant mi janvier ou que la fin est apres mi juin
+  dateDebutMin: Date;
+  dateDebutMax: Date;
+
+  dateDebutMin2: Date;
+  dateDebutMax2: Date;
+
+  dateFinMin: Date;
+  dateFinMax: Date;
+
+  dateFinMin2: Date;
+  dateFinMax2: Date;
+
   displayedColumns: string[] = [
     'photo',
     'nom',
     'prenom',
     'promo',
     'specialite',
-    'etat',
+    'typeValidation',
     'semainesRestantes',
     'pays',
     'dateDebut',
@@ -46,6 +59,12 @@ export class EtudiantEnCoursComponent implements OnInit {
   ngOnInit() {
 
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
+
+      this.initDates();
+
+      console.log('datemin =', this.dateDebutMin);
+      console.log('datemax =', this.dateDebutMax);
+
 
       const etuS: EtudiantSimp[] = rep;
 
@@ -135,6 +154,32 @@ export class EtudiantEnCoursComponent implements OnInit {
   }
 
 
+  initDates() {
+    this.dateDebutMin = new Date(new Date().getFullYear().toString() + '-01-01');
+    this.dateDebutMax = new Date(new Date().getFullYear().toString() + '-01-30');
+
+    const date1 = new Date(new Date().getFullYear().toString() + '-01-01');
+    date1.setFullYear(date1.getFullYear() + 1);
+    const date2 = new Date(new Date().getFullYear().toString() + '-01-30');
+    date2.setFullYear(date2.getFullYear() + 1);
+
+    this.dateDebutMin2 = date1;
+    this.dateDebutMax2 = date2;
+
+
+    this.dateFinMin = new Date(new Date().getFullYear().toString() + '-06-01');
+    this.dateFinMax = new Date(new Date().getFullYear().toString() + '-06-30');
+
+    const date3 = new Date(new Date().getFullYear().toString() + '-06-01');
+    date3.setFullYear(date3.getFullYear() + 1);
+    const date4 = new Date(new Date().getFullYear().toString() + '-06-30');
+    date4.setFullYear(date4.getFullYear() + 1);
+
+    this.dateFinMin2 = date3;
+    this.dateFinMax2 = date4;
+  }
+
+
   buildPhoto(data: Array<number>): SafeUrl {
 
     const base64String = btoa(new Uint8Array(data).reduce(function (data2, byte) {
@@ -153,9 +198,8 @@ export class EtudiantEnCoursComponent implements OnInit {
       item.commentaire,
       item.promo,
       item.semainesRestantes.toString(),
-      item.obtenuVia,
+      item.typeValidation,
       item.specialite.nomSpecialite,
-      item.etat.nomEtat,
       item.pays.nomPays,
       item.annee.toString()];
 

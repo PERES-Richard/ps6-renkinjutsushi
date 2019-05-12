@@ -3,7 +3,7 @@ const app = express()
 var cors = require('cors')
 var mysql = require('mysql');
 var con = mysql.createConnection({
-  port: "3306",
+  port: "3333",
   user: 'ps6_team',
   password: 'ps6_sushi',
   database: 'renkinjutsushi',
@@ -66,7 +66,7 @@ app.get('/getData/etat', function (req, res) {
 
 app.get('/getData/numbersucceed/:annee', function (req, res) {
   let annee = req.param('annee');
-  con.query("select count(*) as degre from etudiant where annee= ? group by etudiant.semestreValide ;",annee, function (err, result, fields) {
+  con.query("select count(*) as degre from etudiant where annee= ? group by etudiant.semestreValide ;", annee, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
@@ -78,7 +78,7 @@ app.get('/getData/numbersucceed/:annee', function (req, res) {
 
 app.get('/getData/piechart/:promo', function (req, res) {
   let promo = req.param('promo');
-  con.query("select count(*) as degre from etudiant inner join etat on etudiant.etat = etat.idEtat where etudiant.promo= ? group by etat.degre having degre >0 and degre <4 ;",promo, function (err, result, fields) {
+  con.query("select count(*) as degre from etudiant inner join etat on etudiant.etat = etat.idEtat where etudiant.promo= ? group by etat.degre having degre >0 and degre <4 ;", promo, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
@@ -93,7 +93,7 @@ app.get('/getData/piechart/:promo', function (req, res) {
 
 app.get('/getData/numberstudents/:pays', function (req, res) {
   let pays = req.param('pays');
-  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? group by etudiant.annee having annee<2020 and annee>2015 ;",pays, function (err, result, fields) {
+  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? group by etudiant.annee having annee<2020 and annee>2015 ;", pays, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
@@ -105,7 +105,7 @@ app.get('/getData/numberstudents/:pays', function (req, res) {
 
 app.get('/getData/numbersucceedcountry/:pays', function (req, res) {
   let pays = req.param('pays');
-  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? and etudiant.annee=2016 group by etudiant.semestreValide;\n\n",pays, function (err, result, fields) {
+  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? and etudiant.annee=2016 group by etudiant.semestreValide;\n\n", pays, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
@@ -154,6 +154,15 @@ app.get('/getData', function (req, res) {
         case 'etat':
           {
             queryStr += 'etat.nomEtat';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " IN ( ? ) AND ";
+            } else queryStr += " LIKE ? AND ";
+            break;
+          }
+
+        case 'degre':
+          {
+            queryStr += 'etat.degre';
             if (Array.isArray(Object.values(urlQuery)[i])) {
               queryStr += " IN ( ? ) AND ";
             } else queryStr += " LIKE ? AND ";
