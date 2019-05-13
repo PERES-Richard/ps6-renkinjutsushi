@@ -31,7 +31,8 @@ import {SidebarComponent} from './components/sidebar/sidebar.component';
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
-    ChartsModule
+    ChartsModule,
+    FormsModule
   ],
   declarations: [
     AppComponent,

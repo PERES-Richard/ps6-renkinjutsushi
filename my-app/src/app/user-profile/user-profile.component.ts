@@ -4,10 +4,13 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import {TableListService} from '../service/table-list/table-list.service';
 import {Etudiant} from '../models/Etudiant';
 import {EtudiantSimp} from '../models/EtudiantSimp';
+import { UserProfileService } from 'app/service/user-profile/user-profile.service';
+import { NgModel } from '@angular/forms';
+
 
 @Component({
   selector: 'app-user-profile',
-  providers: [TableListService],
+  providers: [TableListService, UserProfileService],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
@@ -16,7 +19,7 @@ export class UserProfileComponent implements OnInit {
   etudiant: Etudiant;
   loaded: Promise<boolean>;
 
-  constructor(private tableListService: TableListService,
+  constructor(private tableListService: TableListService, private userProfileService: UserProfileService,
     private domSanitizer: DomSanitizer,
     private route: ActivatedRoute
   ) { }
@@ -55,7 +58,7 @@ export class UserProfileComponent implements OnInit {
                   return element.idPays === etu.pays;
                 }),
                 obtenuVia: etu.obtenuVia,
-                mail: etu.mail,
+                mail: etu.mail.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''),
                 annee: etu.annee
               }
 
@@ -85,6 +88,10 @@ export class UserProfileComponent implements OnInit {
     }, ''));
 
     return this.domSanitizer.bypassSecurityTrustUrl('data:image/jpg;base64,' + base64String);
+  }
+
+  updateStudent() {
+    this.userProfileService.postStudent(this.etudiant);
   }
 
 }

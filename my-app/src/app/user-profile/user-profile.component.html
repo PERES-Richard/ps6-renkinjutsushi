@@ -15,12 +15,12 @@
         </div>
 
         <div class="card-body">
-          <form>
+          <form (ngSubmit)="updateStudent(f)" #f="ngForm">
 
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Nom" value="{{etudiant.nom}}">
+                  <input [(ngModel)]="etudiant.nom" name="Nom" matInput placeholder="Nom" value="{{etudiant.nom}}" ngModel>
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
                   <input matInput placeholder="Promo" type="text" value="{{etudiant.promo}}">

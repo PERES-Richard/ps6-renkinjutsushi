@@ -2,8 +2,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import * as Chartist from 'chartist';
 import { ChartType } from 'chart.js';
 import { MultiDataSet, Label } from 'ng2-charts';
-import {StatistiquesService} from "../service/statistiques/statistiques.service";
-import {Degre} from "../models/Degre";
+import { StatistiquesService } from '../service/statistiques/statistiques.service';
+import { Degre } from '../models/Degre';
 
 @Component({
   selector: 'app-dashboard',
@@ -104,14 +104,15 @@ export class DashboardComponent implements OnInit {
     const promotionPro = this.statistiquesService.getPieChart(promo).toPromise();
 
     promotionPro.then((value) => {
+      console.log('caca', value);
 
 
       const validationDonut = new Chartist.Pie('#ct-chart-pie', {
         series: [value[0].degre, value[1].degre, value[2].degre]
       }, {
-        startAngle: 270,
-        showLabel: true
-      });
+          startAngle: 270,
+          showLabel: true
+        });
     });
   }
 
@@ -132,7 +133,9 @@ export class DashboardComponent implements OnInit {
       const DataDailySalesChart: any = {
         labels: ['2016', '2017', '2018'],
         series: [
-          [(succeed2016[1].degre * 100) / (succeed2016[1].degre + succeed2016[0].degre), (succeed2017[1].degre * 100) / (succeed2017[1].degre + succeed2017[0].degre), (succeed2018[1].degre * 100) / (succeed2018[1].degre + succeed2018[0].degre)]
+          [(succeed2016[1].degre * 100) / (succeed2016[1].degre + succeed2016[0].degre),
+          (succeed2017[1].degre * 100) / (succeed2017[1].degre + succeed2017[0].degre),
+          (succeed2018[1].degre * 100) / (succeed2018[1].degre + succeed2018[0].degre)]
         ]
       };
 
@@ -142,7 +145,7 @@ export class DashboardComponent implements OnInit {
         }),
         low: 0,
         high: 110,
-        chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+        chartPadding: { top: 0, right: 0, bottom: 0, left: 0 },
       }
 
       const sucessRate = new Chartist.Line('#sucessRate', DataDailySalesChart, optionsDailySalesChart);
@@ -170,18 +173,18 @@ export class DashboardComponent implements OnInit {
           [japon[1].degre, canada[2].degre, colombie[2].degre]
         ]
       }, {
-        seriesBarDistance: 15,
-        axisX: {
-          offset: 20
-        },
-        axisY: {
-          offset: 25,
-          labelInterpolationFnc: function (value) {
-            return value
+          seriesBarDistance: 15,
+          axisX: {
+            offset: 20
           },
-          scaleMinSpace: 20
-        }
-      });
+          axisY: {
+            offset: 25,
+            labelInterpolationFnc: function (value) {
+              return value
+            },
+            scaleMinSpace: 20
+          }
+        });
 
     });
   }
@@ -195,14 +198,21 @@ export class DashboardComponent implements OnInit {
 
     Promise.all([japonPro, canadaPro, colombiePro]).then((values) => {
 
-      console.log(values[0]);
-      console.log(values[1]);
-      console.log(values[2]);
+      // console.log('japon', values[0]);
+      // console.log('canada', values[1]);
+      // console.log('colombie', values[2]);
 
       const japon = values[0];
       const canada = values[1];
       const colombie = values[2];
 
+
+      // console.log('japon2', japon[0]);
+      // console.log('canada2', canada[0]);
+      // console.log('colombie2', colombie[0]);
+      // console.log('japon3', japon[1]);
+      // console.log('canada3', canada[1]);
+      // console.log('colombie3', colombie[1]);
 
       const numberSucceedFailure = new Chartist.Bar('#numberSucceedFailure', {
         labels: ['Japon', 'Canada', 'Colombie'],
@@ -211,19 +221,19 @@ export class DashboardComponent implements OnInit {
           [japon[1].degre, canada[1].degre, colombie[1].degre],
         ]
       }, {
-        stackBars: true,
-        axisY: {
-          labelInterpolationFnc: function (value) {
-            return value;
+          stackBars: true,
+          axisY: {
+            labelInterpolationFnc: function (value) {
+              return value;
+            }
           }
-        }
-      }).on('draw', function (Degre) {
-        if (Degre.type === 'bar') {
-          Degre.element.attr({
-            style: 'stroke-width: 30px'
-          });
-        }
-      });
+        }).on('draw', function (degre2) {
+          if (degre2.type === 'bar') {
+            degre2.element.attr({
+              style: 'stroke-width: 30px'
+            });
+          }
+        });
     });
 
   }

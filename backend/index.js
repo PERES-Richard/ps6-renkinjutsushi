@@ -105,7 +105,7 @@ app.get('/getData/numberstudents/:pays', function (req, res) {
 
 app.get('/getData/numbersucceedcountry/:pays', function (req, res) {
   let pays = req.param('pays');
-  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? and etudiant.annee=2016 group by etudiant.semestreValide;\n\n", pays, function (err, result, fields) {
+  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? group by etudiant.semestreValide;\n\n", pays, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
@@ -195,6 +195,20 @@ app.get('/getData', function (req, res) {
       res.status(200).json(result);
     }
   });
+});
+
+
+app.post('/postData/updateStudent', (req, res) => {
+  
+  let student = Etudiant.create(req.body);
+    con.query("UPDATE renkinjutsushi.`etudiant` SET nom = ?, prenom = ?, promo = ?, specialite = ?, etat = ?, semestresRestants = ?, dateDebut = ?, dateFin = ?, pays = ?, obtenuVia = ?, mail = ?, annee = ? WHERE (idEtudiant = ?);\n;\n\n",
+      student.nom,student.prenom,student.promo,student.specialite,student.etat,student.semainesRestantes,student.dateDebut,student.dateFin,student.pays,student.obtenuVia,student.mail,student.annee,student.id, function (err, result, fields) {
+      if (err) {
+        console.log('Error 2.2 =\n', err);
+      } else {
+        res.status(201).json(result);
+      }
+    });
 });
 
 app.listen(3000)
