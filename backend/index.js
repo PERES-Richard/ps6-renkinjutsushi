@@ -105,7 +105,7 @@ app.get('/getData/numberstudents/:pays', function (req, res) {
 
 app.get('/getData/numbersucceedcountry/:pays', function (req, res) {
   let pays = req.param('pays');
-  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? and etudiant.annee=2016 group by etudiant.semestreValide;\n\n", pays, function (err, result, fields) {
+  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? group by etudiant.semestreValide;\n\n", pays, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {

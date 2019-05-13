@@ -1,94 +1,93 @@
 <div class="main-content">
   <div class="container-fluid">
-      <div class="row">
-          <div class="col-md-4">
-              <div class="card card-chart">
-                  <div class="card-header card-header-info">
-                      <div class="ct-chart" id="sucessRate"></div>
-                  </div>
-                  <div>
-                    <h3>Taux de réussite</h3>
-                  </div>
-              </div>
-          </div>
-          <div class="col-md-4">
-              <div class="card card-chart">
-                  <div class="card-header card-header-info">
-                    <div id="legende">
-                        <span>
-                          <img class="img" src=".\..\..\assets\img\red.png"/>
-                        </span>
-                        <span>
-                          Non Validé
-                        </span>
-                        <div class="middle">
-                        <span>
-                          <img class="img" src=".\..\..\assets\img\orange2.png"/>
-                        </span>
-                        <span>
-                          En cours
-                        </span>
-                        </div>
-                        <span>
-                          <img class="img" src=".\..\..\assets\img\green.png"/>
-                        </span>
-                        <span>
-                          Validé
-                        </span>
-                      </div>
-                      <div class="ct-chart" id="ct-chart-pie">
-                    </div>
-                    <p>Sélectionner la promotion :</p>
-
-                    <div>
-                      <input type="radio" id="SI3" name="drone" value="SI3"
-                             checked (click)="initPieChart('SI3')">
-                      <label for="SI3">SI3</label>
-                    </div>
-
-                    <div>
-                      <input type="radio" id="SI4" name="drone" value="SI4" (click)="initPieChart('SI4')">
-                      <label for="SI4">SI4</label>
-                    </div>
-
-                    <div>
-                      <input type="radio" id="SI5" name="drone" value="SI5" (click)="initPieChart('SI5')">
-                      <label for="SI5">SI5</label>
-                    </div>
-
-                  </div>
-                <div>
-                  <h3>Etat d'avancement par promotion</h3>
-                </div>
-              </div>
-          </div>
-      </div>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-6">
+        <div class="card card-chart">
+          <div class="card-header card-header-info">
+            <div class="ct-chart" id="sucessRate"></div>
+          </div>
+          <div>
+            <h3>Taux de réussite</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card card-chart">
+          <div class="card-header card-header-info">
+            <div id="legende">
+              <span>
+                <img class="img" src=".\..\..\assets\img\red.png" />
+              </span>
+              <span>
+                Non Validé
+              </span>
+              <div class="middle">
+                <span>
+                  <img class="img" src=".\..\..\assets\img\orange2.png" />
+                </span>
+                <span>
+                  En cours
+                </span>
+              </div>
+              <span>
+                <img class="img" src=".\..\..\assets\img\green.png" />
+              </span>
+              <span>
+                Validé
+              </span>
+            </div>
+            <div class="ct-chart" id="ct-chart-pie">
+            </div>
+            <p>Sélectionner la promotion :</p>
+
+            <div>
+              <input type="radio" id="SI3" name="drone" value="SI3" checked (click)="initPieChart('SI3')">
+              <label for="SI3">SI3</label>
+            </div>
+
+            <div>
+              <input type="radio" id="SI4" name="drone" value="SI4" (click)="initPieChart('SI4')">
+              <label for="SI4">SI4</label>
+            </div>
+
+            <div>
+              <input type="radio" id="SI5" name="drone" value="SI5" (click)="initPieChart('SI5')">
+              <label for="SI5">SI5</label>
+            </div>
+
+          </div>
+          <div>
+            <h3>Etat d'avancement par promotion</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
         <div class="card card-chart">
           <div class="card-header card-header-info">
             <div id="legende2">
-            <span>
-              <img class="img" src=".\..\..\assets\img\green.png"/>
-            </span>
-            <span>
-              2016
-            </span>
-            <div class="middle">
-            <span>
-              <img class="img" src=".\..\..\assets\img\red.png"/>
-            </span>
-            <span>
-              2017
-            </span>
+              <span>
+                <img class="img" src=".\..\..\assets\img\green.png" />
+              </span>
+              <span>
+                2016
+              </span>
+              <div class="middle">
+                <span>
+                  <img class="img" src=".\..\..\assets\img\red.png" />
+                </span>
+                <span>
+                  2017
+                </span>
+              </div>
+              <span>
+                <img class="img" src=".\..\..\assets\img\orange2.png" />
+              </span>
+              <span>
+                2018
+              </span>
             </div>
-            <span>
-              <img class="img" src=".\..\..\assets\img\orange2.png"/>
-            </span>
-            <span>
-              2018
-            </span>
-          </div>
             <div class="ct-chart" id="numberOfStudents"></div>
           </div>
           <div>
@@ -96,30 +95,32 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card card-chart">
-          <div class="card-header card-header-info">
-            <div id="legende3">
-            <div class="middle">
-            <span>
-              <img class="img" src=".\..\..\assets\img\red.png"/>
-            </span>
-            <span>
-              Echec
-            </span>
+      <div class="col-md-6">
+        <div class="container-fluid">
+          <div class="card card-chart">
+            <div class="card-header card-header-info">
+              <div id="legende3">
+                <div class="middle">
+                  <span>
+                    <img class="img" src=".\..\..\assets\img\red.png" />
+                  </span>
+                  <span>
+                    Echec
+                  </span>
+                </div>
+                <span>
+                  <img class="img" src=".\..\..\assets\img\green.png" />
+                </span>
+                <span>
+                  Réussite
+                </span>
+              </div>
+              <div class="ct-chart" id="numberSucceedFailure"></div>
             </div>
-            <span>
-              <img class="img" src=".\..\..\assets\img\green.png"/>
-            </span>
-            <span>
-              Réussite
-            </span>
-          </div>
-            <div class="ct-chart" id="numberSucceedFailure"></div>
-          </div>
 
-          <div>
-            <h3>Nombre d'échecs/réussite par pays</h3>
+            <div>
+              <h3>Nombre d'échecs/réussite par pays</h3>
+            </div>
           </div>
         </div>
       </div>
