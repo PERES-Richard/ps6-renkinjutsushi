@@ -1,3 +1,10 @@
 
 sql-pays.sql
 BD/renkinjutsushi_test.sql
+.idea/*/*
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/ps6-renkinjutsushi.iml
+.idea/modules.xml
+.idea/misc.xml
+.idea/encodings.xml
