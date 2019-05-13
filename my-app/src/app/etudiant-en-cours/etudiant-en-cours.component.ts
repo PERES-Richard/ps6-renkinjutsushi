@@ -28,13 +28,21 @@ export class EtudiantEnCoursComponent implements OnInit {
       SI3: new FormControl(''),
       SI4: new FormControl(''),
       SI5: new FormControl('')
-    })
-    // specialite: new FormGroup({
-    //   IHM: new FormControl(''),
-    //   AL: new FormControl('')
-    // })
-    // typeValidation: [''],
-    // semainesRestantes: ['']
+    }),
+    specialite: new FormGroup({
+      IHM: new FormControl(''),
+      CS: new FormControl(''),
+      STRAW: new FormControl(''),
+      AL: new FormControl('')
+    }),
+    typeValidation: new FormGroup({
+      IHM: new FormControl(''),
+      CS: new FormControl(''),
+      STRAW: new FormControl(''),
+      AL: new FormControl('')
+    }),
+    semainesRestantes: new FormControl(''),
+    annee: new FormControl('')
   });
 
   etudiant: Etudiant[];
@@ -68,6 +76,7 @@ export class EtudiantEnCoursComponent implements OnInit {
     'dateDebut',
     'dateFin',
     'commentaire',
+    'annee',
     'actions'
   ];
   dataSource = new MatTableDataSource<Etudiant>();
@@ -260,20 +269,15 @@ export class EtudiantEnCoursComponent implements OnInit {
     this.opened = !this.opened;
   }
 
-  CheckBoxValueChange(checkboxValue: string, finalData: any) {
-    finalData.checkboxText = checkboxValue;
-    console.log(checkboxValue);
-  }
-
   onSubmit() {
     // TODO: Use EventEmitter with form value
     console.log('value', this.filtreForm.value);
 
     console.log('en', this.filtreForm.get('promo').value);
+    let params = new HttpParams();
 
     let promo = []
     promo = this.filtreForm.get('promo').value;
-    let params = new HttpParams();
 
     for (let i = 0; i < Object.keys(promo).length; i++) {
       if (Object.values(promo)[i]) {
@@ -281,29 +285,65 @@ export class EtudiantEnCoursComponent implements OnInit {
       }
     }
     console.log('params', params.getAll('promo'));
+
+
+    let specialite = []
+    specialite = this.filtreForm.get('specialite').value;
+    for (let i = 0; i < Object.keys(specialite).length; i++) {
+      if (Object.values(specialite)[i]) {
+        params = params.append('specialite', Object.keys(specialite)[i]);
+      }
+    }
+    console.log('params', params.getAll('specialite'));
+
+
+    let typeValidation = []
+    typeValidation = this.filtreForm.get('typeValidation').value;
+    for (let i = 0; i < Object.keys(typeValidation).length; i++) {
+      if (Object.values(typeValidation)[i]) {
+        params = params.append('typeValidation', Object.keys(typeValidation)[i]);
+      }
+    }
+    console.log('params', params.getAll('typeValidation'));
+
+
+    let semainesRestantes = [];
+    semainesRestantes = this.filtreForm.get('semainesRestantes').value;
+    for (let i = 0; i < Object.keys(semainesRestantes).length; i++) {
+      params = params.append('semainesRestantes', Object.values(semainesRestantes)[i]);
+    }
+    console.log('semainesRestantes', params.getAll('semainesRestantes'));
+
+    let annee = [];
+    annee = this.filtreForm.get('annee').value;
+    for (let i = 0; i < Object.keys(annee).length; i++) {
+      params = params.append('annee', Object.values(annee)[i]);
+    }
+    console.log('annee', params.getAll('annee'));
+
+    params = params.append('degre', '1');
+
+    console.log('params', params);
+    // TODO param.updates
+    // this.router.navigate(['etudiant-en-cours' + JSON.stringify(params)]);
   }
-// TODO le reste
-// onSubmit(form: NgForm) {
-//   console.log('sub', form.value);
 
-// }
+  addFav(form: NgForm) {
+    console.log('add', form.value);
+    console.log('add2', form.control);
+    console.log('add3', form);
+    // let params = new HttpParams();
+    // params = params.append('value', form.value);
+    // console.log(params);
 
-addFav(form: NgForm) {
-  console.log('add', form.value);
-  console.log('add2', form.control);
-  console.log('add3', form);
-  // let params = new HttpParams();
-  // params = params.append('value', form.value);
-  // console.log(params);
-
-  // params.getAll(form.valueChanges)
-}
+    // params.getAll(form.valueChanges)
+  }
 
 
-constructor(private tableListService: TableListService,
-  private route: ActivatedRoute,
-  private domSanitizer: DomSanitizer,
-  private router: Router,
-  private fb: FormBuilder) { }
+  constructor(private tableListService: TableListService,
+    private route: ActivatedRoute,
+    private domSanitizer: DomSanitizer,
+    private router: Router,
+    private fb: FormBuilder) { }
 
 }

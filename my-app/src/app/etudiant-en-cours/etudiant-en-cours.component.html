@@ -8,92 +8,108 @@
           <div style="padding-left: 25px; padding-right: 25px;">
 
             <form [formGroup]="filtreForm" (ngSubmit)="onSubmit()">
-            <p>Promotion:</p>
 
-            <div style="padding-left: 25px;" formGroupName="promo">
-              <div>
-                <input type="checkbox" id="SI3" value="SI3" formControlName="SI3">
-                <label for="SI3">SI3</label>
-              </div>
-              <div>
-                <input type="checkbox" id="SI4" value="SI4" formControlName="SI4">
-                <label for="SI4">SI4</label>
-              </div>
-              <div>
-                <input type="checkbox" id="SI5" value="SI5" formControlName="SI5">
-                <label for="SI5">SI5</label>
-              </div>
-            </div>
+              <p>Promotion:</p>
 
-            <hr>
-
-            <p>Spécialité:</p>
-            <div style="padding-left: 25px;">
-              <div>
-                <input type="checkbox" id="AL" value="AL">
-                <label for="AL">AL</label>
-              </div>
-              <div>
-                <input type="checkbox" id="IHM" value="IHM">
-                <label for="IHM">IHM</label>
-              </div>
-              <div>
-                <input type="checkbox" id="C&S" value="C&S">
-                <label for="C&S">C&S</label>
-              </div>
-              <div>
-                <input type="checkbox" id="STRAW" value="STRAW">
-                <label for="STRAW">STRAW</label>
-              </div>
-            </div>
-
-            <hr>
-
-            <p>Type de validation :</p>
-            <div style="padding-left: 25px;">
-              <div>
-                <input type="checkbox" name="Semestre" value="Semestre">
-                <label for="Semestre">Semestre</label>
+              <div style="padding-left: 25px;" formGroupName="promo">
+                <div>
+                  <input type="checkbox" id="SI3" value="SI3" formControlName="SI3">
+                  <label for="SI3">SI3</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="SI4" value="SI4" formControlName="SI4">
+                  <label for="SI4">SI4</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="SI5" value="SI5" formControlName="SI5">
+                  <label for="SI5">SI5</label>
+                </div>
               </div>
 
-              <div>
-                <input type="checkbox" name="Stage" value="Stage">
-                <label for="Stage">Stage</label>
+              <hr>
+
+              <p>Spécialité:</p>
+              <div style="padding-left: 25px;" formGroupName="specialite">
+                <div>
+                  <input type="checkbox" id="AL" value="AL" formControlName="AL">
+                  <label for="AL">AL</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="IHM" value="IHM" formControlName="IHM">
+                  <label for="IHM">IHM</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="CS" value="CS" formControlName="CS">
+                  <label for="CS">CS</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="STRAW" value="STRAW" formControlName="STRAW">
+                  <label for="STRAW">STRAW</label>
+                </div>
               </div>
 
-              <div>
-                <input type="checkbox" name="Autre" value="Autre">
-                <label for="Autre">Autre</label>
+              <hr>
+
+              <p>Type de validation :</p>
+              <div style="padding-left: 25px;" formGroupName="typeValidation">
+                <div>
+                  <input type="checkbox" name="Semestre" value="Semestre" formControlName="Semestre">
+                  <label for="Semestre">Semestre</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" name="Stage" value="Stage" formControlName="Stage">
+                  <label for="Stage">Stage</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" name="Autre" value="Autre" formControlName="Autre">
+                  <label for="Autre">Autre</label>
+                </div>
               </div>
-            </div>
 
-            <hr>
+              <hr>
 
-            <p>Semaines restantes :</p>
+              <p>Semaines restantes :</p>
 
-            <div style="padding-left: 25px;">
-              <select multiple class="form-control picker" name="SemainesRestantes">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-              </select>
-            </div>
+              <div style="padding-left: 25px;">
+                <select multiple class="form-control picker" name="SemainesRestantes"
+                  formControlName="semainesRestantes">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
 
-            <button mat-raised-button class="btn btn-danger" type="submit"
-              style="width: 198px; margin-top: 50px;     margin-left: -11px;">
-              Filtrer les résultats
-            </button>
+              <hr>
 
-            <button mat-raised-button class="btn btn-default" type="button"
-              style="width: 198px;     margin-left: -11px;" (click)="addFav(f)">
-              Sauvegarder le filtre
-            </button>
+              <p>Années :</p>
+
+              <div style="padding-left: 25px;">
+                <select multiple class="form-control picker" name="annee"
+                  formControlName="annee">
+                  <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                </select>
+              </div>
+
+              <button mat-raised-button class="btn btn-danger" type="submit"
+                style="width: 198px; margin-top: 50px;     margin-left: -11px;">
+                Filtrer les résultats
+              </button>
+
+              <button mat-raised-button class="btn btn-default" type="button"
+                style="width: 198px;     margin-left: -11px;" (click)="addFav(f)">
+                Sauvegarder le filtre
+              </button>
             </form>
 
           </div>
@@ -105,7 +121,7 @@
 
           <div class="card">
             <div class="card-header card-header-danger">
-              <h4 class="card-title ">Liste des étudiants</h4>
+              <h4 class="card-title ">Liste des étudiants en cours de validation</h4>
               <!-- <p class="card-category">Liste des étudiants !</p> -->
             </div>
             <div class="card-body">
@@ -197,6 +213,11 @@
                   <ng-container matColumnDef="commentaire">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Commentaire </th>
                     <td mat-cell *matCellDef="let element"> {{element.commentaire}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="annee">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Année </th>
+                    <td mat-cell *matCellDef="let element"> {{element.annee}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="actions">
