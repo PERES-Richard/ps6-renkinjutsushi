@@ -1,13 +1,16 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
 import { TableListService } from '../service/table-list/table-list.service';
-import { filter } from 'rxjs-compat/operator/filter';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { RouterModule, Routes } from '@angular/router';
-import { UserProfileComponent } from 'app/user-profile/user-profile.component';
 import { Etudiant } from '../models/Etudiant';
 import { EtudiantSimp } from '../models/EtudiantSimp';
+import { NgForm, FormBuilder } from '@angular/forms';
+
+import { HttpParams } from '@angular/common/http';
+import { FormGroup, FormControl } from '@angular/forms';
+import { FormArray } from '@angular/forms';
+
 
 
 @Component({
@@ -20,9 +23,25 @@ import { EtudiantSimp } from '../models/EtudiantSimp';
 
 export class EtudiantEnCoursComponent implements OnInit {
 
+  filtreForm = new FormGroup({
+    promo: new FormGroup({
+      SI3: new FormControl(''),
+      SI4: new FormControl(''),
+      SI5: new FormControl('')
+    })
+    // specialite: new FormGroup({
+    //   IHM: new FormControl(''),
+    //   AL: new FormControl('')
+    // })
+    // typeValidation: [''],
+    // semainesRestantes: ['']
+  });
+
   etudiant: Etudiant[];
   error: any;
   headers: string[];
+
+  opened: boolean;
 
   // si le debut est avant mi janvier ou que la fin est apres mi juin
   dateDebutMin: Date;
@@ -61,9 +80,9 @@ export class EtudiantEnCoursComponent implements OnInit {
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
       this.initDates();
-
-      console.log('datemin =', this.dateDebutMin);
-      console.log('datemax =', this.dateDebutMax);
+      this.opened = false;
+      // console.log('datemin =', this.dateDebutMin);
+      // console.log('datemax =', this.dateDebutMax);
 
 
       const etuS: EtudiantSimp[] = rep;
@@ -229,9 +248,62 @@ export class EtudiantEnCoursComponent implements OnInit {
     this.router.navigate(['user-profile', { idEtudiant: etu.idEtudiant }]);
   }
 
-  constructor(private tableListService: TableListService,
-    private route: ActivatedRoute,
-    private domSanitizer: DomSanitizer,
-    private router: Router) { }
+
+  toggleNav() {
+    if (this.opened) {
+      document.getElementById('mySidebar').style.width = '0';
+      document.getElementById('main').style.marginLeft = '0';
+    } else {
+      document.getElementById('mySidebar').style.width = '225px';
+      document.getElementById('main').style.marginLeft = '225px';
+    }
+    this.opened = !this.opened;
+  }
+
+  CheckBoxValueChange(checkboxValue: string, finalData: any) {
+    finalData.checkboxText = checkboxValue;
+    console.log(checkboxValue);
+  }
+
+  onSubmit() {
+    // TODO: Use EventEmitter with form value
+    console.log('value', this.filtreForm.value);
+
+    console.log('en', this.filtreForm.get('promo').value);
+
+    let promo = []
+    promo = this.filtreForm.get('promo').value;
+    let params = new HttpParams();
+
+    for (let i = 0; i < Object.keys(promo).length; i++) {
+      if (Object.values(promo)[i]) {
+        params = params.append('promo', Object.keys(promo)[i]);
+      }
+    }
+    console.log('params', params.getAll('promo'));
+  }
+// TODO le reste
+// onSubmit(form: NgForm) {
+//   console.log('sub', form.value);
+
+// }
+
+addFav(form: NgForm) {
+  console.log('add', form.value);
+  console.log('add2', form.control);
+  console.log('add3', form);
+  // let params = new HttpParams();
+  // params = params.append('value', form.value);
+  // console.log(params);
+
+  // params.getAll(form.valueChanges)
+}
+
+
+constructor(private tableListService: TableListService,
+  private route: ActivatedRoute,
+  private domSanitizer: DomSanitizer,
+  private router: Router,
+  private fb: FormBuilder) { }
 
 }

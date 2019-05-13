@@ -10,13 +10,14 @@ import { EtudiantValideComponent } from 'app/etudiant-valide/etudiant-valide.com
 import { EtudiantNonValideComponent } from 'app/etudiant-non-valide/etudiant-non-valide.component';
 import { EtudiantEnCoursComponent } from 'app/etudiant-en-cours/etudiant-en-cours.component';
 
+
 import {
   MatButtonModule,
   MatInputModule,
   MatRippleModule,
   MatFormFieldModule,
   MatTooltipModule,
-  MatSelectModule, MatTableModule, MatSortModule, MatPaginatorModule
+  MatSelectModule, MatTableModule, MatSortModule, MatPaginatorModule, MatSidenavModule
 } from '@angular/material';
 @NgModule({
   imports: [
@@ -32,6 +33,8 @@ import {
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    MatSidenavModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     DashboardComponent,

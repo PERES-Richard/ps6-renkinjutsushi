@@ -1,124 +1,230 @@
-<div class="main-content">
+<div class="main-content" style="margin-top: -50px;">
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <div class="card">
-          <div class="card-header card-header-danger">
-            <h4 class="card-title ">Liste des étudiants</h4>
-            <!-- <p class="card-category">Liste des étudiants !</p> -->
+
+        <div id="mySidebar" class="sidebar">
+
+          <div style="padding-left: 25px; padding-right: 25px;">
+
+            <form [formGroup]="filtreForm" (ngSubmit)="onSubmit()">
+            <p>Promotion:</p>
+
+            <div style="padding-left: 25px;" formGroupName="promo">
+              <div>
+                <input type="checkbox" id="SI3" value="SI3" formControlName="SI3">
+                <label for="SI3">SI3</label>
+              </div>
+              <div>
+                <input type="checkbox" id="SI4" value="SI4" formControlName="SI4">
+                <label for="SI4">SI4</label>
+              </div>
+              <div>
+                <input type="checkbox" id="SI5" value="SI5" formControlName="SI5">
+                <label for="SI5">SI5</label>
+              </div>
+            </div>
+
+            <hr>
+
+            <p>Spécialité:</p>
+            <div style="padding-left: 25px;">
+              <div>
+                <input type="checkbox" id="AL" value="AL">
+                <label for="AL">AL</label>
+              </div>
+              <div>
+                <input type="checkbox" id="IHM" value="IHM">
+                <label for="IHM">IHM</label>
+              </div>
+              <div>
+                <input type="checkbox" id="C&S" value="C&S">
+                <label for="C&S">C&S</label>
+              </div>
+              <div>
+                <input type="checkbox" id="STRAW" value="STRAW">
+                <label for="STRAW">STRAW</label>
+              </div>
+            </div>
+
+            <hr>
+
+            <p>Type de validation :</p>
+            <div style="padding-left: 25px;">
+              <div>
+                <input type="checkbox" name="Semestre" value="Semestre">
+                <label for="Semestre">Semestre</label>
+              </div>
+
+              <div>
+                <input type="checkbox" name="Stage" value="Stage">
+                <label for="Stage">Stage</label>
+              </div>
+
+              <div>
+                <input type="checkbox" name="Autre" value="Autre">
+                <label for="Autre">Autre</label>
+              </div>
+            </div>
+
+            <hr>
+
+            <p>Semaines restantes :</p>
+
+            <div style="padding-left: 25px;">
+              <select multiple class="form-control picker" name="SemainesRestantes">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+              </select>
+            </div>
+
+            <button mat-raised-button class="btn btn-danger" type="submit"
+              style="width: 198px; margin-top: 50px;     margin-left: -11px;">
+              Filtrer les résultats
+            </button>
+
+            <button mat-raised-button class="btn btn-default" type="button"
+              style="width: 198px;     margin-left: -11px;" (click)="addFav(f)">
+              Sauvegarder le filtre
+            </button>
+            </form>
+
           </div>
-          <div class="card-body">
-            <div class="table-responsive">
+        </div>
 
-              <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrer">
-              </mat-form-field>
+        <div id="main">
+          <button class="openbtn btn btn-primary" (click)="toggleNav()" style="font-size: 0.95em;">&#9776;
+            Filtres</button>
 
-              <table mat-table [dataSource]="dataSource" matSort class="table" style="text-align: center;">
+          <div class="card">
+            <div class="card-header card-header-danger">
+              <h4 class="card-title ">Liste des étudiants</h4>
+              <!-- <p class="card-category">Liste des étudiants !</p> -->
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
 
-                <ng-container matColumnDef="photo">
-                  <th mat-header-cell *matHeaderCellDef class=" text-primary"> Photo </th>
-                  <td mat-cell *matCellDef="let element"> <img [src]="element.photo" class="rounded-circle" width="45"
-                      height="45"> </td>
-                </ng-container>
+                <mat-form-field>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrer">
+                </mat-form-field>
 
-                <ng-container matColumnDef="nom">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Nom </th>
-                  <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
-                </ng-container>
+                <table mat-table [dataSource]="dataSource" matSort class="table" style="text-align: center;">
+
+                  <ng-container matColumnDef="photo">
+                    <th mat-header-cell *matHeaderCellDef class=" text-primary"> Photo </th>
+                    <td mat-cell *matCellDef="let element"> <img [src]="element.photo" class="rounded-circle" width="45"
+                        height="45"> </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="nom">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Nom </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
+                  </ng-container>
 
 
-                <ng-container matColumnDef="prenom">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Prenom </th>
-                  <td mat-cell *matCellDef="let element"> {{element.prenom}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="prenom">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Prenom </th>
+                    <td mat-cell *matCellDef="let element"> {{element.prenom}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="promo">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Promo </th>
-                  <td mat-cell *matCellDef="let element"> {{element.promo}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="promo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Promo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.promo}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="specialite">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Spécialité </th>
-                  <td mat-cell *matCellDef="let element"> {{element.specialite.nomSpecialite}} <span
-                      *ngIf="element.specialite.envisagee" style="color: mediumvioletred;"><strong> * </strong></span>
-                  </td>
-                </ng-container>
+                  <ng-container matColumnDef="specialite">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Spécialité </th>
+                    <td mat-cell *matCellDef="let element"> {{element.specialite.nomSpecialite}} <span
+                        *ngIf="element.specialite.envisagee" style="color: mediumvioletred;"><strong> * </strong></span>
+                    </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="typeValidation">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Type de validation </th>
-                  <td mat-cell *matCellDef="let element"> {{element.typeValidation}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="typeValidation">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Type de validation
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.typeValidation}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="semainesRestantes">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Semaines restantes </th>
-                  <td mat-cell *matCellDef="let element"> {{element.semainesRestantes}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="semainesRestantes">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Semaines restantes
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.semainesRestantes}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="pays">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Pays </th>
-                  <td mat-cell *matCellDef="let element"> {{element.pays.nomPays}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="pays">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Pays </th>
+                    <td mat-cell *matCellDef="let element"> {{element.pays.nomPays}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="dateDebut">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Date début </th>
-                  <td mat-cell *matCellDef="let element">
-                    <div *ngIf="(element.dateDebut > dateDebutMin && element.dateDebut < dateDebutMax) ||
+                  <ng-container matColumnDef="dateDebut">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Date début </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div *ngIf="(element.dateDebut > dateDebutMin && element.dateDebut < dateDebutMax) ||
                      (element.dateDebut > dateDebutMin2 && element.dateDebut < dateDebutMax2);
                      then thenBlock else elseBlock"></div>
-                    <ng-template #thenBlock>
-                      <span style="color: red;">
-                        <strong> {{element.dateDebut | date:'dd - MM - yyyy'}}</strong>
-                      </span>
-                    </ng-template>
-                    <ng-template #elseBlock>{{element.dateDebut | date:'dd - MM - yyyy'}}.</ng-template>
-                  </td>
-                </ng-container>
+                      <ng-template #thenBlock>
+                        <span style="color: red;">
+                          <strong> {{element.dateDebut | date:'dd - MM - yyyy'}}</strong>
+                        </span>
+                      </ng-template>
+                      <ng-template #elseBlock>{{element.dateDebut | date:'dd - MM - yyyy'}}.</ng-template>
+                    </td>
+                  </ng-container>
 
 
-                <ng-container matColumnDef="dateFin">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Date fin </th>
-                  <td mat-cell *matCellDef="let element">
-                    <div *ngIf="(element.dateFin > dateFinMin && element.dateFin < dateFinMax) ||
+                  <ng-container matColumnDef="dateFin">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Date fin </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div *ngIf="(element.dateFin > dateFinMin && element.dateFin < dateFinMax) ||
                      (element.dateFin > dateFinMin2 && element.dateFin < dateFinMax2);
                      then thenBlock else elseBlock"></div>
-                    <ng-template #thenBlock>
-                      <span style="color: red;">
-                        <strong> {{element.dateFin | date:'dd - MM - yyyy'}}</strong>
-                      </span>
-                    </ng-template>
-                    <ng-template #elseBlock>{{element.dateFin | date:'dd - MM - yyyy'}}.</ng-template>
-                  </td>
-                </ng-container>
+                      <ng-template #thenBlock>
+                        <span style="color: red;">
+                          <strong> {{element.dateFin | date:'dd - MM - yyyy'}}</strong>
+                        </span>
+                      </ng-template>
+                      <ng-template #elseBlock>{{element.dateFin | date:'dd - MM - yyyy'}}.</ng-template>
+                    </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="commentaire">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Commentaire </th>
-                  <td mat-cell *matCellDef="let element"> {{element.commentaire}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="commentaire">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Commentaire </th>
+                    <td mat-cell *matCellDef="let element"> {{element.commentaire}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef class=" text-primary" style="text-align: center;"> Actions </th>
-                  <td mat-cell *matCellDef="let element">
-                    <button mat-raised-button type="button" (click)="edit(element)" matTooltip="Modifier l'étudiant"
-                      [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
-                      <i class="material-icons">edit</i>
-                    </button>
-                    <a href="mailto:{{element.mail}}">
-                      <button mat-raised-button type="button" matTooltip="Envoyer un mail à l'étudiant"
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class=" text-primary" style="text-align: center;"> Actions
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-raised-button type="button" (click)="edit(element)" matTooltip="Modifier l'étudiant"
                         [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
-                        <i class="material-icons">mail</i>
+                        <i class="material-icons">edit</i>
                       </button>
-                    </a>
-                  </td>
-                </ng-container>
+                      <a href="mailto:{{element.mail}}">
+                        <button mat-raised-button type="button" matTooltip="Envoyer un mail à l'étudiant"
+                          [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
+                          <i class="material-icons">mail</i>
+                        </button>
+                      </a>
+                    </td>
+                  </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
 
-              <mat-paginator [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
