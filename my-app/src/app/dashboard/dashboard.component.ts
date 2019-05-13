@@ -198,21 +198,21 @@ export class DashboardComponent implements OnInit {
 
     Promise.all([japonPro, canadaPro, colombiePro]).then((values) => {
 
-      console.log('japon', values[0]);
-      console.log('canada', values[1]);
-      console.log('colombie', values[2]);
+      // console.log('japon', values[0]);
+      // console.log('canada', values[1]);
+      // console.log('colombie', values[2]);
 
       const japon = values[0];
       const canada = values[1];
       const colombie = values[2];
 
 
-      console.log('japon2', japon[0]);
-      console.log('canada2', canada[0]);
-      console.log('colombie2', colombie[0]);
-      console.log('japon3', japon[1]);
-      console.log('canada3', canada[1]);
-      console.log('colombie3', colombie[1]);
+      // console.log('japon2', japon[0]);
+      // console.log('canada2', canada[0]);
+      // console.log('colombie2', colombie[0]);
+      // console.log('japon3', japon[1]);
+      // console.log('canada3', canada[1]);
+      // console.log('colombie3', colombie[1]);
 
       const numberSucceedFailure = new Chartist.Bar('#numberSucceedFailure', {
         labels: ['Japon', 'Canada', 'Colombie'],

@@ -197,6 +197,20 @@ app.get('/getData', function (req, res) {
   });
 });
 
+
+app.post('/postData/updateStudent', (req, res) => {
+  
+  let student = Etudiant.create(req.body);
+    con.query("UPDATE renkinjutsushi.`etudiant` SET nom = ?, prenom = ?, promo = ?, specialite = ?, etat = ?, semestresRestants = ?, dateDebut = ?, dateFin = ?, pays = ?, obtenuVia = ?, mail = ?, annee = ? WHERE (idEtudiant = ?);\n;\n\n",
+      student.nom,student.prenom,student.promo,student.specialite,student.etat,student.semainesRestantes,student.dateDebut,student.dateFin,student.pays,student.obtenuVia,student.mail,student.annee,student.id, function (err, result, fields) {
+      if (err) {
+        console.log('Error 2.2 =\n', err);
+      } else {
+        res.status(201).json(result);
+      }
+    });
+});
+
 app.listen(3000)
 
 console.log('Starting...')
