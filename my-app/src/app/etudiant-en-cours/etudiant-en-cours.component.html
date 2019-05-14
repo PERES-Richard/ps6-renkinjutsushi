@@ -250,4 +250,11 @@
       </div>
     </div>
   </div>
+  <div class="text-center">
+    <p id="para"></p>
+    <input type="file" style="display: none" #file (change)="fileChange($event)"/>
+    <button type="button" class="btn-outline-success" (click)="file.click()">Importer un CSV</button>
+    <button type="button" class="btn-outline-success">Exporter un CSV</button>
+  </div>
 </div>
+

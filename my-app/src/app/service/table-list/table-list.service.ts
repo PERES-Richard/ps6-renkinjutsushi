@@ -17,6 +17,7 @@ import { Etat } from '../../models/Etat';
 export class TableListService {
 
   etudiantURL = 'http://localhost:3000/getData'
+  etudiantURLP= 'http://localhost:3000/postData'
   specialiteURL = 'http://localhost:3000/getData/specialite'
   etatURL = 'http://localhost:3000/getData/etat'
   paysURL = 'http://localhost:3000/getData/pays'
@@ -47,6 +48,11 @@ export class TableListService {
     const rep = this.http.get<Pays[]>(this.paysURL);
     // const rep = from(fetch(this.specialiteURL + idSpe));
     return rep;
+  }
+
+  postEtu(etudiant: Etudiant){
+    return this.http.post(this.etudiantURLP,etudiant).subscribe();
+    //"nom="+etudiant.nom +"&prenom="+etudiant.prenom +"&promo="+etudiant.promo +"&specialite="+etudiant.specialite +"&commentaire="+etudiant.commentaire +"&etat="+etudiant.etat +"&semainesRestantes="+etudiant.semainesRestantes +"&pays="+etudiant.pays +"&obtenuVia="+etudiant.obtenuVia +"&annee="+etudiant.annee
   }
 
   // setEtu(etudiantSimp: EtudiantSimp[]): Etudiant[] {

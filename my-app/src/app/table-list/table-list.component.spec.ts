@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TableListComponent } from './table-list.component';
+import {ViewChild} from "@angular/core";
+import {any} from "codelyzer/util/function";
 
 describe('TableListComponent', () => {
   let component: TableListComponent;
@@ -10,7 +12,7 @@ describe('TableListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ TableListComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

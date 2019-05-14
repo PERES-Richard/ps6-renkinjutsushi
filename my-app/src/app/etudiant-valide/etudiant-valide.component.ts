@@ -174,5 +174,4 @@ export class EtudiantValideComponent implements OnInit {
     private route: ActivatedRoute,
     private domSanitizer: DomSanitizer,
     private router: Router) { }
-
 }

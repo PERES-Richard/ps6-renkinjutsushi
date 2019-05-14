@@ -10,6 +10,9 @@ import { NgForm, FormBuilder } from '@angular/forms';
 import { HttpParams } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { FormArray } from '@angular/forms';
+import {Specialite} from "../models/Specialite";
+import {Etat} from "../models/Etat";
+import {Pays} from "../models/Pays";
 
 
 
@@ -83,6 +86,69 @@ export class EtudiantEnCoursComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  private file;
+  bol: boolean;
+  allStud: string[];
+  etud: Etudiant;
+
+  fileChange(file) {
+    this.file = file.target.files[0];
+    if(this.file.name.substr(-4) != ".csv"){
+      document.getElementById("para").innerHTML = "Le fichier "+this.file.name+" n'est pas un fichier .csv";
+    }
+    else{
+      this.verifyCSV()
+      setTimeout(() => {
+        if(this.bol){
+          console.log(this.allStud[0]);
+          for(let i = 0; i< this.allStud.length; i++){
+            document.getElementById("para").innerHTML = this.file.name+"";
+            this.constructEtudiant(this.allStud[i]);
+            console.log(this.etud.nom);
+            this.tableListService.postEtu(this.etud);
+          }
+        }
+        else{
+          document.getElementById("para").innerHTML = this.file.name+" est invalide";
+        }
+      }, 10000);
+
+    }
+  }
+
+  constructEtudiant(str: String){
+    let etudi = str.split(';');
+    this.etud.nom = etudi[0];
+    this.etud.prenom = etudi[1];
+    this.etud.promo = etudi[2];
+    this.etud.specialite.idSpecialite = parseInt(etudi[3]);
+    this.etud.commentaire = etudi[4];
+    this.etud.etat.idEtat = parseInt(etudi[5]);
+    this.etud.semainesRestantes = parseInt(etudi[6]);
+    this.etud.pays.idPays = parseInt(etudi[7]);
+    this.etud.obtenuVia = etudi[8];
+    this.etud.annee = parseInt(etudi[9]);
+    this.etud.etat.degre = parseInt(etudi[10]);
+  }
+
+  verifyCSV(){
+    var reader = new FileReader();
+    reader.onload = (event: Event) => {
+      let text = reader.result as string;
+      var allTextLines = text.split(/\r\n|\n/);
+      for(var i = 0; i<allTextLines.length-2; i++){
+        let entries = allTextLines[i].split(';');
+        if(typeof(entries[0])!= "string" || typeof(entries[1])!= "string" || typeof(entries[2])!= "string" || typeof(parseInt(entries[3]))!= "number" || typeof(entries[4])!= "string" || typeof(parseInt(entries[5]))!= "number" || typeof(parseInt(entries[6]))!= "number" || typeof(parseInt(entries[7]))!= "number" || typeof(entries[8])!= "string" || typeof(parseInt(entries[9]))!= "number" || typeof(parseInt(entries[10]))!= "number"){
+          this.bol = false;
+          return;
+        }
+      }
+      this.bol = true;
+      this.allStud = allTextLines;
+    };
+    reader.readAsText(this.file);
+  }
 
   ngOnInit() {
 
