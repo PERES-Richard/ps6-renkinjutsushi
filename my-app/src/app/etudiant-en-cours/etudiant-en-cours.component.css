@@ -2,6 +2,11 @@ th.mat-sort-header-sorted {
   color: black;
 }
 
+button{
+  margin: 50px;
+}
+
+
 .mat-sort-header-button {
   margin-right: auto !important;
   margin-left: auto !important;

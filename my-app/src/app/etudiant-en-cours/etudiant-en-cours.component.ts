@@ -13,6 +13,8 @@ import { FormArray } from '@angular/forms';
 import {Specialite} from "../models/Specialite";
 import {Etat} from "../models/Etat";
 import {Pays} from "../models/Pays";
+import { saveAs } from 'file-saver/FileSaver'
+import {any} from "codelyzer/util/function";
 
 
 
@@ -130,6 +132,32 @@ export class EtudiantEnCoursComponent implements OnInit {
     this.etud.obtenuVia = etudi[8];
     this.etud.annee = parseInt(etudi[9]);
     this.etud.etat.degre = parseInt(etudi[10]);
+  }
+
+  writeCSV(){
+    let etu = "";
+    for(let i = 0; i<this.etudiant.length; i++){
+      etu += this.etudiant[i].nom+";";
+      etu += this.etudiant[i].prenom+";";
+      etu += this.etudiant[i].promo+";";
+      etu += this.etudiant[i].specialite.nomSpecialite+";";
+      etu += this.etudiant[i].commentaire+";";
+      etu += this.etudiant[i].etat.nomEtat+";"
+      etu += this.etudiant[i].semainesRestantes+";";
+      etu += this.etudiant[i].pays.nomPays+";";
+      etu += this.etudiant[i].obtenuVia+";";
+      etu += this.etudiant[i].annee+";";
+      etu += this.etudiant[i].etat.degre+";";
+    }
+
+    var a = document.createElement("a");
+    var blob = new Blob([etu], {type: 'text/csv' });
+
+    a.href = window.URL.createObjectURL(blob);
+    a.download = "myFile.csv";
+    a.click();
+    window.URL.revokeObjectURL(window.URL.createObjectURL(blob));
+    a.remove();
   }
 
   verifyCSV(){
