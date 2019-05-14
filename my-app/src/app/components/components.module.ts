@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import {LoginComponent} from './login/login.component';
 import {FormsModule} from '@angular/forms';
 
 @NgModule({
@@ -17,14 +16,12 @@ import {FormsModule} from '@angular/forms';
   declarations: [
     FooterComponent,
     NavbarComponent,
-    SidebarComponent,
-    LoginComponent
+    SidebarComponent
   ],
   exports: [
     FooterComponent,
     NavbarComponent,
-    SidebarComponent,
-    LoginComponent
+    SidebarComponent
   ]
 })
 export class ComponentsModule { }
