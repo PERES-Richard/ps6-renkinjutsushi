@@ -92,22 +92,30 @@ export class DashboardComponent implements OnInit {
    *   Number Of Students For Every Country
    */
   initStudentByCountry() {
-    const japonPro = this.statistiquesService.getNumberStudents('japon').toPromise();
-    const canadaPro = this.statistiquesService.getNumberStudents('canada').toPromise();
-    const colombiePro = this.statistiquesService.getNumberStudents('colombie').toPromise();
+    const country1Pro = this.statistiquesService.getNumberStudents().toPromise();
+    const country2Pro = this.statistiquesService.getNumberStudents().toPromise();
+    const country3Pro = this.statistiquesService.getNumberStudents().toPromise();
 
-    Promise.all([japonPro, canadaPro, colombiePro]).then((values) => {
-      const japon = values[0];
-      const canada = values[1];
-      const colombie = values[2];
 
+    Promise.all([country1Pro, country2Pro, country3Pro]).then((values) => {
+
+
+
+      values[0].sort(this.sortByName);
+
+
+      const country1 = [values[0][0],values[0][1],values[0][2]];
+      const country2 = [values[0][3],values[0][4],values[0][5]];
+      const country3 = [values[0][6],values[0][7],values[0][8]];
+
+      console.log("values",country1[0]);
 
       const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
-        labels: ['Japon', 'Canada', 'Colombie'],
+        labels: [country1[0].pays, country2[0].pays, country3[0].pays],
         series: [
-          [japon[0].degre, canada[0].degre, colombie[0].degre],
-          [japon[2].degre, canada[1].degre, colombie[1].degre],
-          [japon[1].degre, canada[2].degre, colombie[2].degre]
+          [country1[0].nombre, country2[0].nombre, country3[0].nombre],
+          [country1[1].nombre, country2[1].nombre, country3[1].nombre],
+          [country1[2].nombre, country2[2].nombre, country3[2].nombre]
         ]
       }, {
           seriesBarDistance: 15,
@@ -124,6 +132,15 @@ export class DashboardComponent implements OnInit {
         });
 
     });
+  }
+
+  sortByName(elementOne: any, elementTwo: any){
+    if (elementOne.nom_fr_fr<elementTwo.nom_fr_fr){
+      return 0;
+    }
+    else{
+      return 1;
+    }
   }
 
 

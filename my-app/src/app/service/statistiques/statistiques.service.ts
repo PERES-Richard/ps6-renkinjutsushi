@@ -2,6 +2,7 @@ import {Etudiant} from "../../models/Etudiant";
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Degre} from "../../models/Degre";
+import {TupleNameNumber} from '../../models/TupleNameNumber';
 
 @Injectable(
   // {providedIn: 'root'}
@@ -16,8 +17,8 @@ export class StatistiquesService {
   constructor(private http: HttpClient) {
   }
 
-  getNumberStudents(pays: string) {
-    const rep = this.http.get<Degre[]>(this.etudiantURL + '/numberstudents/' + pays);
+  getNumberStudents() {
+    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL + '/numberstudents/');
     return rep;
   }
 
