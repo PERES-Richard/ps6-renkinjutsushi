@@ -23,14 +23,19 @@ export class StatistiquesService {
     return rep;
   }
 
-  getNumberStudentsWithCountry(country: string){
-    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL+'/numberstudentswithcountry/'+country);
+  getNumberStudentsWithCountry(country: string, etat:string){
+    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL+'/numberstudentswithcountry/'+country+'&'+etat);
     return rep;
   }
 
 
   getPieChart(promotion: string){
     const rep = this.http.get<Degre[]>(this.etudiantURL + '/piechart/' + promotion);
+    return rep;
+  }
+
+  getPieChartNonValide(){
+    const rep = this.http.get<Degre[]>(this.etudiantURL + '/piechartNonValide/');
     return rep;
   }
 
