@@ -17,10 +17,17 @@ export class StatistiquesService {
   constructor(private http: HttpClient) {
   }
 
-  getNumberStudents() {
-    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL + '/numberstudents/');
+  getNumberStudents(etat: string) {
+
+    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL + '/numberstudents/'+etat);
     return rep;
   }
+
+  getNumberStudentsWithCountry(country: string){
+    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL+'/numberstudentswithcountry/'+country);
+    return rep;
+  }
+
 
   getPieChart(promotion: string){
     const rep = this.http.get<Degre[]>(this.etudiantURL + '/piechart/' + promotion);

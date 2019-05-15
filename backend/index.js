@@ -1,9 +1,16 @@
+
+
+const EtudiantSimp = require("./src/app/models/etudiantSimp.model");
+
+
+const Etudiant = require("./src/app/models");
+
 const express = require('express');
 const app = express();
 var cors = require('cors');
 var mysql = require('mysql');
 var con = mysql.createConnection({
-  port: "3333",
+  port: "3306",
   user: 'ps6_team',
   password: 'ps6_sushi',
   database: 'renkinjutsushi',
@@ -91,13 +98,39 @@ app.get('/getData/piechart/:promo', function (req, res) {
 
 
 
-app.get('/getData/numberstudents/:pays', function (req, res) {
-  let pays = req.param('pays');
-  con.query("select count(*) as degre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= ? group by etudiant.annee having annee<2020 and annee>2015 ;", pays, function (err, result, fields) {
+app.get('/getData/numberstudents/:etat', function (req, res) {
+  let etat = req.param('etat');
+  console.log("etat",etat);
+  let otherEtat= '';
+  if (etat === '1'){
+    otherEtat = "where etudiant.etat=2 OR etudiant.etat=4";
+  }
+  else if (etat === '0'){
+    otherEtat = "where etudiant.etat=3 OR etudiant.etat=7";
+  }
+  else if (etat === '3'){
+    otherEtat = "where etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6";
+  }
+
+  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id "+otherEtat+" group by pays.id order by count(*) DESC limit 3 ; ";
+  console.log(request);
+  con.query(request, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
-      console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/numberstudentswithcountry/:country', function (req, res) {
+  let country = req.param('country');
+  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' group by pays.id,etudiant.annee order by count(*) ; ";
+  console.log(request);
+  con.query(request, function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
       res.status(200).json(result);
     }
   });
