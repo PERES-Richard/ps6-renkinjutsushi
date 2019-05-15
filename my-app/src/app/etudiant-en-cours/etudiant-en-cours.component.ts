@@ -13,14 +13,15 @@ import { FormArray } from '@angular/forms';
 import {Specialite} from "../models/Specialite";
 import {Etat} from "../models/Etat";
 import {Pays} from "../models/Pays";
-import { saveAs } from 'file-saver/FileSaver'
 import {any} from "codelyzer/util/function";
+import * as Chartist from "chartist";
+import {StatistiquesService} from "../service/statistiques/statistiques.service";
 
 
 
 @Component({
   selector: 'app-etudiant-en-cours',
-  providers: [TableListService],
+  providers: [TableListService, StatistiquesService],
   templateUrl: './etudiant-en-cours.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./etudiant-en-cours.component.css']
@@ -179,6 +180,8 @@ export class EtudiantEnCoursComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.initStudentByCountry();
 
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
@@ -433,8 +436,79 @@ export class EtudiantEnCoursComponent implements OnInit {
     // params.getAll(form.valueChanges)
   }
 
+  /**
+   *   Number Of Students For Every Country
+   */
+  initStudentByCountry() {
+    const countryPro = this.statistiquesService.getNumberStudents('1').toPromise();
 
-  constructor(private tableListService: TableListService,
+    Promise.all([countryPro]).then((value) => {
+
+      const country1 = value[0][0].pays;
+      const country2 = value[0][1].pays;
+      const country3 = value[0][2].pays;
+
+      // console.log("country1" + country1);
+      // console.log("country2" + country2);
+      // console.log("country3" + country3);
+
+      const country11Pro = this.statistiquesService.getNumberStudentsWithCountry(country1,'1').toPromise();
+      const country22Pro = this.statistiquesService.getNumberStudentsWithCountry(country2,'1').toPromise();
+      const country33Pro = this.statistiquesService.getNumberStudentsWithCountry(country3,'1').toPromise();
+
+      Promise.all([country11Pro, country22Pro, country33Pro]).then((values) => {
+
+        console.log("values "+values[2]);
+
+        values[0].sort(this.sortByName);
+        values[1].sort(this.sortByName);
+        values[2].sort(this.sortByName);
+
+
+        const country11 = [values[0][0],values[0][1],values[0][2]];
+        const country22 = [values[1][0],values[1][1],values[1][2]];
+        const country33 = [values[2][0],values[2][1],values[2][2]];
+
+        console.log("values",country11[0], country11[1], country11[2]);
+        console.log("values",country22[0]);
+        console.log("values",country33[0]);
+
+        const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
+          labels: [country11[0].pays, country22[0].pays, country33[0].pays],
+          series: [
+            [country11[0].nombre, country22[0].nombre, country33[0].nombre],
+            [country11[1].nombre, country22[1].nombre, country33[1].nombre],
+            [country11[2].nombre, country22[2].nombre, country33[2].nombre]
+          ]
+        }, {
+          seriesBarDistance: 15,
+          axisX: {
+            offset: 20
+          },
+          axisY: {
+            offset: 25,
+            labelInterpolationFnc: function (value) {
+              return value
+            },
+            scaleMinSpace: 20
+          }
+        });
+      });
+    });
+  }
+
+  sortByName(elementOne: any, elementTwo: any){
+    if (elementOne.nom_fr_fr<elementTwo.nom_fr_fr){
+      return 0;
+    }
+    else{
+      return 1;
+    }
+  }
+
+
+
+  constructor(private tableListService: TableListService, private statistiquesService: StatistiquesService,
     private route: ActivatedRoute,
     private domSanitizer: DomSanitizer,
     private router: Router,
