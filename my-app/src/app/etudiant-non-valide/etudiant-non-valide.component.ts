@@ -8,11 +8,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserProfileComponent } from 'app/user-profile/user-profile.component';
 import { Etudiant } from '../models/Etudiant';
 import { EtudiantSimp } from '../models/EtudiantSimp';
+import * as Chartist from "chartist";
+import {StatistiquesService} from "../service/statistiques/statistiques.service";
+import {log} from "util";
 
 
 @Component({
   selector: 'app-etudiant-non-valide',
-  providers: [TableListService],
+  providers: [TableListService, StatistiquesService],
   templateUrl: './etudiant-non-valide.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./etudiant-non-valide.component.css']
@@ -41,6 +44,8 @@ export class EtudiantNonValideComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
+
+    this.initPieChart();
 
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
@@ -170,7 +175,25 @@ export class EtudiantNonValideComponent implements OnInit {
     this.router.navigate(['user-profile', { idEtudiant: etu.idEtudiant }]);
   }
 
-  constructor(private tableListService: TableListService,
+  /**
+   *   Succeed Graph Init
+   */
+  initPieChart() {
+    const promotionPro = this.statistiquesService.getPieChartNonValide().toPromise();
+
+    promotionPro.then((value) => {
+
+      const validationDonut = new Chartist.Pie('#ct-chart-pie', {
+
+        series: [value[1].degre, value[0].degre, value[3].degre,value[2].degre]
+      }, {
+        startAngle: 270,
+        showLabel: true
+      });
+    });
+  }
+
+  constructor(private tableListService: TableListService,private statistiquesService: StatistiquesService,
     private route: ActivatedRoute,
     private domSanitizer: DomSanitizer,
     private router: Router) { }
