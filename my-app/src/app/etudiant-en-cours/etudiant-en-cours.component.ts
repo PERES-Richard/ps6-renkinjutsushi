@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, MatSortable, MatDialogRef, MatDialog } from '@angular/material';
 import { TableListService } from '../service/table-list/table-list.service';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { ActivatedRoute, Router, Params, NavigationExtras } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Etudiant } from '../models/Etudiant';
 import { EtudiantSimp } from '../models/EtudiantSimp';
-import { NgForm, FormBuilder } from '@angular/forms';
-
+import { Favoris } from '../models/Favoris';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { HttpParams } from '@angular/common/http';
-import { FormGroup, FormControl } from '@angular/forms';
-import { FormArray } from '@angular/forms';
+import { FavPopupComponent } from 'app/fav-popup/fav-popup.component';
 
 
 
@@ -33,13 +32,13 @@ export class EtudiantEnCoursComponent implements OnInit {
       IHM: new FormControl(''),
       CS: new FormControl(''),
       STRAW: new FormControl(''),
-      AL: new FormControl('')
+      AL: new FormControl(''),
+      IAM: new FormControl('')
     }),
     typeValidation: new FormGroup({
-      IHM: new FormControl(''),
-      CS: new FormControl(''),
-      STRAW: new FormControl(''),
-      AL: new FormControl('')
+      Semestre: new FormControl(''),
+      Stage: new FormControl(''),
+      Autre: new FormControl('')
     }),
     semainesRestantes: new FormControl(''),
     annee: new FormControl('')
@@ -50,8 +49,8 @@ export class EtudiantEnCoursComponent implements OnInit {
   headers: string[];
 
   opened: boolean;
+  fav: Favoris[];
 
-  // si le debut est avant mi janvier ou que la fin est apres mi juin
   dateDebutMin: Date;
   dateDebutMax: Date;
 
@@ -90,6 +89,13 @@ export class EtudiantEnCoursComponent implements OnInit {
 
       this.initDates();
       this.opened = false;
+
+      this.fav = JSON.parse(localStorage.getItem('favoris'));
+
+      if (this.fav == null) {
+        this.fav = []
+      }
+
       // console.log('datemin =', this.dateDebutMin);
       // console.log('datemax =', this.dateDebutMax);
 
@@ -269,22 +275,40 @@ export class EtudiantEnCoursComponent implements OnInit {
     this.opened = !this.opened;
   }
 
-  onSubmit() {
-    // TODO: Use EventEmitter with form value
-    console.log('value', this.filtreForm.value);
+  setFilter() {
+    // TODO preset les filtres
+  }
 
-    console.log('en', this.filtreForm.get('promo').value);
+  onSubmit() {
+    // console.log('value', this.filtreForm.value);
+    // console.log('en', this.filtreForm.get('promo').value);
+
+    const params = this.getParams();
+
+    this.router.navigateByUrl('/etudiant-en-cours?' + params.toString()).then(state => {
+      // console.log(state);
+      window.location.reload();
+    }
+
+    );
+    // this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge'});
+  }
+
+
+  getParams(): HttpParams {
     let params = new HttpParams();
+
+    params = params.append('degre', '1');
 
     let promo = []
     promo = this.filtreForm.get('promo').value;
-
+    // console.log('params init', params);
     for (let i = 0; i < Object.keys(promo).length; i++) {
       if (Object.values(promo)[i]) {
         params = params.append('promo', Object.keys(promo)[i]);
       }
     }
-    console.log('params', params.getAll('promo'));
+    // console.log('params', params.getAll('promo'));
 
 
     let specialite = []
@@ -294,7 +318,7 @@ export class EtudiantEnCoursComponent implements OnInit {
         params = params.append('specialite', Object.keys(specialite)[i]);
       }
     }
-    console.log('params', params.getAll('specialite'));
+    // console.log('params', params.getAll('specialite'));
 
 
     let typeValidation = []
@@ -304,7 +328,7 @@ export class EtudiantEnCoursComponent implements OnInit {
         params = params.append('typeValidation', Object.keys(typeValidation)[i]);
       }
     }
-    console.log('params', params.getAll('typeValidation'));
+    // console.log('params', params.getAll('typeValidation'));
 
 
     let semainesRestantes = [];
@@ -312,31 +336,49 @@ export class EtudiantEnCoursComponent implements OnInit {
     for (let i = 0; i < Object.keys(semainesRestantes).length; i++) {
       params = params.append('semainesRestantes', Object.values(semainesRestantes)[i]);
     }
-    console.log('semainesRestantes', params.getAll('semainesRestantes'));
+    // console.log('semainesRestantes', params.getAll('semainesRestantes'));
+
 
     let annee = [];
     annee = this.filtreForm.get('annee').value;
     for (let i = 0; i < Object.keys(annee).length; i++) {
       params = params.append('annee', Object.values(annee)[i]);
     }
-    console.log('annee', params.getAll('annee'));
+    // console.log('annee', params.getAll('annee'));
 
-    params = params.append('degre', '1');
-
-    console.log('params', params);
-    // TODO param.updates
-    // this.router.navigate(['etudiant-en-cours' + JSON.stringify(params)]);
+    return params;
   }
 
-  addFav(form: NgForm) {
-    console.log('add', form.value);
-    console.log('add2', form.control);
-    console.log('add3', form);
-    // let params = new HttpParams();
-    // params = params.append('value', form.value);
-    // console.log(params);
+  deleteFav(favori: Favoris) {
+    // console.log('rip');
+    const index = this.fav.indexOf(favori);
+    this.fav.splice(index, 1);
+    localStorage.setItem('favoris', JSON.stringify(this.fav));
+  }
 
-    // params.getAll(form.valueChanges)
+  addFav() {
+    // console.log('fav1', this.fav);
+
+    const params = this.getParams();
+    // console.log('params', params.toString());
+    const url = 'etudiant-en-cours?' + params.toString();
+
+    const dialogRef = this.dialog.open(FavPopupComponent, {
+      height: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: `, result);
+      if (Array.isArray(result)) {
+        this.fav.push({ nom: result[0], url: url, memo: result[1] })
+      } else {
+        this.fav.push({ nom: result, url: url })
+      }
+
+      localStorage.setItem('favoris', JSON.stringify(this.fav));
+      console.log('fav2', this.fav);
+    });
+
   }
 
 
@@ -344,6 +386,6 @@ export class EtudiantEnCoursComponent implements OnInit {
     private route: ActivatedRoute,
     private domSanitizer: DomSanitizer,
     private router: Router,
-    private fb: FormBuilder) { }
+    private dialog: MatDialog) { }
 
 }

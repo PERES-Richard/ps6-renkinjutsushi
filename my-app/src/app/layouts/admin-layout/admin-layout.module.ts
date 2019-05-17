@@ -9,6 +9,7 @@ import { TableListComponent } from '../../table-list/table-list.component';
 import { EtudiantValideComponent } from 'app/etudiant-valide/etudiant-valide.component';
 import { EtudiantNonValideComponent } from 'app/etudiant-non-valide/etudiant-non-valide.component';
 import { EtudiantEnCoursComponent } from 'app/etudiant-en-cours/etudiant-en-cours.component';
+import { FavPopupComponent } from 'app/fav-popup/fav-popup.component';
 
 
 import {
@@ -17,8 +18,10 @@ import {
   MatRippleModule,
   MatFormFieldModule,
   MatTooltipModule,
-  MatSelectModule, MatTableModule, MatSortModule, MatPaginatorModule, MatSidenavModule
+  MatSelectModule, MatTableModule, MatSortModule, MatPaginatorModule, MatSidenavModule, MatDialogModule,
 } from '@angular/material';
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -35,6 +38,7 @@ import {
     MatPaginatorModule,
     MatSidenavModule,
     ReactiveFormsModule,
+    MatDialogModule,
   ],
   declarations: [
     DashboardComponent,
@@ -43,7 +47,10 @@ import {
     EtudiantValideComponent,
     EtudiantNonValideComponent,
     EtudiantEnCoursComponent,
-  ]
+    FavPopupComponent,
+  ],
+  entryComponents: [FavPopupComponent]
+
 })
 
-export class AdminLayoutModule {}
+export class AdminLayoutModule { }

@@ -19,6 +19,8 @@ import {
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import {ChartsModule} from 'ng2-charts';
 import {SidebarComponent} from './components/sidebar/sidebar.component';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { FavPopupComponent } from './fav-popup/fav-popup.component';
 
 
 @NgModule({
@@ -32,14 +34,15 @@ import {SidebarComponent} from './components/sidebar/sidebar.component';
     RouterModule,
     AppRoutingModule,
     ChartsModule,
-    FormsModule
+    FormsModule,
   ],
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

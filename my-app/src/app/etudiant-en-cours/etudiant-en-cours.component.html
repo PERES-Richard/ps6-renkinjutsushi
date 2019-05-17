@@ -35,6 +35,10 @@
                   <label for="AL">AL</label>
                 </div>
                 <div>
+                  <input type="checkbox" id="IAM" value="IAM" formControlName="IAM">
+                  <label for="IAM">IAM</label>
+                </div>
+                <div>
                   <input type="checkbox" id="IHM" value="IHM" formControlName="IHM">
                   <label for="IHM">IHM</label>
                 </div>
@@ -92,8 +96,7 @@
               <p>Années :</p>
 
               <div style="padding-left: 25px;">
-                <select multiple class="form-control picker" name="annee"
-                  formControlName="annee">
+                <select multiple class="form-control picker" name="annee" formControlName="annee">
                   <option value="2016">2016</option>
                   <option value="2017">2017</option>
                   <option value="2018">2018</option>
@@ -118,6 +121,14 @@
         <div id="main">
           <button class="openbtn btn btn-primary" (click)="toggleNav()" style="font-size: 0.95em;">&#9776;
             Filtres</button>
+
+          <button *ngFor="let favori of fav" class="favbtn btn btn-info" style="font-size: 0.95em;" matTooltip="{{favori.memo}}" [matTooltipPosition]="'below'">
+          <button class="deleteFavBtn" (click)="deleteFav(favori)">x</button>
+          <a [href]="favori.url">
+          <i
+              class="material-icons favi">star</i>
+
+            {{favori.nom}} </a></button>
 
           <div class="card">
             <div class="card-header card-header-danger">
@@ -169,7 +180,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="semainesRestantes">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Semaines restantes
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary" matTooltip="Tooltip!" [matTooltipPosition]="'above'"> Semaines restantes
                     </th>
                     <td mat-cell *matCellDef="let element"> {{element.semainesRestantes}} </td>
                   </ng-container>

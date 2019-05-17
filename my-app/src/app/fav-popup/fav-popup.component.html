@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Personnaliser le favoris</h1>
+<div mat-dialog-content>
+    <mat-form-field class="example-full-width">
+      <input matInput type="text" placeholder="Nom du favoris" [(ngModel)]="nom" required>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <input matInput type="text" placeholder="Mémo du favoris" [(ngModel)]="memo">
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button mat-raised-button class="btn btn-danger" (click)="closeDialog()" cdkFocusInitial>Ajouter</button>
+</div>

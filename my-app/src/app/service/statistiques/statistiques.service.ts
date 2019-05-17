@@ -1,7 +1,7 @@
-import {Etudiant} from "../../models/Etudiant";
-import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
-import {Degre} from "../../models/Degre";
+import {Etudiant} from '../../models/Etudiant';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Degre} from '../../models/Degre';
 
 @Injectable(
   // {providedIn: 'root'}
@@ -21,17 +21,17 @@ export class StatistiquesService {
     return rep;
   }
 
-  getPieChart(promotion: string){
+  getPieChart(promotion: string) {
     const rep = this.http.get<Degre[]>(this.etudiantURL + '/piechart/' + promotion);
     return rep;
   }
 
-  getNumberSucceed(annee: string){
+  getNumberSucceed(annee: string) {
     const rep = this.http.get<Degre[]>(this.etudiantURL + '/numbersucceed/' + annee);
     return rep;
   }
 
-  getNumberSucceedCountry(pays: string){
+  getNumberSucceedCountry(pays: string) {
     const rep = this.http.get<Degre[]>(this.etudiantURL + '/numbersucceedcountry/' + pays);
     return rep;
   }
