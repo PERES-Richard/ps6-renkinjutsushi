@@ -37,9 +37,9 @@
                 <mat-form-field class="example-full-width">
                   <mat-label>Spécialité</mat-label>
                   <mat-select matInput
-                    [(value)]="etudiant.specialite.envisagee ? etudiant.specialite.nomSpecialite + '*' : etudiant.specialite.nomSpecialite">
+                    [(value)]="etudiant.specialite">
                     <mat-option *ngFor="let spe of specialites"
-                      [value]="spe.envisagee ? spe.nomSpecialite + '*' : spe.nomSpecialite">
+                      [value]="spe">
                       {{spe.envisagee ? spe.nomSpecialite + '*' : spe.nomSpecialite}}
                     </mat-option>
                   </mat-select>
