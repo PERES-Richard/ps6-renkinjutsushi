@@ -20,13 +20,29 @@
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="example-full-width">
-                  <input [(ngModel)]="etudiant.nom" name="Nom" matInput placeholder="Nom" value="{{etudiant.nom}}" ngModel>
+                  <input [(ngModel)]="etudiant.nom" name="Nom" matInput placeholder="Nom" value="{{etudiant.nom}}"
+                    ngModel>
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Promo" type="text" value="{{etudiant.promo}}">
+                  <mat-label>Promo</mat-label>
+                  <mat-select matInput [(value)]="etudiant.promo">
+                    <mat-option value="SI3">SI3
+                    </mat-option>
+                    <mat-option value="SI4">SI4
+                    </mat-option>
+                    <mat-option value="SI5">SI5
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Spécialité" type="text" value="{{etudiant.specialite.nomSpecialite}}">
+                  <mat-label>Spécialité</mat-label>
+                  <mat-select matInput
+                    [(value)]="etudiant.specialite.envisagee ? etudiant.specialite.nomSpecialite + '*' : etudiant.specialite.nomSpecialite">
+                    <mat-option *ngFor="let spe of specialites"
+                      [value]="spe.envisagee ? spe.nomSpecialite + '*' : spe.nomSpecialite">
+                      {{spe.envisagee ? spe.nomSpecialite + '*' : spe.nomSpecialite}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
@@ -49,40 +65,66 @@
             <div class="row">
               <div class="col-md-6">
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="État" type="text" value="{{etudiant.etat.nomEtat}}">
+                  <mat-label>État</mat-label>
+                  <mat-select matInput [(value)]="etudiant.etat.nomEtat">
+                    <mat-option *ngFor="let etat of etats" [value]="etat.nomEtat">
+                      {{etat.nomEtat}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Semaines restantes" type="number" value="{{etudiant.semRestantes}}">
+                  <mat-label>Semaines restantes</mat-label>
+                  <mat-select matInput [(value)]="etudiant.semainesRestantes">
+                    <mat-option [value]="0">0</mat-option>
+                    <mat-option [value]="1">1</mat-option>
+                    <mat-option [value]="2">2</mat-option>
+                    <mat-option [value]="3">3</mat-option>
+                    <mat-option [value]="4">4</mat-option>
+                    <mat-option [value]="5">5</mat-option>
+                    <mat-option [value]="6">6</mat-option>
+                    <mat-option [value]="7">7</mat-option>
+                    <mat-option [value]="8">8</mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
                   <input matInput placeholder="Obtenu via" type="text" value="{{etudiant.obtenuVia}}">
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Type de validation</mat-label>
+                  <mat-select matInput [(value)]="etudiant.typeValidation">
+                    <mat-option value="Semestre">Semestre
+                    </mat-option>
+                    <mat-option value="Stage">Stage
+                    </mat-option>
+                    <mat-option value="Autre">Autre
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
               <div class="col-md-6">
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Pays" type="text" value="{{etudiant.pays.nomPays}}">
+                  <mat-label>Pays</mat-label>
+                  <mat-select matInput [(value)]="etudiant.pays.nomPays">
+                    <mat-option *ngFor="let pays of pays" [value]="pays.nomPays">
+                      {{pays.nomPays}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Date début" type="text"
-                    value="{{etudiant.dateDebut | date:'dd - MM - yyyy'}}">
+                  <input matInput [matDatepicker]="picker" placeholder="Date de début" name="dpd" #dpd="ngModel" [(ngModel)]="planModel.dpd">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker [startAt]="etudiant.dateDebut"></mat-datepicker>
                 </mat-form-field>
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Date fin" type="text"
-                    value="{{etudiant.dateFin | date:'dd - MM - yyyy'}}">
-                </mat-form-field>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-md-4">
-              </div>
-              <div class="col-md-4">
                 <mat-form-field class="example-full-width">
-                  <textarea matInput placeholder="Commentaire" rows="3" value="{{etudiant.commentaire}}"></textarea>
+                  <input matInput [matDatepicker]="picker2" placeholder="Date de fin" name="dpf" #dpf="ngModel" [(ngModel)]="planModel.dpf">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2 [startAt]="etudiant.dateFin"></mat-datepicker>
                 </mat-form-field>
-              </div>
-              <div class="col-md-4">
+                <mat-form-field class="example-full-width">
+                  <textarea matInput placeholder="Commentaire" rows="1" value="{{etudiant.commentaire}}"></textarea>
+                </mat-form-field>
               </div>
             </div>
 

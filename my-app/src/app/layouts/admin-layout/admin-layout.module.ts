@@ -18,7 +18,8 @@ import {
   MatRippleModule,
   MatFormFieldModule,
   MatTooltipModule,
-  MatSelectModule, MatTableModule, MatSortModule, MatPaginatorModule, MatSidenavModule, MatDialogModule,
+  MatSelectModule, MatTableModule, MatSortModule,
+  MatPaginatorModule, MatSidenavModule, MatDialogModule, MatDatepickerModule, MatNativeDateModule
 } from '@angular/material';
 
 
@@ -39,6 +40,8 @@ import {
     MatSidenavModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   declarations: [
     DashboardComponent,
