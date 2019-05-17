@@ -9,12 +9,19 @@ import { Favoris } from '../models/Favoris';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { HttpParams } from '@angular/common/http';
 import { FavPopupComponent } from 'app/fav-popup/fav-popup.component';
+import { FormArray } from '@angular/forms';
+import { Specialite } from '../models/Specialite';
+import { Etat } from '../models/Etat';
+import { Pays } from '../models/Pays';
+import { any } from 'codelyzer/util/function';
+import * as Chartist from 'chartist';
+import { StatistiquesService } from '../service/statistiques/statistiques.service';
 
 
 
 @Component({
   selector: 'app-etudiant-en-cours',
-  providers: [TableListService],
+  providers: [TableListService, StatistiquesService],
   templateUrl: './etudiant-en-cours.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./etudiant-en-cours.component.css']
@@ -83,7 +90,101 @@ export class EtudiantEnCoursComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  private file;
+  bol: boolean;
+  allStud: string[];
+  etud: Etudiant;
+
+  fileChange(file) {
+    this.file = file.target.files[0];
+    if (this.file.name.substr(-4) !== '.csv') {
+      document.getElementById('para').innerHTML = 'Le fichier ' + this.file.name + ' n\'est pas un fichier .csv';
+    } else {
+      this.verifyCSV()
+      setTimeout(() => {
+        if (this.bol) {
+          console.log(this.allStud[0]);
+          for (let i = 0; i < this.allStud.length; i++) {
+            document.getElementById('para').innerHTML = this.file.name + '';
+            this.constructEtudiant(this.allStud[i]);
+            console.log(this.etud.nom);
+            this.tableListService.postEtu(this.etud);
+          }
+        } else {
+          document.getElementById('para').innerHTML = this.file.name + ' est invalide';
+        }
+      }, 10000);
+
+    }
+  }
+
+  constructEtudiant(str: String) {
+    const etudi = str.split(';');
+    this.etud.nom = etudi[0];
+    this.etud.prenom = etudi[1];
+    this.etud.promo = etudi[2];
+    this.etud.specialite.idSpecialite = parseInt(etudi[3], 10);
+    this.etud.commentaire = etudi[4];
+    this.etud.etat.idEtat = parseInt(etudi[5], 10);
+    this.etud.semainesRestantes = parseInt(etudi[6], 10);
+    this.etud.pays.idPays = parseInt(etudi[7], 10);
+    this.etud.obtenuVia = etudi[8];
+    this.etud.annee = parseInt(etudi[9], 10);
+    this.etud.etat.degre = parseInt(etudi[10], 10);
+  }
+
+  writeCSV() {
+    let etu = '';
+    for (let i = 0; i < this.etudiant.length; i++) {
+      etu += this.etudiant[i].nom + ';';
+      etu += this.etudiant[i].prenom + ';';
+      etu += this.etudiant[i].promo + ';';
+      etu += this.etudiant[i].specialite.nomSpecialite + ';';
+      etu += this.etudiant[i].commentaire + ';';
+      etu += this.etudiant[i].etat.nomEtat + ';'
+      etu += this.etudiant[i].semainesRestantes + ';';
+      etu += this.etudiant[i].pays.nomPays + ';';
+      etu += this.etudiant[i].obtenuVia + ';';
+      etu += this.etudiant[i].annee + ';';
+      etu += this.etudiant[i].etat.degre + ';';
+    }
+
+    const a = document.createElement('a');
+    const blob = new Blob([etu], { type: 'text/csv' });
+
+    a.href = window.URL.createObjectURL(blob);
+    a.download = 'myFile.csv';
+    a.click();
+    window.URL.revokeObjectURL(window.URL.createObjectURL(blob));
+    a.remove();
+  }
+
+  verifyCSV() {
+    const reader = new FileReader();
+    reader.onload = (event: Event) => {
+      const text = reader.result as string;
+      const allTextLines = text.split(/\r\n|\n/);
+      for (let i = 0; i < allTextLines.length - 2; i++) {
+        const entries = allTextLines[i].split(';');
+        if (typeof (entries[0]) !== 'string' || typeof (entries[1]) !== 'string'
+          || typeof (entries[2]) !== 'string' || typeof (parseInt(entries[3], 10)) !==
+          'number' || typeof (entries[4]) !== 'string' || typeof (parseInt(entries[5], 10))
+          !== 'number' || typeof (parseInt(entries[6], 10)) !== 'number' || typeof (parseInt(entries[7], 10))
+          !== 'number' || typeof (entries[8]) !== 'string' || typeof (parseInt(entries[9], 10)) !== 'number'
+          || typeof (parseInt(entries[10], 10)) !== 'number') {
+          this.bol = false;
+          return;
+        }
+      }
+      this.bol = true;
+      this.allStud = allTextLines;
+    };
+    reader.readAsText(this.file);
+  }
+
   ngOnInit() {
+
+    this.initStudentByCountry();
 
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
@@ -381,8 +482,78 @@ export class EtudiantEnCoursComponent implements OnInit {
 
   }
 
+  /**
+   *   Number Of Students For Every Country
+   */
+  initStudentByCountry() {
+    const countryPro = this.statistiquesService.getNumberStudents('1').toPromise();
 
-  constructor(private tableListService: TableListService,
+    Promise.all([countryPro]).then((value) => {
+
+      const country1 = value[0][0].pays;
+      const country2 = value[0][1].pays;
+      const country3 = value[0][2].pays;
+
+      // console.log("country1" + country1);
+      // console.log("country2" + country2);
+      // console.log("country3" + country3);
+
+      const country11Pro = this.statistiquesService.getNumberStudentsWithCountry(country1, '1').toPromise();
+      const country22Pro = this.statistiquesService.getNumberStudentsWithCountry(country2, '1').toPromise();
+      const country33Pro = this.statistiquesService.getNumberStudentsWithCountry(country3, '1').toPromise();
+
+      Promise.all([country11Pro, country22Pro, country33Pro]).then((values) => {
+
+        console.log('values ' + values[2]);
+
+        values[0].sort(this.sortByName);
+        values[1].sort(this.sortByName);
+        values[2].sort(this.sortByName);
+
+
+        const country11 = [values[0][0], values[0][1], values[0][2]];
+        const country22 = [values[1][0], values[1][1], values[1][2]];
+        const country33 = [values[2][0], values[2][1], values[2][2]];
+
+        console.log('values', country11[0], country11[1], country11[2]);
+        console.log('values', country22[0]);
+        console.log('values', country33[0]);
+
+        const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
+          labels: [country11[0].pays, country22[0].pays, country33[0].pays],
+          series: [
+            [country11[0].nombre, country22[0].nombre, country33[0].nombre],
+            [country11[1].nombre, country22[1].nombre, country33[1].nombre],
+            [country11[2].nombre, country22[2].nombre, country33[2].nombre]
+          ]
+        }, {
+            seriesBarDistance: 15,
+            axisX: {
+              offset: 20
+            },
+            axisY: {
+              offset: 25,
+              labelInterpolationFnc: function (result) {
+                return result
+              },
+              scaleMinSpace: 20
+            }
+          });
+      });
+    });
+  }
+
+  sortByName(elementOne: any, elementTwo: any) {
+    if (elementOne.nom_fr_fr < elementTwo.nom_fr_fr) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+
+
+
+  constructor(private tableListService: TableListService, private statistiquesService: StatistiquesService,
     private route: ActivatedRoute,
     private domSanitizer: DomSanitizer,
     private router: Router,

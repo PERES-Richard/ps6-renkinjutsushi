@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
     this.initPieChart('SI3');
 
     this.initSucceedRateChart();
+
     this.initStudentByCountry();
 
     this.initSucceedByCounty();
@@ -43,9 +44,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
+
   /**
-  *   Validation Donut Init
-  */
+   *   Validation Donut Init
+   */
   initSucceedRateChart() {
 
     const succeed2016Pro = this.statistiquesService.getNumberSucceed('2016').toPromise();
@@ -88,38 +91,67 @@ export class DashboardComponent implements OnInit {
    *   Number Of Students For Every Country
    */
   initStudentByCountry() {
-    const japonPro = this.statistiquesService.getNumberStudents('japon').toPromise();
-    const canadaPro = this.statistiquesService.getNumberStudents('canada').toPromise();
-    const colombiePro = this.statistiquesService.getNumberStudents('colombie').toPromise();
+    const countryPro = this.statistiquesService.getNumberStudents('-1').toPromise();
 
-    Promise.all([japonPro, canadaPro, colombiePro]).then((values) => {
-      const japon = values[0];
-      const canada = values[1];
-      const colombie = values[2];
+    Promise.all([countryPro]).then((value) => {
+
+      const country1 = value[0][0].pays;
+      const country2 = value[0][1].pays;
+      const country3 = value[0][2].pays;
+
+      // console.log("country1" + country1);
+      // console.log("country2" + country2);
+      // console.log("country3" + country3);
+
+      const country11Pro = this.statistiquesService.getNumberStudentsWithCountry(country1, '-1').toPromise();
+      const country22Pro = this.statistiquesService.getNumberStudentsWithCountry(country2, '-1').toPromise();
+      const country33Pro = this.statistiquesService.getNumberStudentsWithCountry(country3, '-1').toPromise();
+
+      Promise.all([country11Pro, country22Pro, country33Pro]).then((values) => {
+
+        console.log('values ' + values[2]);
+
+        // values[0].sort(this.sortByName);
 
 
-      const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
-        labels: ['Japon', 'Canada', 'Colombie'],
-        series: [
-          [japon[0].degre, canada[0].degre, colombie[0].degre],
-          [japon[2].degre, canada[1].degre, colombie[1].degre],
-          [japon[1].degre, canada[2].degre, colombie[2].degre]
-        ]
-      }, {
-          seriesBarDistance: 15,
-          axisX: {
-            offset: 20
-          },
-          axisY: {
-            offset: 25,
-            labelInterpolationFnc: function (value) {
-              return value
+        const country11 = [values[0][0], values[0][1], values[0][2]];
+        const country22 = [values[1][0], values[1][1], values[1][2]];
+        const country33 = [values[2][0], values[2][1], values[2][2]];
+
+        console.log('values', country11[0], country11[1], country11[2]);
+        console.log('values', country22[0]);
+        console.log('values', country33[0]);
+
+        const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
+          labels: [country11[0].pays, country22[0].pays, country33[0].pays],
+          series: [
+            [country11[0].nombre, country22[0].nombre, country33[0].nombre],
+            [country11[1].nombre, country22[1].nombre, country33[1].nombre],
+            [country11[2].nombre, country22[2].nombre, country33[2].nombre]
+          ]
+        }, {
+            seriesBarDistance: 15,
+            axisX: {
+              offset: 20
             },
-            scaleMinSpace: 20
-          }
-        });
-
+            axisY: {
+              offset: 25,
+              labelInterpolationFnc: function (result) {
+                return result
+              },
+              scaleMinSpace: 20
+            }
+          });
+      });
     });
+  }
+
+  sortByName(elementOne: any, elementTwo: any) {
+    if (elementOne.nom_fr_fr < elementTwo.nom_fr_fr) {
+      return 0;
+    } else {
+      return 1;
+    }
   }
 
 
