@@ -18,7 +18,6 @@ import * as Chartist from 'chartist';
 import { StatistiquesService } from '../service/statistiques/statistiques.service';
 
 
-
 @Component({
   selector: 'app-etudiant-en-cours',
   providers: [TableListService, StatistiquesService],
@@ -381,24 +380,18 @@ export class EtudiantEnCoursComponent implements OnInit {
   }
 
   onSubmit() {
-    // console.log('value', this.filtreForm.value);
-    // console.log('en', this.filtreForm.get('promo').value);
-
     const params = this.getParams();
 
     this.router.navigateByUrl('/etudiant-en-cours?' + params.toString()).then(state => {
-      // console.log(state);
       window.location.reload();
     }
 
     );
-    // this.router.navigate([], {relativeTo: this.route, queryParamsHandling: 'merge'});
   }
 
 
   getParams(): HttpParams {
     let params = new HttpParams();
-
     params = params.append('degre', '1');
 
     let promo = []
@@ -409,8 +402,6 @@ export class EtudiantEnCoursComponent implements OnInit {
         params = params.append('promo', Object.keys(promo)[i]);
       }
     }
-    // console.log('params', params.getAll('promo'));
-
 
     let specialite = []
     specialite = this.filtreForm.get('specialite').value;
@@ -419,8 +410,6 @@ export class EtudiantEnCoursComponent implements OnInit {
         params = params.append('specialite', Object.keys(specialite)[i]);
       }
     }
-    // console.log('params', params.getAll('specialite'));
-
 
     let typeValidation = []
     typeValidation = this.filtreForm.get('typeValidation').value;
@@ -429,39 +418,30 @@ export class EtudiantEnCoursComponent implements OnInit {
         params = params.append('typeValidation', Object.keys(typeValidation)[i]);
       }
     }
-    // console.log('params', params.getAll('typeValidation'));
-
 
     let semainesRestantes = [];
     semainesRestantes = this.filtreForm.get('semainesRestantes').value;
     for (let i = 0; i < Object.keys(semainesRestantes).length; i++) {
       params = params.append('semainesRestantes', Object.values(semainesRestantes)[i]);
     }
-    // console.log('semainesRestantes', params.getAll('semainesRestantes'));
-
 
     let annee = [];
     annee = this.filtreForm.get('annee').value;
     for (let i = 0; i < Object.keys(annee).length; i++) {
       params = params.append('annee', Object.values(annee)[i]);
     }
-    // console.log('annee', params.getAll('annee'));
 
     return params;
   }
 
   deleteFav(favori: Favoris) {
-    // console.log('rip');
     const index = this.fav.indexOf(favori);
     this.fav.splice(index, 1);
     localStorage.setItem('favoris', JSON.stringify(this.fav));
   }
 
   addFav() {
-    // console.log('fav1', this.fav);
-
     const params = this.getParams();
-    // console.log('params', params.toString());
     const url = 'etudiant-en-cours?' + params.toString();
 
     const dialogRef = this.dialog.open(FavPopupComponent, {
@@ -469,15 +449,16 @@ export class EtudiantEnCoursComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: `, result);
-      if (Array.isArray(result)) {
-        this.fav.push({ nom: result[0], url: url, memo: result[1] })
-      } else {
-        this.fav.push({ nom: result, url: url })
-      }
+      if (result !== null && result !== undefined) {
+        if (Array.isArray(result)) {
+          this.fav.push({ nom: result[0], url: url, memo: result[1] })
+        } else {
+          this.fav.push({ nom: result, url: url })
+        }
 
-      localStorage.setItem('favoris', JSON.stringify(this.fav));
-      console.log('fav2', this.fav);
+        localStorage.setItem('favoris', JSON.stringify(this.fav));
+        console.log('fav2', this.fav);
+      }
     });
 
   }
