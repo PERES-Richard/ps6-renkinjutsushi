@@ -97,6 +97,17 @@ app.get('/getData/piechart/:promo', function (req, res) {
   });
 });
 
+app.get('/getData/piechartnonvalide/', function (req, res) {
+  con.query("select etat.idEtat, count(*) as degre from etudiant inner join etat on etudiant.etat = etat.idEtat where etat.degre = 3 or etat.degre = 2 group by etat.idEtat order by etat.idEtat;", function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
 
 
 
@@ -125,9 +136,21 @@ app.get('/getData/numberstudents/:etat', function (req, res) {
   });
 });
 
-app.get('/getData/numberstudentswithcountry/:country', function (req, res) {
+app.get('/getData/numberstudentswithcountry/:country&:etat', function (req, res) {
+  let etat = req.param('etat');
   let country = req.param('country');
-  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' group by pays.id,etudiant.annee order by count(*) ; ";
+  let otherEtat='';
+  if (etat === '1'){
+    otherEtat = "and etudiant.etat=2 OR etudiant.etat=4";
+  }
+  else if (etat === '0'){
+    otherEtat = "and etudiant.etat=3 OR etudiant.etat=7";
+  }
+  else if (etat === '3'){
+    otherEtat = "and etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6";
+  }
+
+  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' "+otherEtat+"  group by pays.id,etudiant.annee order by count(*) ; ";
   console.log(request);
   con.query(request, function (err, result, fields) {
     if (err) {
@@ -385,6 +408,21 @@ app.post('/postData/updateStudent', (req, res) => {
       }
     });
 });
+
+
+/*router.put('/:schoolTicketId', (req, res) => {
+  try {
+    res.status(200).json(SchoolTicket.update(req.params.schoolTicketId, req.body));
+  } catch (err) {
+    if (err.name === 'NotFoundError') {
+      res.status(404).end();
+    } else if (err.name === 'ValidationError') {
+      res.status(400).json(err.extra);
+    } else {
+      res.status(500).json(err);
+    }
+  }
+})*/
 
 app.listen(3000)
 
