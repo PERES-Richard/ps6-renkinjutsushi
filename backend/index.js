@@ -1,9 +1,8 @@
 
 
-const EtudiantSimp = require("./src/app/models/etudiantSimp.model");
 
 
-const Etudiant = require("./src/app/models");
+const Etudiant = require("./src/app/models/etudiant.model");
 
 const express = require('express');
 const app = express();
@@ -15,7 +14,9 @@ var con = mysql.createConnection({
   password: 'ps6_sushi',
   database: 'renkinjutsushi',
 });
+var bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
 app.use(cors());
 
 app.use((req, res, next) => {
@@ -73,6 +74,7 @@ app.get('/getData/etat', function (req, res) {
 
 app.get('/getData/numbersucceed/:annee', function (req, res) {
   let annee = req.param('annee');
+
   con.query("select count(*) as degre from etudiant where annee= ? group by etudiant.semestreValide ;", annee, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);

@@ -9,6 +9,7 @@ module.exports = (cb) => {
   app.disable('x-powered-by');
   app.use(cors());
   app.use(bodyParser.json({}));
+  app.use(bodyParser.urlencoded({extended: true}));
   app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
   app.use('/api', api);
   app.use('*', (req, res) => res.status(404).end());
