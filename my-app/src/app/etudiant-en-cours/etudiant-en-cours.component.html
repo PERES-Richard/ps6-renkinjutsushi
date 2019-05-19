@@ -167,7 +167,8 @@
                   </ng-container>
 
                   <ng-container matColumnDef="specialite">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Spécialité </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"  matTooltip="* si envisagée"
+                      [matTooltipPosition]="'above'"> Spécialité </th>
                     <td mat-cell *matCellDef="let element"> {{element.specialite.nomSpecialite}} <span
                         *ngIf="element.specialite.envisagee" style="color: mediumvioletred;"><strong> * </strong></span>
                     </td>
@@ -180,7 +181,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef="semainesRestantes">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary" matTooltip="Tooltip!"
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary" matTooltip="Nombre de semaines restantes après le séjour en cours"
                       [matTooltipPosition]="'above'"> Semaines restantes
                     </th>
                     <td mat-cell *matCellDef="let element"> {{element.semainesRestantes}} </td>
@@ -192,33 +193,35 @@
                   </ng-container>
 
                   <ng-container matColumnDef="dateDebut">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Date début </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary" matTooltip="Date en rouge si le début est prévu pendant la période des partiels (Janvier)"
+                      [matTooltipPosition]="'above'"> Date début </th>
                     <td mat-cell *matCellDef="let element">
                       <div *ngIf="(element.dateDebut > dateDebutMin && element.dateDebut < dateDebutMax) ||
                      (element.dateDebut > dateDebutMin2 && element.dateDebut < dateDebutMax2);
                      then thenBlock else elseBlock"></div>
                       <ng-template #thenBlock>
                         <span style="color: red;">
-                          <strong> {{element.dateDebut | date:'dd - MM - yyyy'}}</strong>
+                          <strong> {{element.dateDebut | date:'dd/MM/yyyy'}}</strong>
                         </span>
                       </ng-template>
-                      <ng-template #elseBlock>{{element.dateDebut | date:'dd - MM - yyyy'}}.</ng-template>
+                      <ng-template #elseBlock>{{element.dateDebut | date:'dd/MM/yyyy'}}.</ng-template>
                     </td>
                   </ng-container>
 
 
                   <ng-container matColumnDef="dateFin">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Date fin </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary" matTooltip="Date en rouge si la fin du séjour est prévu pendant la période de projet de fin d'année (Juin)"
+                      [matTooltipPosition]="'above'"> Date fin </th>
                     <td mat-cell *matCellDef="let element">
                       <div *ngIf="(element.dateFin > dateFinMin && element.dateFin < dateFinMax) ||
                      (element.dateFin > dateFinMin2 && element.dateFin < dateFinMax2);
                      then thenBlock else elseBlock"></div>
                       <ng-template #thenBlock>
                         <span style="color: red;">
-                          <strong> {{element.dateFin | date:'dd - MM - yyyy'}}</strong>
+                          <strong> {{element.dateFin | date:'dd/MM/yyyy'}}</strong>
                         </span>
                       </ng-template>
-                      <ng-template #elseBlock>{{element.dateFin | date:'dd - MM - yyyy'}}.</ng-template>
+                      <ng-template #elseBlock>{{element.dateFin | date:'dd/MM/yyyy'}}.</ng-template>
                     </td>
                   </ng-container>
 

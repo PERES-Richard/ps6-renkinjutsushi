@@ -1,16 +1,16 @@
 
 
-const EtudiantSimp = require("./src/app/models/etudiantSimp.model");
+// const EtudiantSimp = require("./src/app/models/etudiantSimp.model");
 
 
-const Etudiant = require("./src/app/models");
+// const Etudiant = require("./src/app/models");
 
 const express = require('express');
 const app = express();
 var cors = require('cors');
 var mysql = require('mysql');
 var con = mysql.createConnection({
-  port: "3306",
+  port: "3333",
   user: 'ps6_team',
   password: 'ps6_sushi',
   database: 'renkinjutsushi',

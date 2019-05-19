@@ -97,5 +97,5 @@ a>span:after {
   background-color: #e53a36 !important;
   box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(244, 67, 54, 0.4);
   /* border-radius: 0 0 6px 6px; */
-  padding-bottom: 8px;
+  padding: 0px;
 }

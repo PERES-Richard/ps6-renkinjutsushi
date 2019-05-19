@@ -1,10 +1,10 @@
 th.mat-sort-header-sorted {
-  color: black ;
+  color: black;
 }
 
-button{
+/* button {
   margin: 50px;
-}
+} */
 
 
 .mat-sort-header-button {
@@ -18,22 +18,15 @@ button{
 /* The sidebar menu */
 .sidebar {
   height: 100%;
-  /* 100% Full-height */
   width: 0;
-  /* 0 width - change this with JavaScript */
   position: absolute;
-  /* Stay in place */
   z-index: 1;
-  /* Stay on top */
   top: 0;
   left: 0;
-  /* background-color: #000; Black */
   overflow-x: hidden;
-  /* Disable horizontal scroll */
   padding-top: 60px;
-  /* Place content 60px from the top */
   transition: 0.5s;
-  /* 0.5 second transition effect to slide in the sidebar */
+  margin-top: -45px;
 }
 
 /* The sidebar links */
@@ -160,7 +153,7 @@ label {
   margin-left: 12px;
 }
 
-.favbtn > a {
+.favbtn>a {
   color: white;
 }
 
@@ -194,49 +187,45 @@ label {
   /* visibility: visible; */
   color: #d40303;
 }
-.card [class*="card-header-"]:not(.card-header-icon):not(.card-header-text):not(.card-header-image) {
-  border-radius: 3px;
-  margin-top: -20px;
-  padding: 15px;
-  /* max-width: 92%; */
-  margin-left: auto;
-  margin-right: auto;
-  width: 70%;
-}
 
-h3{
+h3 {
   text-align: center;
 }
 
-.middle{
+.middle {
   margin: auto;
 }
 
-p{
+p {
   font-weight: bold;
 }
 
-.img{
+.img {
   width: 30px;
   height: 20px;
-  border-radius:10px 10px;
+  border-radius: 10px 10px;
 }
 
 
-.ct-series-b .ct-bar, .ct-series-b .ct-line, .ct-series-b .ct-point, .ct-series-b .ct-slice-donut {
+.ct-series-b .ct-bar,
+.ct-series-b .ct-line,
+.ct-series-b .ct-point,
+.ct-series-b .ct-slice-donut {
   stroke: red !important;
 }
 
-.ct-series-a .ct-bar, .ct-series-a .ct-line, .ct-series-a .ct-point, .ct-series-a .ct-slice-donut {
+.ct-series-a .ct-bar,
+.ct-series-a .ct-line,
+.ct-series-a .ct-point,
+.ct-series-a .ct-slice-donut {
   stroke: #22B14C !important;
 }
-.ct-series-a .ct-line, .ct-series-a .ct-point {
+
+.ct-series-a .ct-line,
+.ct-series-a .ct-point {
   stroke: white !important;
 }
 
-.card [class*="card-header-"] .ct-chart .ct-series-a .ct-slice-pie, .card [class*="card-header-"] .ct-chart .ct-series-a .ct-area {
-  fill: #22B14C;
-}
 
 .ct-chart {
   margin: auto;
@@ -244,20 +233,26 @@ p{
   height: 300px;
 }
 
-#legende, #legende2, #legende3{
+#legende,
+#legende2,
+#legende3 {
   width: 25%;
   float: left;
 }
-#ct-chart-pie, #numberSucceedFailure, #numberOfStudents{
-  margin-left:25%
-}
 
-.card .card-header-info .card-icon, .card .card-header-info .card-text, .card .card-header-info:not(.card-header-icon):not(.card-header-text), .card.bg-info, .card.card-rotate.bg-info .front, .card.card-rotate.bg-info .back {
-  background: linear-gradient(60deg, #9c4747, #d01919);
+#ct-chart-pie,
+#numberSucceedFailure,
+#numberOfStudents {
+  margin-left: 25%
 }
 
 .ct-chart .ct-label {
   fill: rgb(255, 255, 255);
+}
+
+
+/* .card .card-header-info .card-icon, .card .card-header-info .card-text, .card .card-header-info:not(.card-header-icon):not(.card-header-text), .card.bg-info, .card.card-rotate.bg-info .front, .card.card-rotate.bg-info .back {
+  background: linear-gradient(60deg, #9c4747, #d01919);
 }
 
 .card [class*="card-header-"] .ct-chart .ct-label {
@@ -269,9 +264,21 @@ p{
   border-radius: 3px;
   margin-top: -20px;
   padding: 15px;
-  /* max-width: 92%; */
   margin-left: auto;
   margin-right: auto;
   width: 70%;
 }
 
+.card [class*="card-header-"] .ct-chart .ct-series-a .ct-slice-pie, .card [class*="card-header-"] .ct-chart .ct-series-a .ct-area {
+  fill: #22B14C;
+}
+
+.card [class*="card-header-"]:not(.card-header-icon):not(.card-header-text):not(.card-header-image) {
+  border-radius: 3px;
+  margin-top: -20px;
+  padding: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+*/
