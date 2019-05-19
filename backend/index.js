@@ -1,9 +1,8 @@
 
 
-// const EtudiantSimp = require("./src/app/models/etudiantSimp.model");
 
 
-// const Etudiant = require("./src/app/models");
+const Etudiant = require("./src/app/models/etudiant.model");
 
 const express = require('express');
 const app = express();
@@ -15,7 +14,9 @@ var con = mysql.createConnection({
   password: 'ps6_sushi',
   database: 'renkinjutsushi',
 });
+var bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
 app.use(cors());
 
 app.use((req, res, next) => {
@@ -73,6 +74,7 @@ app.get('/getData/etat', function (req, res) {
 
 app.get('/getData/numbersucceed/:annee', function (req, res) {
   let annee = req.param('annee');
+
   con.query("select count(*) as degre from etudiant where annee= ? group by etudiant.semestreValide ;", annee, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
@@ -86,6 +88,17 @@ app.get('/getData/numbersucceed/:annee', function (req, res) {
 app.get('/getData/piechart/:promo', function (req, res) {
   let promo = req.param('promo');
   con.query("select count(*) as degre from etudiant inner join etat on etudiant.etat = etat.idEtat where etudiant.promo= ? group by etat.degre having degre >0 and degre <4 ;", promo, function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      // console.log(result);
+      res.status(200).json(result);
+    }
+  });
+});
+
+app.get('/getData/piechartnonvalide/', function (req, res) {
+  con.query("select etat.idEtat, count(*) as degre from etudiant inner join etat on etudiant.etat = etat.idEtat where etat.degre = 3 or etat.degre = 2 group by etat.idEtat order by etat.idEtat;", function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
@@ -123,9 +136,21 @@ app.get('/getData/numberstudents/:etat', function (req, res) {
   });
 });
 
-app.get('/getData/numberstudentswithcountry/:country', function (req, res) {
+app.get('/getData/numberstudentswithcountry/:country&:etat', function (req, res) {
+  let etat = req.param('etat');
   let country = req.param('country');
-  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' group by pays.id,etudiant.annee order by count(*) ; ";
+  let otherEtat='';
+  if (etat === '1'){
+    otherEtat = "and etudiant.etat=2 OR etudiant.etat=4";
+  }
+  else if (etat === '0'){
+    otherEtat = "and etudiant.etat=3 OR etudiant.etat=7";
+  }
+  else if (etat === '3'){
+    otherEtat = "and etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6";
+  }
+
+  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' "+otherEtat+"  group by pays.id,etudiant.annee order by count(*) ; ";
   console.log(request);
   con.query(request, function (err, result, fields) {
     if (err) {
@@ -147,6 +172,51 @@ app.get('/getData/numbersucceedcountry/:pays', function (req, res) {
     }
   });
 });
+
+
+app.get('/getData/getidcountry/:country', function (req, res) {
+  let country = req.param('country');
+
+  con.query("SELECT id FROM renkinjutsushi.pays where nom_fr_fr = ?; \n\n", country, function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+
+app.get('/getData/getidspeciality/:speciality', function (req, res) {
+  let speciality = req.param('speciality');
+
+  con.query("SELECT idSpecialite FROM renkinjutsushi.specialite where nomSpecialite = ? ;; \n\n", speciality, function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+
+app.get('/getData/getidetat/:etat', function (req, res) {
+  let etat = req.param('etat');
+
+  con.query("SELECT idEtat FROM renkinjutsushi.etat where nomEtat = ? ;; \n\n", etat, function (err, result, fields) {
+    if (err) {
+      console.log('Error 2.2 =\n', err);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
+
+
+
+
+
 
 app.get('/getData', function (req, res) {
 
@@ -306,10 +376,31 @@ app.get('/getData', function (req, res) {
 });
 
 app.post('/postData/updateStudent', (req, res) => {
-  
-  let student = Etudiant.create(req.body);
-    con.query("UPDATE renkinjutsushi.`etudiant` SET nom = ?, prenom = ?, promo = ?, specialite = ?, etat = ?, semestresRestants = ?, dateDebut = ?, dateFin = ?, pays = ?, obtenuVia = ?, mail = ?, annee = ? WHERE (idEtudiant = ?);\n;\n\n",
-      student.nom,student.prenom,student.promo,student.specialite,student.etat,student.semainesRestantes,student.dateDebut,student.dateFin,student.pays,student.obtenuVia,student.mail,student.annee,student.id, function (err, result, fields) {
+
+
+
+    const student = Etudiant.create(req.body);
+    console.log("student "+student.nom);
+
+    let dateD1 = student.dateDebut.toString().replace('T',' ');
+    let dateD2 = dateD1.replace('Z','');
+
+    let dateF1 = student.dateDebut.toString().replace('T',' ');
+    let dateF2 = dateD1.replace('Z','');
+
+
+
+    let params = [student.nom,student.prenom,student.promo,student.specialite.idSpecialite,student.commentaire,student.etat.idEtat,student.semainesRestantes,student.typeValidation,dateD2,dateF2,student.pays.idPays,student.obtenuVia,student.mail,student.annee,student.idEtudiant];
+    //res.status(201).json(ticket);
+
+    //res.status(200).json(SchoolTicket.update(req.params.schoolTicketId, req.body));
+
+    /*let student = Etudiant.create(req.body);
+    const updatedItem = Object.assign({}, req.body);
+    console.log("test : "+student);
+    console.log("test : "+updatedItem);*/
+    con.query("UPDATE `renkinjutsushi`.`etudiant` SET `nom` = ?, `prenom` = ?, `promo` = ?, `specialite` = ?, `commentaire` = ?, `etat` = ?, `semainesRestantes` = ?, `typeValidation` = ?, `dateDebut` = ?, `dateFin` = ?, `pays` = ?, `obtenuVia` = ?, `mail` = ?, `annee` = ? WHERE (`idEtudiant` = ?);\n\n\n",params,
+       function (err, result, fields) {
       if (err) {
         console.log('Error 2.2 =\n', err);
       } else {
@@ -317,6 +408,21 @@ app.post('/postData/updateStudent', (req, res) => {
       }
     });
 });
+
+
+/*router.put('/:schoolTicketId', (req, res) => {
+  try {
+    res.status(200).json(SchoolTicket.update(req.params.schoolTicketId, req.body));
+  } catch (err) {
+    if (err.name === 'NotFoundError') {
+      res.status(404).end();
+    } else if (err.name === 'ValidationError') {
+      res.status(400).json(err.extra);
+    } else {
+      res.status(500).json(err);
+    }
+  }
+})*/
 
 app.listen(3000)
 

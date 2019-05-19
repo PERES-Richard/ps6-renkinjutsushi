@@ -111,7 +111,23 @@ export class UserProfileComponent implements OnInit {
   }
 
   updateStudent() {
-    this.userProfileService.postStudent(this.etudiant);
+    this.etudiant.photo="photo";
+    console.log("spe  "+this.etudiant.specialite.nomSpecialite);
+    const idCountryPro = this.userProfileService.getIdCountry(this.etudiant.pays.nomPays).toPromise();
+    const idSpecialityPro = this.userProfileService.getIdSpeciality(this.etudiant.specialite.nomSpecialite).toPromise();
+    const idEtatPro = this.userProfileService.getIdEtat(this.etudiant.etat.nomEtat).toPromise();
+
+
+    Promise.all([idCountryPro, idSpecialityPro, idEtatPro]).then((values) => {
+
+      this.etudiant.pays.idPays=values[0][0].id;
+      //this.etudiant.specialite.idSpecialite=values[1][0].idSpecialite;
+      this.etudiant.etat.idEtat=values[2][0].idEtat;
+
+      console.log(values);
+
+      this.userProfileService.postStudent(this.etudiant);
+    });
   }
 
 }

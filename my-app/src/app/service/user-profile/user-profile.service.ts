@@ -17,11 +17,28 @@ export class UserProfileService {
   }
 
   postStudent(student: Etudiant) {
-    this.http.post(this.URL + '/postData/updateStudent', student).subscribe(
+
+    this.http.post<Etudiant>(this.URL + '/postData/updateStudent', student).subscribe(
       (data: any) => {
-        console.log(data);
+        //
       }
     );
+  }
+
+
+  getIdCountry(countryName: string) {
+    const rep=this.http.get<number>(this.URL+'/getData/getidcountry/'+countryName);
+    return rep;
+  }
+
+  getIdSpeciality(speName: string) {
+    const rep=this.http.get<number>(this.URL+'/getData/getidspeciality/'+speName);
+    return rep;
+  }
+
+  getIdEtat(etatName: string) {
+    const rep=this.http.get<number>(this.URL+'/getData/getidetat/'+etatName);
+    return rep;
   }
 
 
