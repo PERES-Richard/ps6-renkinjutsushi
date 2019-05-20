@@ -10,6 +10,8 @@ import { Specialite } from 'app/models/Specialite';
 import { Pays } from 'app/models/Pays';
 import { Etat } from 'app/models/Etat';
 import { MAT_DATE_LOCALE, DateAdapter } from '@angular/material';
+import { Location } from '@angular/common';
+
 
 
 @Component({
@@ -30,7 +32,7 @@ export class UserProfileComponent implements OnInit {
 
 
   constructor(private tableListService: TableListService, private userProfileService: UserProfileService,
-    private domSanitizer: DomSanitizer, private dateAdapter: DateAdapter<Date>,
+    private domSanitizer: DomSanitizer, private dateAdapter: DateAdapter<Date>, private location: Location,
     private route: ActivatedRoute
   ) { }
 
@@ -111,8 +113,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   updateStudent() {
-    this.etudiant.photo="photo";
-    console.log("spe  "+this.etudiant.specialite.nomSpecialite);
+    this.etudiant.photo = 'photo';
+    console.log('spe  ' + this.etudiant.specialite.nomSpecialite);
     const idCountryPro = this.userProfileService.getIdCountry(this.etudiant.pays.nomPays).toPromise();
     const idSpecialityPro = this.userProfileService.getIdSpeciality(this.etudiant.specialite.nomSpecialite).toPromise();
     const idEtatPro = this.userProfileService.getIdEtat(this.etudiant.etat.nomEtat).toPromise();
@@ -120,13 +122,14 @@ export class UserProfileComponent implements OnInit {
 
     Promise.all([idCountryPro, idSpecialityPro, idEtatPro]).then((values) => {
 
-      this.etudiant.pays.idPays=values[0][0].id;
-      //this.etudiant.specialite.idSpecialite=values[1][0].idSpecialite;
-      this.etudiant.etat.idEtat=values[2][0].idEtat;
+      this.etudiant.pays.idPays = values[0][0].id;
+      // this.etudiant.specialite.idSpecialite=values[1][0].idSpecialite;
+      this.etudiant.etat.idEtat = values[2][0].idEtat;
 
       console.log(values);
 
       this.userProfileService.postStudent(this.etudiant);
+      this.location.back();
     });
   }
 

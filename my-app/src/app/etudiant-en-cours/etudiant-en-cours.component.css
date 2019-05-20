@@ -183,7 +183,7 @@ label {
   cursor: pointer;
 }
 
-.deleteFavBtn:hover {
+.favbtn:hover > .deleteFavBtn {
   /* visibility: visible; */
   color: #d40303;
 }

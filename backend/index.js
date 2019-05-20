@@ -113,19 +113,19 @@ app.get('/getData/piechartnonvalide/', function (req, res) {
 
 app.get('/getData/numberstudents/:etat', function (req, res) {
   let etat = req.param('etat');
-  console.log("etat",etat);
-  let otherEtat= '';
-  if (etat === '1'){
+  console.log("etat", etat);
+  let otherEtat = '';
+  if (etat === '1') {
     otherEtat = "where etudiant.etat=2 OR etudiant.etat=4";
   }
-  else if (etat === '0'){
+  else if (etat === '0') {
     otherEtat = "where etudiant.etat=3 OR etudiant.etat=7";
   }
-  else if (etat === '3'){
+  else if (etat === '3') {
     otherEtat = "where etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6";
   }
 
-  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id "+otherEtat+" group by pays.id order by count(*) DESC limit 3 ; ";
+  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id " + otherEtat + " group by pays.id order by count(*) DESC limit 3 ; ";
   console.log(request);
   con.query(request, function (err, result, fields) {
     if (err) {
@@ -139,18 +139,18 @@ app.get('/getData/numberstudents/:etat', function (req, res) {
 app.get('/getData/numberstudentswithcountry/:country&:etat', function (req, res) {
   let etat = req.param('etat');
   let country = req.param('country');
-  let otherEtat='';
-  if (etat === '1'){
+  let otherEtat = '';
+  if (etat === '1') {
     otherEtat = "and etudiant.etat=2 OR etudiant.etat=4";
   }
-  else if (etat === '0'){
+  else if (etat === '0') {
     otherEtat = "and etudiant.etat=3 OR etudiant.etat=7";
   }
-  else if (etat === '3'){
+  else if (etat === '3') {
     otherEtat = "and etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6";
   }
 
-  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' "+otherEtat+"  group by pays.id,etudiant.annee order by count(*) ; ";
+  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '" + country + "' " + otherEtat + "  group by pays.id,etudiant.annee order by count(*) ; ";
   console.log(request);
   con.query(request, function (err, result, fields) {
     if (err) {
@@ -312,49 +312,49 @@ app.get('/getData', function (req, res) {
 
       switch (Object.keys(urlQuery)[i]) {
         case 'pays':
-        {
-          queryStr += 'pays.nom_fr_fr';
-          if (Array.isArray(Object.values(urlQuery)[i])) {
-            queryStr += " IN ( ? ) AND ";
-          } else queryStr += " LIKE ? AND ";
-          break;
-        }
+          {
+            queryStr += 'pays.nom_fr_fr';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " IN ( ? ) AND ";
+            } else queryStr += " LIKE ? AND ";
+            break;
+          }
 
         case 'specialite':
-        {
-          queryStr += 'spe.nomSpecialite';
-          if (Array.isArray(Object.values(urlQuery)[i])) {
-            queryStr += " IN ( ? ) AND ";
-          } else queryStr += " LIKE ? AND ";
-          break;
-        }
+          {
+            queryStr += 'spe.nomSpecialite';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " IN ( ? ) AND ";
+            } else queryStr += " LIKE ? AND ";
+            break;
+          }
 
         case 'etat':
-        {
-          queryStr += 'etat.nomEtat';
-          if (Array.isArray(Object.values(urlQuery)[i])) {
-            queryStr += " IN ( ? ) AND ";
-          } else queryStr += " LIKE ? AND ";
-          break;
-        }
+          {
+            queryStr += 'etat.nomEtat';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " IN ( ? ) AND ";
+            } else queryStr += " LIKE ? AND ";
+            break;
+          }
 
         case 'degre':
-        {
-          queryStr += 'etat.degre';
-          if (Array.isArray(Object.values(urlQuery)[i])) {
-            queryStr += " IN ( ? ) AND ";
-          } else queryStr += " LIKE ? AND ";
-          break;
-        }
+          {
+            queryStr += 'etat.degre';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += " IN ( ? ) AND ";
+            } else queryStr += " LIKE ? AND ";
+            break;
+          }
 
         default:
-        {
-          queryStr += 'etu.';
-          if (Array.isArray(Object.values(urlQuery)[i])) {
-            queryStr += Object.keys(urlQuery)[i] + " IN ( ? ) AND ";
-          } else queryStr += Object.keys(urlQuery)[i] + " LIKE ? AND ";
-          break;
-        }
+          {
+            queryStr += 'etu.';
+            if (Array.isArray(Object.values(urlQuery)[i])) {
+              queryStr += Object.keys(urlQuery)[i] + " IN ( ? ) AND ";
+            } else queryStr += Object.keys(urlQuery)[i] + " LIKE ? AND ";
+            break;
+          }
       }
 
     queryStr = queryStr.substring(0, queryStr.length - 4)
@@ -379,28 +379,28 @@ app.post('/postData/updateStudent', (req, res) => {
 
 
 
-    const student = Etudiant.create(req.body);
-    console.log("student "+student.nom);
+  const student = Etudiant.create(req.body);
+  console.log("student " + student.nom);
 
-    let dateD1 = student.dateDebut.toString().replace('T',' ');
-    let dateD2 = dateD1.replace('Z','');
+  let dateD1 = student.dateDebut.toString().replace('T', ' ');
+  let dateD2 = dateD1.replace('Z', '');
 
-    let dateF1 = student.dateDebut.toString().replace('T',' ');
-    let dateF2 = dateD1.replace('Z','');
+  let dateF1 = student.dateDebut.toString().replace('T', ' ');
+  let dateF2 = dateD1.replace('Z', '');
 
 
 
-    let params = [student.nom,student.prenom,student.promo,student.specialite.idSpecialite,student.commentaire,student.etat.idEtat,student.semainesRestantes,student.typeValidation,dateD2,dateF2,student.pays.idPays,student.obtenuVia,student.mail,student.annee,student.idEtudiant];
-    //res.status(201).json(ticket);
+  let params = [student.nom, student.prenom, student.promo, student.specialite.idSpecialite, student.commentaire, student.etat.idEtat, student.semainesRestantes, student.typeValidation, dateD2, dateF2, student.pays.idPays, student.obtenuVia, student.mail, student.annee, student.idEtudiant];
+  //res.status(201).json(ticket);
 
-    //res.status(200).json(SchoolTicket.update(req.params.schoolTicketId, req.body));
+  //res.status(200).json(SchoolTicket.update(req.params.schoolTicketId, req.body));
 
-    /*let student = Etudiant.create(req.body);
-    const updatedItem = Object.assign({}, req.body);
-    console.log("test : "+student);
-    console.log("test : "+updatedItem);*/
-    con.query("UPDATE `renkinjutsushi`.`etudiant` SET `nom` = ?, `prenom` = ?, `promo` = ?, `specialite` = ?, `commentaire` = ?, `etat` = ?, `semainesRestantes` = ?, `typeValidation` = ?, `dateDebut` = ?, `dateFin` = ?, `pays` = ?, `obtenuVia` = ?, `mail` = ?, `annee` = ? WHERE (`idEtudiant` = ?);\n\n\n",params,
-       function (err, result, fields) {
+  /*let student = Etudiant.create(req.body);
+  const updatedItem = Object.assign({}, req.body);
+  console.log("test : "+student);
+  console.log("test : "+updatedItem);*/
+  con.query("UPDATE `renkinjutsushi`.`etudiant` SET `nom` = ?, `prenom` = ?, `promo` = ?, `specialite` = ?, `commentaire` = ?, `etat` = ?, `semainesRestantes` = ?, `typeValidation` = ?, `dateDebut` = ?, `dateFin` = ?, `pays` = ?, `obtenuVia` = ?, `mail` = ?, `annee` = ? WHERE (`idEtudiant` = ?);\n\n\n", params,
+    function (err, result, fields) {
       if (err) {
         console.log('Error 2.2 =\n', err);
       } else {
