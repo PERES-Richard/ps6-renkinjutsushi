@@ -2,6 +2,11 @@ import {Etudiant} from '../../models/Etudiant';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Degre} from '../../models/Degre';
+import {EtudiantSimp} from "../../models/EtudiantSimp";
+import {SafeUrl} from "@angular/platform-browser";
+import {Specialite} from "../../models/Specialite";
+import {Etat} from "../../models/Etat";
+import {Pays} from "../../models/Pays";
 
 @Injectable(
   // {providedIn: 'root'}
@@ -11,18 +16,14 @@ export class UserProfileService {
 
   URL = 'http://localhost:3000';
 
-  etudiant: Etudiant[];
 
   constructor(private http: HttpClient) {
   }
 
   postStudent(student: Etudiant) {
 
-    this.http.post<Etudiant>(this.URL + '/postData/updateStudent', student).subscribe(
-      (data: any) => {
-        //
-      }
-    );
+    const rep =this.http.post<Etudiant>(this.URL + '/postData/updateStudent', student);
+    return rep;
   }
 
 

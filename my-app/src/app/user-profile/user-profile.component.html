@@ -39,7 +39,7 @@
                   <mat-select [(ngModel)]="etudiant.specialite.nomSpecialite" name="NomSpecialite" matInput
                     [(value)]="etudiant.specialite.nomSpecialite">
                     <mat-option *ngFor="let spe of specialites"
-                      [value]="spe">
+                      [value]="spe.nomSpecialite">
                       {{spe.envisagee ? spe.nomSpecialite + '*' : spe.nomSpecialite}}
                     </mat-option>
                   </mat-select>
@@ -129,7 +129,7 @@
             </div>
 
 
-            <button mat-raised-button type="submit" class="btn btn-danger pull-right">Sauvegarder</button>
+            <button mat-raised-button type="submit" class="btn btn-danger pull-right" >Sauvegarder</button>
             <div class="clearfix"></div>
           </form>
         </div>
