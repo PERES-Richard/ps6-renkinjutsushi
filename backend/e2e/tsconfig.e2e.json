@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/app",
     "module": "commonjs",
-    "target": "esnext",
+    "target": "es5",
     "types": [
       "jasmine",
       "jasminewd2",

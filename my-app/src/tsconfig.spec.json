@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../out-tsc/spec",
     "module": "commonjs",
-    "target": "esnext",
+    "target": "es2017",
     "baseUrl": "",
     "types": [
       "jasmine",
