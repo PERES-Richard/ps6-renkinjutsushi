@@ -190,7 +190,9 @@ app.get('/getData/getidcountry/:country', function (req, res) {
 app.get('/getData/getidspeciality/:speciality', function (req, res) {
   let speciality = req.param('speciality');
 
-  con.query("SELECT idSpecialite FROM renkinjutsushi.specialite where nomSpecialite = ? ;; \n\n", speciality, function (err, result, fields) {
+  let params = [speciality];
+
+  con.query("SELECT idSpecialite FROM renkinjutsushi.specialite where nomSpecialite = ?;; \n\n", params, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
     } else {
