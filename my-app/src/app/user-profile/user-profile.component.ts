@@ -122,7 +122,6 @@ export class UserProfileComponent implements OnInit {
 
 
     Promise.all([idCountryPro, idSpecialityPro, idEtatPro]).then((values) => {
-
       this.etudiant.pays.idPays = values[0][0].id;
       this.etudiant.specialite.idSpecialite = values[1][1].idSpecialite;
       this.etudiant.etat.idEtat = values[2][0].idEtat;
