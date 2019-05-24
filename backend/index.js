@@ -150,7 +150,7 @@ app.get('/getData/numberstudentswithcountry/:country&:etat', function (req, res)
     otherEtat = "and etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6";
   }
 
-  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '" + country + "' " + otherEtat + "  group by pays.id,etudiant.annee order by count(*) ; ";
+  let request = " select pays.nom_fr_fr as pays, etudiant.annee,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' "+otherEtat+"  group by pays.id,etudiant.annee order by etudiant.annee ; ";
   console.log(request);
   con.query(request, function (err, result, fields) {
     if (err) {
