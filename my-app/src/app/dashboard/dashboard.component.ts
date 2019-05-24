@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import * as Chartist from 'chartist';
 import { StatistiquesService } from '../service/statistiques/statistiques.service';
+import {Degre} from "../models/Degre";
 
 @Component({
   selector: 'app-dashboard',
@@ -33,10 +34,22 @@ export class DashboardComponent implements OnInit {
    */
   initPieChart(promo: string) {
     const promotionPro = this.statistiquesService.getPieChart(promo).toPromise();
-
+    let tab: number[]= [0,0,0,0];
     promotionPro.then((value) => {
+
+      if (value.length != 4){
+        for (let i of value){
+          console.log(i);
+          tab[i.etatdegre] = i.degre
+        }
+      }else {
+
+        for (let j=0;j<value.length;j++){
+          tab[j]=value[j].degre;
+        }
+      }
       const validationDonut = new Chartist.Pie('#ct-chart-pie', {
-        series: [value[0].degre, value[1].degre, value[2].degre]
+        series: [tab[0], tab[3], tab[1]+tab[2]]
       }, {
           startAngle: 270,
           showLabel: true

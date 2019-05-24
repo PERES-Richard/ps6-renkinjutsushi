@@ -180,12 +180,31 @@ export class EtudiantNonValideComponent implements OnInit {
    */
   initPieChart() {
     const promotionPro = this.statistiquesService.getPieChartNonValide().toPromise();
-
+    let tab: number[]= [0,0,0,0];
     promotionPro.then((value) => {
+
+      if (value.length != 4){
+        for (let i of value){
+
+          if (i.etatdegre==1){
+            tab[0]=i.degre;
+          }else{
+            tab[0]=0;
+          }
+
+          console.log(i);
+          tab[i.etatdegre-3] = i.degre
+        }
+      }else {
+
+        for (let j=0;j<value.length;j++){
+          tab[j]=value[j].degre;
+        }
+      }
 
       const validationDonut = new Chartist.Pie('#ct-chart-pie', {
 
-        series: [value[1].degre, value[0].degre, value[3].degre,value[2].degre]
+        series: [tab[1], tab[0], tab[3],tab[2]]
       }, {
         startAngle: 270,
         showLabel: true
