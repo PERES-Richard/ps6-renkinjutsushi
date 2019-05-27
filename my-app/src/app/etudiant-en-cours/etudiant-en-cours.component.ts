@@ -399,7 +399,8 @@ export class EtudiantEnCoursComponent implements OnInit {
     promo = this.filtreForm.get('promo').value;
     // console.log('params init', params);
     for (let i = 0; i < Object.keys(promo).length; i++) {
-      if (Object.values(promo)[i]) {
+      let values = Object.keys(promo).map(key => promo[key])
+      if (values[i]) {
         params = params.append('promo', Object.keys(promo)[i]);
       }
     }
@@ -407,7 +408,8 @@ export class EtudiantEnCoursComponent implements OnInit {
     let specialite = []
     specialite = this.filtreForm.get('specialite').value;
     for (let i = 0; i < Object.keys(specialite).length; i++) {
-      if (Object.values(specialite)[i]) {
+      let values = Object.keys(specialite).map(key => specialite[key])
+      if (values[i]) {
         params = params.append('specialite', Object.keys(specialite)[i]);
       }
     }
@@ -415,7 +417,8 @@ export class EtudiantEnCoursComponent implements OnInit {
     let typeValidation = []
     typeValidation = this.filtreForm.get('typeValidation').value;
     for (let i = 0; i < Object.keys(typeValidation).length; i++) {
-      if (Object.values(typeValidation)[i]) {
+      let values = Object.keys(typeValidation).map(key => typeValidation[key])
+      if (values[i]) {
         params = params.append('typeValidation', Object.keys(typeValidation)[i]);
       }
     }
@@ -423,13 +426,15 @@ export class EtudiantEnCoursComponent implements OnInit {
     let semainesRestantes = [];
     semainesRestantes = this.filtreForm.get('semainesRestantes').value;
     for (let i = 0; i < Object.keys(semainesRestantes).length; i++) {
-      params = params.append('semainesRestantes', Object.values(semainesRestantes)[i]);
+      let values = Object.keys(semainesRestantes).map(key => semainesRestantes[key])
+      params = params.append('semainesRestantes', values[i]);
     }
 
     let annee = [];
     annee = this.filtreForm.get('annee').value;
     for (let i = 0; i < Object.keys(annee).length; i++) {
-      params = params.append('annee', Object.values(annee)[i]);
+      let values = Object.keys(annee).map(key => annee[key])
+      params = params.append('annee', values[i]);
     }
 
     return params;
