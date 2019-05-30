@@ -6,6 +6,12 @@ th.mat-sort-header-sorted {
   margin: 50px;
 } */
 
+.noresult {
+  font-size: 1.75em;
+  color: gray;
+  text-align: center;
+  padding: 30px;
+}
 
 .mat-sort-header-button {
   margin-right: auto !important;

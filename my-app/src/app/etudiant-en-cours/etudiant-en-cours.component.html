@@ -122,7 +122,7 @@
           <button class="openbtn btn btn-primary" (click)="toggleNav()" style="font-size: 0.95em;">&#9776;
             Filtres</button>
 
-          <button *ngFor="let favori of fav" class="favbtn btn btn-info" style="font-size: 0.95em;"
+          <button *ngFor="let favori of fav" class="favbtn btn btn-info" style="font-size: 0.95em; min-width: 100px;"
             matTooltip="{{favori.memo}}" [matTooltipPosition]="'below'">
             <button class="deleteFavBtn" (click)="deleteFav(favori)">x</button>
             <a [href]="favori.url">
@@ -135,7 +135,7 @@
               <h4 class="card-title ">Liste des étudiants en cours de validation</h4>
               <!-- <p class="card-category">Liste des étudiants !</p> -->
             </div>
-            <div *ngIf="noResult" class="card-body">
+            <div *ngIf="!noResult" class="card-body">
               <div class="table-responsive">
 
                 <mat-form-field>
@@ -263,8 +263,8 @@
               </div>
             </div>
 
-            <div *ngIf="!noResult" class="card-body">
-            <h4> Aucun résultat :(<br>Essayer avec d'autres filtres !</h4>
+            <div *ngIf="noResult" class="card-body">
+            <h4 class="noresult"> Aucun résultat :(<br>Essayez avec d'autres filtres !</h4>
             </div>
           </div>
 

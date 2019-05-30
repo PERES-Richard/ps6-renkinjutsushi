@@ -55,7 +55,7 @@ export class EtudiantEnCoursComponent implements OnInit {
   });
 
   etudiant: Etudiant[];
-  noResult = true;
+  noResult: Boolean;
   error: any;
   headers: string[];
 
@@ -216,12 +216,12 @@ export class EtudiantEnCoursComponent implements OnInit {
 
     const semainesRestantes = this.route.snapshot.queryParamMap.getAll('semainesRestantes');
     if (semainesRestantes != null) {
-        this.filtreForm.get('semainesRestantes').setValue(semainesRestantes)
+      this.filtreForm.get('semainesRestantes').setValue(semainesRestantes)
     }
 
     const annee = this.route.snapshot.queryParamMap.getAll('annee');
     if (semainesRestantes != null) {
-        this.filtreForm.get('annee').setValue(annee)
+      this.filtreForm.get('annee').setValue(annee)
     }
 
   }
@@ -249,6 +249,12 @@ export class EtudiantEnCoursComponent implements OnInit {
 
 
       const etuS: EtudiantSimp[] = rep;
+
+      if (etuS == null || etuS === undefined || etuS.length === 0) {
+        this.noResult = true;
+      } else {
+        this.noResult = false;
+      }
 
       this.etudiant = [];
 
