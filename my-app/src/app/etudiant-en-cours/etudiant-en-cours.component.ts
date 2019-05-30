@@ -181,6 +181,13 @@ export class EtudiantEnCoursComponent implements OnInit {
     reader.readAsText(this.file);
   }
 
+
+  setFormGrp() {
+    console.log('e', this.filtreForm.get('specialite').get('AL'));
+    // this.filtreForm.get('specialite').get('AL').setValue(true);
+    // TODO
+  }
+
   ngOnInit() {
 
     this.initStudentByCountry();
@@ -189,6 +196,9 @@ export class EtudiantEnCoursComponent implements OnInit {
 
       this.initDates();
       this.opened = false;
+
+      this.setFormGrp();
+
 
       this.fav = JSON.parse(localStorage.getItem('favoris'));
 
