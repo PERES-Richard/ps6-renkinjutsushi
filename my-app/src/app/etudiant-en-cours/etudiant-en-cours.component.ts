@@ -16,7 +16,10 @@ import { Pays } from '../models/Pays';
 import { any } from 'codelyzer/util/function';
 import * as Chartist from 'chartist';
 import { StatistiquesService } from '../service/statistiques/statistiques.service';
-import {TupleNameNumber} from "../models/TupleNameNumber";
+import { TupleNameNumber } from '../models/TupleNameNumber';
+import * as $ from 'jquery';
+import 'bootstrap-notify';
+
 
 
 @Component({
@@ -409,7 +412,7 @@ export class EtudiantEnCoursComponent implements OnInit {
     promo = this.filtreForm.get('promo').value;
     // console.log('params init', params);
     for (let i = 0; i < Object.keys(promo).length; i++) {
-      let values = Object.keys(promo).map(key => promo[key])
+      const values = Object.keys(promo).map(key => promo[key])
       if (values[i]) {
         params = params.append('promo', Object.keys(promo)[i]);
       }
@@ -418,7 +421,7 @@ export class EtudiantEnCoursComponent implements OnInit {
     let specialite = []
     specialite = this.filtreForm.get('specialite').value;
     for (let i = 0; i < Object.keys(specialite).length; i++) {
-      let values = Object.keys(specialite).map(key => specialite[key])
+      const values = Object.keys(specialite).map(key => specialite[key])
       if (values[i]) {
         params = params.append('specialite', Object.keys(specialite)[i]);
       }
@@ -427,7 +430,7 @@ export class EtudiantEnCoursComponent implements OnInit {
     let typeValidation = []
     typeValidation = this.filtreForm.get('typeValidation').value;
     for (let i = 0; i < Object.keys(typeValidation).length; i++) {
-      let values = Object.keys(typeValidation).map(key => typeValidation[key])
+      const values = Object.keys(typeValidation).map(key => typeValidation[key])
       if (values[i]) {
         params = params.append('typeValidation', Object.keys(typeValidation)[i]);
       }
@@ -436,14 +439,14 @@ export class EtudiantEnCoursComponent implements OnInit {
     let semainesRestantes = [];
     semainesRestantes = this.filtreForm.get('semainesRestantes').value;
     for (let i = 0; i < Object.keys(semainesRestantes).length; i++) {
-      let values = Object.keys(semainesRestantes).map(key => semainesRestantes[key])
+      const values = Object.keys(semainesRestantes).map(key => semainesRestantes[key])
       params = params.append('semainesRestantes', values[i]);
     }
 
     let annee = [];
     annee = this.filtreForm.get('annee').value;
     for (let i = 0; i < Object.keys(annee).length; i++) {
-      let values = Object.keys(annee).map(key => annee[key])
+      const values = Object.keys(annee).map(key => annee[key])
       params = params.append('annee', values[i]);
     }
 
@@ -474,6 +477,18 @@ export class EtudiantEnCoursComponent implements OnInit {
 
         localStorage.setItem('favoris', JSON.stringify(this.fav));
         console.log('fav2', this.fav);
+        $.notify({
+          icon: 'success',
+          message: 'Le favoris a bien été ajouté à votre espace !'
+        },
+          {
+            type: 'success',
+            timer: 4000,
+            placement: {
+              from: 'top',
+              align: 'center'
+            }
+          });
       }
     });
 
@@ -520,7 +535,7 @@ export class EtudiantEnCoursComponent implements OnInit {
             [tab1[0], tab2[0], tab3[0]],
             [tab1[1], tab2[1], tab3[1]],
             [tab1[2], tab2[2], tab3[2]]
-           ]
+          ]
         }, {
             seriesBarDistance: 15,
             axisX: {
@@ -546,17 +561,17 @@ export class EtudiantEnCoursComponent implements OnInit {
     }
   }
 
-  verificationOnCountryGraph(country: TupleNameNumber[]){
-    let tab: number[] = [0,0,0];
-    console.log("country length  "+country);
-    if (country.length != 3){
-      for (let i of country){
-        tab[i.annee-2016] = i.nombre
+  verificationOnCountryGraph(country: TupleNameNumber[]) {
+    const tab: number[] = [0, 0, 0];
+    console.log('country length  ' + country);
+    if (country.length !== 3) {
+      for (const i of country) {
+        tab[i.annee - 2016] = i.nombre
       }
-    }else {
-      for (let j=0;j<country.length;j++){
-        tab[j]=country[j].nombre;
-        console.log("country "+j+ " " +country[j].nombre);
+    } else {
+      for (let j = 0; j < country.length; j++) {
+        tab[j] = country[j].nombre;
+        console.log('country ' + j + ' ' + country[j].nombre);
       }
     }
     return tab;
