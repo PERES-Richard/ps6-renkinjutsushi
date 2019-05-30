@@ -3,109 +3,252 @@
     <div class="row">
       <div class="col-md-12">
 
+        <div id="mySidebar" class="sidebar">
 
-        <div class="card">
-          <div class="card-header card-header-danger">
-            <h4 class="card-title ">Liste des étudiants qui n'ont pas (encore) validé l'étranger</h4>
-            <!-- <p class="card-category">Liste des étudiants !</p> -->
+          <div style="padding-left: 25px; padding-right: 25px;">
+
+            <form [formGroup]="filtreForm" (ngSubmit)="onSubmit()">
+
+              <p>Promotion:</p>
+
+              <div style="padding-left: 25px;" formGroupName="promo">
+                <div>
+                  <input type="checkbox" id="SI3" value="SI3" formControlName="SI3">
+                  <label for="SI3">SI3</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="SI4" value="SI4" formControlName="SI4">
+                  <label for="SI4">SI4</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="SI5" value="SI5" formControlName="SI5">
+                  <label for="SI5">SI5</label>
+                </div>
+              </div>
+
+              <hr>
+
+              <p>Spécialité:</p>
+              <div style="padding-left: 25px;" formGroupName="specialite">
+                <div>
+                  <input type="checkbox" id="AL" value="AL" formControlName="AL">
+                  <label for="AL">AL</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="IAM" value="IAM" formControlName="IAM">
+                  <label for="IAM">IAM</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="IHM" value="IHM" formControlName="IHM">
+                  <label for="IHM">IHM</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="CS" value="CS" formControlName="CS">
+                  <label for="CS">CS</label>
+                </div>
+                <div>
+                  <input type="checkbox" id="STRAW" value="STRAW" formControlName="STRAW">
+                  <label for="STRAW">STRAW</label>
+                </div>
+              </div>
+
+              <hr>
+
+              <p>État</p>
+              <div style="padding-left: 25px;" formGroupName="etat">
+                <div>
+                  <input type="checkbox" id="Non validé" value="Non validé" formControlName="NonValide">
+                  <label for="Non validé">Non validé</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" id="Dossier en cours" value="Dossier en cours" formControlName="DossierEnCours">
+                  <label for="Dossier en cours">Dossier en cours</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" id="Dossier annulé" value="Dossier annulé" formControlName="DossierAnnule">
+                  <label for="Dossier annulé">Dossier annulé</label>
+                </div>
+
+                <div>
+                  <input type="checkbox" id="En attente du dossier" value="En attente du dossier" formControlName="EnAttenteDuDossier">
+                  <label for="En attente du dossier">En attente du dossier</label>
+                </div>
+              </div>
+
+              <hr>
+
+              <p>Semaines restantes :</p>
+
+              <div style="padding-left: 25px;">
+                <select multiple class="form-control picker" name="SemainesRestantes"
+                  formControlName="semainesRestantes">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
+
+              <hr>
+
+              <p>Années :</p>
+
+              <div style="padding-left: 25px;">
+                <select multiple class="form-control picker" name="annee" formControlName="annee">
+                  <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                </select>
+              </div>
+
+              <button mat-raised-button class="btn btn-danger" type="submit"
+                style="width: 198px; margin-top: 50px;     margin-left: -11px;">
+                Filtrer les résultats
+              </button>
+
+              <button mat-raised-button class="btn btn-default" type="button"
+                style="width: 198px;     margin-left: -11px;" (click)="addFav(f)">
+                Sauvegarder le filtre
+              </button>
+            </form>
+
           </div>
-          <div class="card-body">
-            <div class="table-responsive">
+        </div>
 
-              <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrer">
-              </mat-form-field>
+        <div id="main">
+          <button class="openbtn btn btn-primary" (click)="toggleNav()" style="font-size: 0.95em;">&#9776;
+            Filtres</button>
 
-              <table mat-table [dataSource]="dataSource" matSort class="table" style="text-align: center;">
+          <button *ngFor="let favori of fav" class="favbtn btn btn-info" style="font-size: 0.95em; min-width: 100px;"
+            matTooltip="{{favori.memo}}" [matTooltipPosition]="'below'">
+            <button class="deleteFavBtn" (click)="deleteFav(favori)">x</button>
+            <a [href]="favori.url">
+              <i class="material-icons favi">star</i>
 
-                <ng-container matColumnDef="photo">
-                  <th mat-header-cell *matHeaderCellDef class=" text-primary"> Photo </th>
-                  <td mat-cell *matCellDef="let element"> <img [src]="element.photo" class="rounded-circle" width="45"
-                      height="45"> </td>
-                </ng-container>
+              {{favori.nom}} </a></button>
 
-                <ng-container matColumnDef="nom">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Nom </th>
-                  <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
-                </ng-container>
+          <div class="card">
+            <div class="card-header card-header-danger">
+              <h4 class="card-title ">Liste des étudiants qui n'ont pas validé l'étranger</h4>
+              <!-- <p class="card-category">Liste des étudiants !</p> -->
+            </div>
+            <div *ngIf="!noResult" class="card-body">
+              <div class="table-responsive">
+
+                <mat-form-field>
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrer">
+                </mat-form-field>
+
+                <table mat-table [dataSource]="dataSource" matSort class="table" style="text-align: center;">
+
+                  <ng-container matColumnDef="photo">
+                    <th mat-header-cell *matHeaderCellDef class=" text-primary"> Photo </th>
+                    <td mat-cell *matCellDef="let element"> <img [src]="element.photo" class="rounded-circle" width="45"
+                        height="45"> </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="nom">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Nom </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
+                  </ng-container>
 
 
-                <ng-container matColumnDef="prenom">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Prenom </th>
-                  <td mat-cell *matCellDef="let element"> {{element.prenom}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="prenom">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Prenom </th>
+                    <td mat-cell *matCellDef="let element"> {{element.prenom}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="promo">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Promo </th>
-                  <td mat-cell *matCellDef="let element"> {{element.promo}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="promo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Promo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.promo}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="specialite">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Spécialité </th>
-                  <td mat-cell *matCellDef="let element"> {{element.specialite.nomSpecialite}} <span
-                      *ngIf="element.specialite.envisagee" style="color: mediumvioletred;"><strong> * </strong></span>
-                  </td>
-                </ng-container>
+                  <ng-container matColumnDef="specialite">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Spécialité </th>
+                    <td mat-cell *matCellDef="let element"> {{element.specialite.nomSpecialite}} <span
+                        *ngIf="element.specialite.envisagee" style="color: mediumvioletred;"><strong> * </strong></span>
+                    </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="etat">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> État </th>
-                  <td mat-cell *matCellDef="let element">
-                    <div *ngIf="element.etat.degre == 4; then thenBlock else elseBlock"></div>
-                    <ng-template #thenBlock>
-                      <span style="color: red; font-weight: 900;">
-                        <strong> {{element.etat.nomEtat}}</strong>
-                      </span>
-                    </ng-template>
-                    <ng-template #elseBlock>
-                      <div *ngIf="element.etat.degre == 3; then thenBlock else elseBlock"></div>
+                  <ng-container matColumnDef="etat">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> État </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div *ngIf="element.etat.degre == 4; then thenBlock else elseBlock"></div>
                       <ng-template #thenBlock>
-                        <span style="color: orange; font-weight: 900;">
+                        <span style="color: red; font-weight: 900;">
                           <strong> {{element.etat.nomEtat}}</strong>
                         </span>
                       </ng-template>
                       <ng-template #elseBlock>
-                        <div *ngIf="element.etat.degre == 2; then thenBlock"></div>
+                        <div *ngIf="element.etat.degre == 3; then thenBlock else elseBlock"></div>
                         <ng-template #thenBlock>
-                          <span style="color: #2f8f1b; font-weight: 900;">
+                          <span style="color: orange; font-weight: 900;">
                             <strong> {{element.etat.nomEtat}}</strong>
                           </span>
                         </ng-template>
+                        <ng-template #elseBlock>
+                          <div *ngIf="element.etat.degre == 2; then thenBlock"></div>
+                          <ng-template #thenBlock>
+                            <span style="color: #2f8f1b; font-weight: 900;">
+                              <strong> {{element.etat.nomEtat}}</strong>
+                            </span>
+                          </ng-template>
+                        </ng-template>
                       </ng-template>
-                    </ng-template>
-                  </td>
-                </ng-container>
+                    </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="semainesRestantes">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Semaines restantes </th>
-                  <td mat-cell *matCellDef="let element"> {{element.semainesRestantes}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="semainesRestantes">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Semaines restantes
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.semainesRestantes}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="commentaire">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Commentaire </th>
-                  <td mat-cell *matCellDef="let element"> {{element.commentaire}} </td>
-                </ng-container>
+                  <ng-container matColumnDef="commentaire">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Commentaire </th>
+                    <td mat-cell *matCellDef="let element"> {{element.commentaire}} </td>
+                  </ng-container>
 
-                <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef class=" text-primary" style="text-align: center;"> Actions </th>
-                  <td mat-cell *matCellDef="let element">
-                    <button mat-raised-button type="button" (click)="edit(element)" matTooltip="Modifier l'étudiant"
-                      [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
-                      <i class="material-icons">edit</i>
-                    </button>
-                    <a href="mailto:{{element.mail}}">
-                      <button mat-raised-button type="button" matTooltip="Envoyer un mail à l'étudiant"
+                  <ng-container matColumnDef="annee">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class=" text-primary"> Année </th>
+                    <td mat-cell *matCellDef="let element"> {{element.annee}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class=" text-primary" style="text-align: center;"> Actions
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-raised-button type="button" (click)="edit(element)" matTooltip="Modifier l'étudiant"
                         [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
-                        <i class="material-icons">mail</i>
+                        <i class="material-icons">edit</i>
                       </button>
-                    </a>
-                  </td>
-                </ng-container>
+                      <a href="mailto:{{element.mail}}">
+                        <button mat-raised-button type="button" matTooltip="Envoyer un mail à l'étudiant"
+                          [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm">
+                          <i class="material-icons">mail</i>
+                        </button>
+                      </a>
+                    </td>
+                  </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
 
-              <mat-paginator [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+              </div>
+            </div>
+
+            <div *ngIf="noResult" class="card-body">
+              <h4 class="noresult"> Aucun résultat :(<br>Essayez avec d'autres filtres !</h4>
             </div>
           </div>
         </div>
@@ -116,34 +259,34 @@
     <div class="card card-chart">
       <div class="card-header card-header-info">
         <div id="legende">
-              <span>
-                <img class="img" src=".\..\..\assets\img\red.png" />
-              </span>
           <span>
-                Non Validé
-              </span>
+            <img class="img" src=".\..\..\assets\img\red.png" />
+          </span>
+          <span>
+            Non Validé
+          </span>
           <div class="upper-middle">
-              <span>
-                <img class="img" src=".\..\..\assets\img\red2.png" />
-              </span>
-          <span>
-                Dossier annulé
-              </span>
+            <span>
+              <img class="img" src=".\..\..\assets\img\red2.png" />
+            </span>
+            <span>
+              Dossier annulé
+            </span>
           </div>
           <div class="middle">
-                <span>
-                  <img class="img" src=".\..\..\assets\img\orange2.png" />
-                </span>
             <span>
-                  En attente du dossier
-                </span>
+              <img class="img" src=".\..\..\assets\img\orange2.png" />
+            </span>
+            <span>
+              En attente du dossier
+            </span>
           </div>
           <span>
-                <img class="img" src=".\..\..\assets\img\green.png" />
-              </span>
+            <img class="img" src=".\..\..\assets\img\green.png" />
+          </span>
           <span>
-                Dossier en cours
-              </span>
+            Dossier en cours
+          </span>
         </div>
         <div class="ct-chart" id="ct-chart-pie">
         </div>
