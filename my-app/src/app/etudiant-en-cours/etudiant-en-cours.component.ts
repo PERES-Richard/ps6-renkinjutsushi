@@ -55,6 +55,7 @@ export class EtudiantEnCoursComponent implements OnInit {
   });
 
   etudiant: Etudiant[];
+  noResult = true;
   error: any;
   headers: string[];
 
@@ -187,9 +188,42 @@ export class EtudiantEnCoursComponent implements OnInit {
 
 
   setFormGrp() {
-    console.log('e', this.filtreForm.get('specialite').get('AL'));
-    // this.filtreForm.get('specialite').get('AL').setValue(true);
-    // TODO
+
+    const promo = this.route.snapshot.queryParamMap.getAll('promo');
+    if (promo != null) {
+      // console.log('promo : ', promo);
+      const self = this;
+      promo.forEach(function (value) {
+        self.filtreForm.get('promo').get(value).setValue(true)
+      })
+    }
+
+    const typeValidation = this.route.snapshot.queryParamMap.getAll('typeValidation');
+    if (typeValidation != null) {
+      const self = this;
+      typeValidation.forEach(function (value) {
+        self.filtreForm.get('typeValidation').get(value).setValue(true)
+      })
+    }
+
+    const spe = this.route.snapshot.queryParamMap.getAll('specialite');
+    if (spe != null) {
+      const self = this;
+      spe.forEach(function (value) {
+        self.filtreForm.get('specialite').get(value).setValue(true)
+      })
+    }
+
+    const semainesRestantes = this.route.snapshot.queryParamMap.getAll('semainesRestantes');
+    if (semainesRestantes != null) {
+        this.filtreForm.get('semainesRestantes').setValue(semainesRestantes)
+    }
+
+    const annee = this.route.snapshot.queryParamMap.getAll('annee');
+    if (semainesRestantes != null) {
+        this.filtreForm.get('annee').setValue(annee)
+    }
+
   }
 
   ngOnInit() {
@@ -518,7 +552,7 @@ export class EtudiantEnCoursComponent implements OnInit {
 
       Promise.all([country1Pro, country2Pro, country3Pro]).then((values) => {
 
-        console.log('values ' + values[2]);
+        // console.log('values ' + values[2]);
 
         values[0].sort(this.sortByName);
         values[1].sort(this.sortByName);
@@ -563,7 +597,7 @@ export class EtudiantEnCoursComponent implements OnInit {
 
   verificationOnCountryGraph(country: TupleNameNumber[]) {
     const tab: number[] = [0, 0, 0];
-    console.log('country length  ' + country);
+    // console.log('country length  ' + country);
     if (country.length !== 3) {
       for (const i of country) {
         tab[i.annee - 2016] = i.nombre

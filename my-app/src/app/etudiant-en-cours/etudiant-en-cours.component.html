@@ -135,7 +135,7 @@
               <h4 class="card-title ">Liste des étudiants en cours de validation</h4>
               <!-- <p class="card-category">Liste des étudiants !</p> -->
             </div>
-            <div class="card-body">
+            <div *ngIf="noResult" class="card-body">
               <div class="table-responsive">
 
                 <mat-form-field>
@@ -261,6 +261,10 @@
 
                 <mat-paginator [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
               </div>
+            </div>
+
+            <div *ngIf="!noResult" class="card-body">
+            <h4> Aucun résultat :(<br>Essayer avec d'autres filtres !</h4>
             </div>
           </div>
 
