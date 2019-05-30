@@ -99,133 +99,6 @@ export class EtudiantEnCoursComponent implements OnInit {
   allStud: string[];
   etud: Etudiant;
 
-  fileChange(file) {
-    this.file = file.target.files[0];
-    if (this.file.name.substr(-4) !== '.csv') {
-      document.getElementById('para').innerHTML = 'Le fichier ' + this.file.name + ' n\'est pas un fichier .csv';
-    } else {
-      this.verifyCSV()
-      setTimeout(() => {
-        if (this.bol) {
-          console.log(this.allStud[0]);
-          for (let i = 0; i < this.allStud.length; i++) {
-            document.getElementById('para').innerHTML = this.file.name + '';
-            this.constructEtudiant(this.allStud[i]);
-            console.log(this.etud.nom);
-            this.tableListService.postEtu(this.etud);
-          }
-        } else {
-          document.getElementById('para').innerHTML = this.file.name + ' est invalide';
-        }
-      }, 10000);
-
-    }
-  }
-
-  constructEtudiant(str: String) {
-    const etudi = str.split(';');
-    this.etud.nom = etudi[0];
-    this.etud.prenom = etudi[1];
-    this.etud.promo = etudi[2];
-    this.etud.specialite.idSpecialite = parseInt(etudi[3], 10);
-    this.etud.commentaire = etudi[4];
-    this.etud.etat.idEtat = parseInt(etudi[5], 10);
-    this.etud.semainesRestantes = parseInt(etudi[6], 10);
-    this.etud.pays.idPays = parseInt(etudi[7], 10);
-    this.etud.obtenuVia = etudi[8];
-    this.etud.annee = parseInt(etudi[9], 10);
-    this.etud.etat.degre = parseInt(etudi[10], 10);
-  }
-
-  writeCSV() {
-    let etu = '';
-    for (let i = 0; i < this.etudiant.length; i++) {
-      etu += this.etudiant[i].nom + ';';
-      etu += this.etudiant[i].prenom + ';';
-      etu += this.etudiant[i].promo + ';';
-      etu += this.etudiant[i].specialite.nomSpecialite + ';';
-      etu += this.etudiant[i].commentaire + ';';
-      etu += this.etudiant[i].etat.nomEtat + ';'
-      etu += this.etudiant[i].semainesRestantes + ';';
-      etu += this.etudiant[i].pays.nomPays + ';';
-      etu += this.etudiant[i].obtenuVia + ';';
-      etu += this.etudiant[i].annee + ';';
-      etu += this.etudiant[i].etat.degre + ';';
-    }
-
-    const a = document.createElement('a');
-    const blob = new Blob([etu], { type: 'text/csv' });
-
-    a.href = window.URL.createObjectURL(blob);
-    a.download = 'myFile.csv';
-    a.click();
-    window.URL.revokeObjectURL(window.URL.createObjectURL(blob));
-    a.remove();
-  }
-
-  verifyCSV() {
-    const reader = new FileReader();
-    reader.onload = (event: Event) => {
-      const text = reader.result as string;
-      const allTextLines = text.split(/\r\n|\n/);
-      for (let i = 0; i < allTextLines.length - 2; i++) {
-        const entries = allTextLines[i].split(';');
-        if (typeof (entries[0]) !== 'string' || typeof (entries[1]) !== 'string'
-          || typeof (entries[2]) !== 'string' || typeof (parseInt(entries[3], 10)) !==
-          'number' || typeof (entries[4]) !== 'string' || typeof (parseInt(entries[5], 10))
-          !== 'number' || typeof (parseInt(entries[6], 10)) !== 'number' || typeof (parseInt(entries[7], 10))
-          !== 'number' || typeof (entries[8]) !== 'string' || typeof (parseInt(entries[9], 10)) !== 'number'
-          || typeof (parseInt(entries[10], 10)) !== 'number') {
-          this.bol = false;
-          return;
-        }
-      }
-      this.bol = true;
-      this.allStud = allTextLines;
-    };
-    reader.readAsText(this.file);
-  }
-
-
-  setFormGrp() {
-
-    const promo = this.route.snapshot.queryParamMap.getAll('promo');
-    if (promo != null) {
-      // console.log('promo : ', promo);
-      const self = this;
-      promo.forEach(function (value) {
-        self.filtreForm.get('promo').get(value).setValue(true)
-      })
-    }
-
-    const typeValidation = this.route.snapshot.queryParamMap.getAll('typeValidation');
-    if (typeValidation != null) {
-      const self = this;
-      typeValidation.forEach(function (value) {
-        self.filtreForm.get('typeValidation').get(value).setValue(true)
-      })
-    }
-
-    const spe = this.route.snapshot.queryParamMap.getAll('specialite');
-    if (spe != null) {
-      const self = this;
-      spe.forEach(function (value) {
-        self.filtreForm.get('specialite').get(value).setValue(true)
-      })
-    }
-
-    const semainesRestantes = this.route.snapshot.queryParamMap.getAll('semainesRestantes');
-    if (semainesRestantes != null) {
-      this.filtreForm.get('semainesRestantes').setValue(semainesRestantes)
-    }
-
-    const annee = this.route.snapshot.queryParamMap.getAll('annee');
-    if (semainesRestantes != null) {
-      this.filtreForm.get('annee').setValue(annee)
-    }
-
-  }
-
   ngOnInit() {
 
     this.initStudentByCountry();
@@ -238,7 +111,7 @@ export class EtudiantEnCoursComponent implements OnInit {
       this.setFormGrp();
 
 
-      this.fav = JSON.parse(localStorage.getItem('favoris'));
+      this.fav = JSON.parse(localStorage.getItem('favorisEC'));
 
       if (this.fav == null) {
         this.fav = []
@@ -417,7 +290,7 @@ export class EtudiantEnCoursComponent implements OnInit {
     this.router.navigate(['user-profile', { idEtudiant: etu.idEtudiant }]);
   }
 
-
+/** FAVORIS **/
   toggleNav() {
     if (this.opened) {
       document.getElementById('mySidebar').style.width = '0';
@@ -429,20 +302,52 @@ export class EtudiantEnCoursComponent implements OnInit {
     this.opened = !this.opened;
   }
 
-  setFilter() {
-    // TODO preset les filtres
-  }
-
   onSubmit() {
     const params = this.getParams();
 
     this.router.navigateByUrl('/etudiant-en-cours?' + params.toString()).then(state => {
       window.location.reload();
-    }
-
-    );
+    });
   }
 
+  setFormGrp() {
+
+    const promo = this.route.snapshot.queryParamMap.getAll('promo');
+    if (promo != null) {
+      // console.log('promo : ', promo);
+      const self = this;
+      promo.forEach(function (value) {
+        self.filtreForm.get('promo').get(value).setValue(true)
+      })
+    }
+
+    const typeValidation = this.route.snapshot.queryParamMap.getAll('typeValidation');
+    if (typeValidation != null) {
+      const self = this;
+      typeValidation.forEach(function (value) {
+        self.filtreForm.get('typeValidation').get(value).setValue(true)
+      })
+    }
+
+    const spe = this.route.snapshot.queryParamMap.getAll('specialite');
+    if (spe != null) {
+      const self = this;
+      spe.forEach(function (value) {
+        self.filtreForm.get('specialite').get(value).setValue(true)
+      })
+    }
+
+    const semainesRestantes = this.route.snapshot.queryParamMap.getAll('semainesRestantes');
+    if (semainesRestantes != null) {
+      this.filtreForm.get('semainesRestantes').setValue(semainesRestantes)
+    }
+
+    const annee = this.route.snapshot.queryParamMap.getAll('annee');
+    if (annee != null) {
+      this.filtreForm.get('annee').setValue(annee)
+    }
+
+  }
 
   getParams(): HttpParams {
     let params = new HttpParams();
@@ -496,7 +401,7 @@ export class EtudiantEnCoursComponent implements OnInit {
   deleteFav(favori: Favoris) {
     const index = this.fav.indexOf(favori);
     this.fav.splice(index, 1);
-    localStorage.setItem('favoris', JSON.stringify(this.fav));
+    localStorage.setItem('favorisEC', JSON.stringify(this.fav));
   }
 
   addFav() {
@@ -515,7 +420,7 @@ export class EtudiantEnCoursComponent implements OnInit {
           this.fav.push({ nom: result, url: url })
         }
 
-        localStorage.setItem('favoris', JSON.stringify(this.fav));
+        localStorage.setItem('favorisEC', JSON.stringify(this.fav));
         console.log('fav2', this.fav);
         $.notify({
           icon: 'success',
@@ -533,6 +438,9 @@ export class EtudiantEnCoursComponent implements OnInit {
     });
 
   }
+
+  /** END FAVORIS **/
+
 
   /**
    *   Number Of Students For Every Country
@@ -617,7 +525,92 @@ export class EtudiantEnCoursComponent implements OnInit {
     return tab;
   }
 
+  fileChange(file) {
+    this.file = file.target.files[0];
+    if (this.file.name.substr(-4) !== '.csv') {
+      document.getElementById('para').innerHTML = 'Le fichier ' + this.file.name + ' n\'est pas un fichier .csv';
+    } else {
+      this.verifyCSV()
+      setTimeout(() => {
+        if (this.bol) {
+          console.log(this.allStud[0]);
+          for (let i = 0; i < this.allStud.length; i++) {
+            document.getElementById('para').innerHTML = this.file.name + '';
+            this.constructEtudiant(this.allStud[i]);
+            console.log(this.etud.nom);
+            this.tableListService.postEtu(this.etud);
+          }
+        } else {
+          document.getElementById('para').innerHTML = this.file.name + ' est invalide';
+        }
+      }, 10000);
 
+    }
+  }
+
+  constructEtudiant(str: String) {
+    const etudi = str.split(';');
+    this.etud.nom = etudi[0];
+    this.etud.prenom = etudi[1];
+    this.etud.promo = etudi[2];
+    this.etud.specialite.idSpecialite = parseInt(etudi[3], 10);
+    this.etud.commentaire = etudi[4];
+    this.etud.etat.idEtat = parseInt(etudi[5], 10);
+    this.etud.semainesRestantes = parseInt(etudi[6], 10);
+    this.etud.pays.idPays = parseInt(etudi[7], 10);
+    this.etud.obtenuVia = etudi[8];
+    this.etud.annee = parseInt(etudi[9], 10);
+    this.etud.etat.degre = parseInt(etudi[10], 10);
+  }
+
+  writeCSV() {
+    let etu = '';
+    for (let i = 0; i < this.etudiant.length; i++) {
+      etu += this.etudiant[i].nom + ';';
+      etu += this.etudiant[i].prenom + ';';
+      etu += this.etudiant[i].promo + ';';
+      etu += this.etudiant[i].specialite.nomSpecialite + ';';
+      etu += this.etudiant[i].commentaire + ';';
+      etu += this.etudiant[i].etat.nomEtat + ';'
+      etu += this.etudiant[i].semainesRestantes + ';';
+      etu += this.etudiant[i].pays.nomPays + ';';
+      etu += this.etudiant[i].obtenuVia + ';';
+      etu += this.etudiant[i].annee + ';';
+      etu += this.etudiant[i].etat.degre + ';';
+    }
+
+    const a = document.createElement('a');
+    const blob = new Blob([etu], { type: 'text/csv' });
+
+    a.href = window.URL.createObjectURL(blob);
+    a.download = 'myFile.csv';
+    a.click();
+    window.URL.revokeObjectURL(window.URL.createObjectURL(blob));
+    a.remove();
+  }
+
+  verifyCSV() {
+    const reader = new FileReader();
+    reader.onload = (event: Event) => {
+      const text = reader.result as string;
+      const allTextLines = text.split(/\r\n|\n/);
+      for (let i = 0; i < allTextLines.length - 2; i++) {
+        const entries = allTextLines[i].split(';');
+        if (typeof (entries[0]) !== 'string' || typeof (entries[1]) !== 'string'
+          || typeof (entries[2]) !== 'string' || typeof (parseInt(entries[3], 10)) !==
+          'number' || typeof (entries[4]) !== 'string' || typeof (parseInt(entries[5], 10))
+          !== 'number' || typeof (parseInt(entries[6], 10)) !== 'number' || typeof (parseInt(entries[7], 10))
+          !== 'number' || typeof (entries[8]) !== 'string' || typeof (parseInt(entries[9], 10)) !== 'number'
+          || typeof (parseInt(entries[10], 10)) !== 'number') {
+          this.bol = false;
+          return;
+        }
+      }
+      this.bol = true;
+      this.allStud = allTextLines;
+    };
+    reader.readAsText(this.file);
+  }
 
   constructor(private tableListService: TableListService, private statistiquesService: StatistiquesService,
     private route: ActivatedRoute,

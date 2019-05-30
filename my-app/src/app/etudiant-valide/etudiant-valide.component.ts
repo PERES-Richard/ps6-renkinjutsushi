@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation, Output } from '@angular/core';
-import { MatSort, MatPaginator, MatTableDataSource, MatSortable } from '@angular/material';
+import { MatSort, MatPaginator, MatTableDataSource, MatSortable, MatDialog } from '@angular/material';
 import { TableListService } from '../service/table-list/table-list.service';
 import { filter } from 'rxjs-compat/operator/filter';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,14 +8,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserProfileComponent } from 'app/user-profile/user-profile.component';
 import { Etudiant } from '../models/Etudiant';
 import { EtudiantSimp } from '../models/EtudiantSimp';
-import {StatistiquesService} from "../service/statistiques/statistiques.service";
-import * as Chartist from "chartist";
-import {TupleNameNumber} from "../models/TupleNameNumber";
+import {StatistiquesService} from '../service/statistiques/statistiques.service';
+import * as Chartist from 'chartist';
+import {TupleNameNumber} from '../models/TupleNameNumber';
+import * as $ from 'jquery';
+import 'bootstrap-notify';
+import { Favoris } from '../models/Favoris';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { HttpParams } from '@angular/common/http';
+import { FavPopupComponent } from 'app/fav-popup/fav-popup.component';
 
 
 @Component({
   selector: 'app-etudiant-valide',
-  providers: [TableListService,StatistiquesService],
+  providers: [TableListService, StatistiquesService],
   templateUrl: './etudiant-valide.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./etudiant-valide.component.css']
@@ -24,8 +30,10 @@ import {TupleNameNumber} from "../models/TupleNameNumber";
 export class EtudiantValideComponent implements OnInit {
 
   etudiant: Etudiant[];
+  noResult: Boolean;
   error: any;
   headers: string[];
+
 
   displayedColumns: string[] = [
     'photo',
@@ -36,9 +44,35 @@ export class EtudiantValideComponent implements OnInit {
     'typeValidation',
     'obtenuVia',
     'commentaire',
+    'annee',
     'actions'
   ];
   dataSource = new MatTableDataSource<Etudiant>();
+
+  opened: boolean;
+  fav: Favoris[];
+
+  filtreForm = new FormGroup({
+    promo: new FormGroup({
+      SI3: new FormControl(''),
+      SI4: new FormControl(''),
+      SI5: new FormControl('')
+    }),
+    specialite: new FormGroup({
+      IHM: new FormControl(''),
+      CS: new FormControl(''),
+      STRAW: new FormControl(''),
+      AL: new FormControl(''),
+      IAM: new FormControl('')
+    }),
+    typeValidation: new FormGroup({
+      Semestre: new FormControl(''),
+      Stage: new FormControl(''),
+      Autre: new FormControl('')
+    }),
+    annee: new FormControl('')
+  });
+
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -46,11 +80,32 @@ export class EtudiantValideComponent implements OnInit {
   ngOnInit() {
 
     this.initStudentByCountry();
-    //this.initPieChart('SI3');
+    // this.initPieChart('SI3');
 
     this.tableListService.getEtudiantObs(this.route.snapshot.queryParams).subscribe(rep => {
 
+      this.opened = false;
+
+      this.setFormGrp();
+
+
+      this.fav = JSON.parse(localStorage.getItem('favorisV'));
+
+      if (this.fav == null) {
+        this.fav = []
+      }
+
+      // console.log('datemin =', this.dateDebutMin);
+      // console.log('datemax =', this.dateDebutMax);
+
+
       const etuS: EtudiantSimp[] = rep;
+
+      if (etuS == null || etuS === undefined || etuS.length === 0) {
+        this.noResult = true;
+      } else {
+        this.noResult = false;
+      }
 
       this.etudiant = [];
 
@@ -154,6 +209,7 @@ export class EtudiantValideComponent implements OnInit {
       const str: string[] = [item.nom,
       item.prenom,
       item.commentaire,
+      item.annee.toString(),
       item.promo,
       item.obtenuVia,
       item.typeValidation,
@@ -175,6 +231,149 @@ export class EtudiantValideComponent implements OnInit {
   edit(etu: Etudiant) {
     this.router.navigate(['user-profile', { idEtudiant: etu.idEtudiant }]);
   }
+
+
+
+  /** FAVORIS **/
+  toggleNav() {
+    if (this.opened) {
+      document.getElementById('mySidebar').style.width = '0';
+      document.getElementById('main').style.marginLeft = '0';
+    } else {
+      document.getElementById('mySidebar').style.width = '225px';
+      document.getElementById('main').style.marginLeft = '225px';
+    }
+    this.opened = !this.opened;
+  }
+
+  onSubmit() {
+    const params = this.getParams();
+
+    this.router.navigateByUrl('/etudiant-valide?' + params.toString()).then(state => {
+      window.location.reload();
+    });
+  }
+
+  setFormGrp() {
+
+    const promo = this.route.snapshot.queryParamMap.getAll('promo');
+    if (promo != null) {
+      // console.log('promo : ', promo);
+      const self = this;
+      promo.forEach(function (value) {
+        self.filtreForm.get('promo').get(value).setValue(true)
+      })
+    }
+
+    const typeValidation = this.route.snapshot.queryParamMap.getAll('typeValidation');
+    if (typeValidation != null) {
+      const self = this;
+      typeValidation.forEach(function (value) {
+        self.filtreForm.get('typeValidation').get(value).setValue(true)
+      })
+    }
+
+    const spe = this.route.snapshot.queryParamMap.getAll('specialite');
+    if (spe != null) {
+      const self = this;
+      spe.forEach(function (value) {
+        self.filtreForm.get('specialite').get(value).setValue(true)
+      })
+    }
+
+    const annee = this.route.snapshot.queryParamMap.getAll('annee');
+    if (annee != null) {
+      this.filtreForm.get('annee').setValue(annee)
+    }
+
+  }
+
+  getParams(): HttpParams {
+    let params = new HttpParams();
+    params = params.append('degre', '0');
+
+    let promo = []
+    promo = this.filtreForm.get('promo').value;
+    // console.log('params init', params);
+    for (let i = 0; i < Object.keys(promo).length; i++) {
+      const values = Object.keys(promo).map(key => promo[key])
+      if (values[i]) {
+        params = params.append('promo', Object.keys(promo)[i]);
+      }
+    }
+
+    let specialite = []
+    specialite = this.filtreForm.get('specialite').value;
+    for (let i = 0; i < Object.keys(specialite).length; i++) {
+      const values = Object.keys(specialite).map(key => specialite[key])
+      if (values[i]) {
+        params = params.append('specialite', Object.keys(specialite)[i]);
+      }
+    }
+
+    let typeValidation = []
+    typeValidation = this.filtreForm.get('typeValidation').value;
+    for (let i = 0; i < Object.keys(typeValidation).length; i++) {
+      const values = Object.keys(typeValidation).map(key => typeValidation[key])
+      if (values[i]) {
+        params = params.append('typeValidation', Object.keys(typeValidation)[i]);
+      }
+    }
+
+    let annee = [];
+    annee = this.filtreForm.get('annee').value;
+    for (let i = 0; i < Object.keys(annee).length; i++) {
+      const values = Object.keys(annee).map(key => annee[key])
+      params = params.append('annee', values[i]);
+    }
+
+    return params;
+  }
+
+  deleteFav(favori: Favoris) {
+    const index = this.fav.indexOf(favori);
+    this.fav.splice(index, 1);
+    localStorage.setItem('favorisV', JSON.stringify(this.fav));
+  }
+
+  addFav() {
+    const params = this.getParams();
+    const url = 'etudiant-valide?' + params.toString();
+
+    const dialogRef = this.dialog.open(FavPopupComponent, {
+      height: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== null && result !== undefined) {
+        if (Array.isArray(result)) {
+          this.fav.push({ nom: result[0], url: url, memo: result[1] })
+        } else {
+          this.fav.push({ nom: result, url: url })
+        }
+
+        localStorage.setItem('favorisV', JSON.stringify(this.fav));
+        // console.log('fav2', this.fav);
+        $.notify({
+          icon: 'success',
+          message: 'Le favoris a bien été ajouté à votre espace !'
+        },
+          {
+            type: 'success',
+            timer: 4000,
+            placement: {
+              from: 'top',
+              align: 'center'
+            }
+          });
+      }
+    });
+
+  }
+
+  /** END FAVORIS **/
+
+
 
   /**
    *   Number Of Students For Every Country
@@ -237,31 +436,29 @@ export class EtudiantValideComponent implements OnInit {
     });
   }
 
-  sortByName(elementOne: any, elementTwo: any){
-    if (elementOne.nom_fr_fr<elementTwo.nom_fr_fr){
+  sortByName(elementOne: any, elementTwo: any) {
+    if (elementOne.nom_fr_fr < elementTwo.nom_fr_fr) {
       return 0;
-    }
-    else{
+    } else {
       return 1;
     }
   }
 
-  verificationOnCountryGraph(country: TupleNameNumber[]){
-    let tab: number[] = [0,0,0];
-    console.log("country length  "+country);
-    if (country.length != 3){
-      for (let i of country){
-        tab[i.annee-2016] = i.nombre
+  verificationOnCountryGraph(country: TupleNameNumber[]) {
+    const tab: number[] = [0, 0, 0];
+    console.log('country length  ' + country);
+    if (country.length !== 3) {
+      for (const i of country) {
+        tab[i.annee - 2016] = i.nombre
       }
-    }else {
-      for (let j=0;j<country.length;j++){
-        tab[j]=country[j].nombre;
-        console.log("country "+j+ " " +country[j].nombre);
+    } else {
+      for (let j = 0; j < country.length; j++) {
+        tab[j] = country[j].nombre;
+        console.log('country ' + j + ' ' + country[j].nombre);
       }
     }
     return tab;
   }
-
 
   /**
    *   Succeed Graph Init
@@ -280,8 +477,10 @@ export class EtudiantValideComponent implements OnInit {
     });
   }
 
-  constructor(private tableListService: TableListService,private statistiquesService: StatistiquesService,
+
+  constructor(private tableListService: TableListService, private statistiquesService: StatistiquesService,
     private route: ActivatedRoute,
     private domSanitizer: DomSanitizer,
-    private router: Router) { }
+    private router: Router,
+    private dialog: MatDialog) { }
 }

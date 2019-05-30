@@ -13,6 +13,10 @@ th.mat-sort-header-sorted {
   padding: 30px;
 }
 
+.main-content {
+  margin-top: -50px;
+}
+
 .mat-sort-header-button {
   margin-right: auto !important;
   margin-left: auto !important;
@@ -189,7 +193,7 @@ label {
   cursor: pointer;
 }
 
-.favbtn:hover > .deleteFavBtn {
+.favbtn:hover>.deleteFavBtn {
   /* visibility: visible; */
   color: #d40303;
 }
