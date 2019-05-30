@@ -16,6 +16,7 @@ import { Pays } from '../models/Pays';
 import { any } from 'codelyzer/util/function';
 import * as Chartist from 'chartist';
 import { StatistiquesService } from '../service/statistiques/statistiques.service';
+import {TupleNameNumber} from "../models/TupleNameNumber";
 
 
 @Component({
@@ -408,7 +409,8 @@ export class EtudiantEnCoursComponent implements OnInit {
     promo = this.filtreForm.get('promo').value;
     // console.log('params init', params);
     for (let i = 0; i < Object.keys(promo).length; i++) {
-      if (Object.values(promo)[i]) {
+      let values = Object.keys(promo).map(key => promo[key])
+      if (values[i]) {
         params = params.append('promo', Object.keys(promo)[i]);
       }
     }
@@ -416,7 +418,8 @@ export class EtudiantEnCoursComponent implements OnInit {
     let specialite = []
     specialite = this.filtreForm.get('specialite').value;
     for (let i = 0; i < Object.keys(specialite).length; i++) {
-      if (Object.values(specialite)[i]) {
+      let values = Object.keys(specialite).map(key => specialite[key])
+      if (values[i]) {
         params = params.append('specialite', Object.keys(specialite)[i]);
       }
     }
@@ -424,7 +427,8 @@ export class EtudiantEnCoursComponent implements OnInit {
     let typeValidation = []
     typeValidation = this.filtreForm.get('typeValidation').value;
     for (let i = 0; i < Object.keys(typeValidation).length; i++) {
-      if (Object.values(typeValidation)[i]) {
+      let values = Object.keys(typeValidation).map(key => typeValidation[key])
+      if (values[i]) {
         params = params.append('typeValidation', Object.keys(typeValidation)[i]);
       }
     }
@@ -432,13 +436,15 @@ export class EtudiantEnCoursComponent implements OnInit {
     let semainesRestantes = [];
     semainesRestantes = this.filtreForm.get('semainesRestantes').value;
     for (let i = 0; i < Object.keys(semainesRestantes).length; i++) {
-      params = params.append('semainesRestantes', Object.values(semainesRestantes)[i]);
+      let values = Object.keys(semainesRestantes).map(key => semainesRestantes[key])
+      params = params.append('semainesRestantes', values[i]);
     }
 
     let annee = [];
     annee = this.filtreForm.get('annee').value;
     for (let i = 0; i < Object.keys(annee).length; i++) {
-      params = params.append('annee', Object.values(annee)[i]);
+      let values = Object.keys(annee).map(key => annee[key])
+      params = params.append('annee', values[i]);
     }
 
     return params;
@@ -478,22 +484,24 @@ export class EtudiantEnCoursComponent implements OnInit {
    */
   initStudentByCountry() {
     const countryPro = this.statistiquesService.getNumberStudents('1').toPromise();
-
+    let tab1: number[];
+    let tab2: number[];
+    let tab3: number[];
     Promise.all([countryPro]).then((value) => {
 
-      const country1 = value[0][0].pays;
-      const country2 = value[0][1].pays;
-      const country3 = value[0][2].pays;
+      const country1Name = value[0][0].pays;
+      const country2Name = value[0][1].pays;
+      const country3Name = value[0][2].pays;
 
       // console.log("country1" + country1);
       // console.log("country2" + country2);
       // console.log("country3" + country3);
 
-      const country11Pro = this.statistiquesService.getNumberStudentsWithCountry(country1, '1').toPromise();
-      const country22Pro = this.statistiquesService.getNumberStudentsWithCountry(country2, '1').toPromise();
-      const country33Pro = this.statistiquesService.getNumberStudentsWithCountry(country3, '1').toPromise();
+      const country1Pro = this.statistiquesService.getNumberStudentsWithCountry(country1Name, '1').toPromise();
+      const country2Pro = this.statistiquesService.getNumberStudentsWithCountry(country2Name, '1').toPromise();
+      const country3Pro = this.statistiquesService.getNumberStudentsWithCountry(country3Name, '1').toPromise();
 
-      Promise.all([country11Pro, country22Pro, country33Pro]).then((values) => {
+      Promise.all([country1Pro, country2Pro, country3Pro]).then((values) => {
 
         console.log('values ' + values[2]);
 
@@ -501,22 +509,18 @@ export class EtudiantEnCoursComponent implements OnInit {
         values[1].sort(this.sortByName);
         values[2].sort(this.sortByName);
 
+        tab1 = this.verificationOnCountryGraph(values[0]);
+        tab2 = this.verificationOnCountryGraph(values[1]);
+        tab3 = this.verificationOnCountryGraph(values[2]);
 
-        const country11 = [values[0][0], values[0][1], values[0][2]];
-        const country22 = [values[1][0], values[1][1], values[1][2]];
-        const country33 = [values[2][0], values[2][1], values[2][2]];
-
-        console.log('values', country11[0], country11[1], country11[2]);
-        console.log('values', country22[0]);
-        console.log('values', country33[0]);
 
         const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
-          labels: [country11[0].pays, country22[0].pays, country33[0].pays],
+          labels: [country1Name, country2Name, country3Name],
           series: [
-            [country11[0].nombre, country22[0].nombre, country33[0].nombre],
-            [country11[1].nombre, country22[1].nombre, country33[1].nombre],
-            [country11[2].nombre, country22[2].nombre, country33[2].nombre]
-          ]
+            [tab1[0], tab2[0], tab3[0]],
+            [tab1[1], tab2[1], tab3[1]],
+            [tab1[2], tab2[2], tab3[2]]
+           ]
         }, {
             seriesBarDistance: 15,
             axisX: {
@@ -540,6 +544,22 @@ export class EtudiantEnCoursComponent implements OnInit {
     } else {
       return 1;
     }
+  }
+
+  verificationOnCountryGraph(country: TupleNameNumber[]){
+    let tab: number[] = [0,0,0];
+    console.log("country length  "+country);
+    if (country.length != 3){
+      for (let i of country){
+        tab[i.annee-2016] = i.nombre
+      }
+    }else {
+      for (let j=0;j<country.length;j++){
+        tab[j]=country[j].nombre;
+        console.log("country "+j+ " " +country[j].nombre);
+      }
+    }
+    return tab;
   }
 
 
