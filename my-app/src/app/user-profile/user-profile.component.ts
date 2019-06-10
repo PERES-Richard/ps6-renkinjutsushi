@@ -113,11 +113,11 @@ export class UserProfileComponent implements OnInit {
   }
 
   updateStudent() {
-    this.etudiant.photo = 'photo';
-    console.log('spe  ' + this.etudiant.specialite.nomSpecialite);
+    this.etudiant.photo = "null";
+    //console.log(JSON.stringify(this.etudiant));
     const idCountryPro = this.userProfileService.getIdCountry(this.etudiant.pays.nomPays).toPromise();
     const idSpecialityPro = this.userProfileService.getIdSpeciality(this.etudiant.specialite.nomSpecialite).toPromise();
-    console.log('spe ' + this.etudiant.specialite.envisagee);
+    //console.log('spe ' + this.etudiant.specialite.envisagee);
     const idEtatPro = this.userProfileService.getIdEtat(this.etudiant.etat.nomEtat).toPromise();
 
 
@@ -127,7 +127,7 @@ export class UserProfileComponent implements OnInit {
       this.etudiant.specialite.idSpecialite = values[1][1].idSpecialite;
       this.etudiant.etat.idEtat = values[2][0].idEtat;
 
-      console.log(values);
+      console.log(this.etudiant);
 
       const postPro = this.userProfileService.postStudent(this.etudiant).toPromise();
 

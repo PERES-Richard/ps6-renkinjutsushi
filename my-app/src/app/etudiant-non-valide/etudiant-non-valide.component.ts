@@ -430,25 +430,30 @@ export class EtudiantNonValideComponent implements OnInit {
     const tab: number[] = [0, 0, 0, 0];
     promotionPro.then((value) => {
 
+      console.log(value[2]);
+      let k = 0;
       if (value.length !== 4) {
         for (const i of value) {
-
-          if (i.etatdegre === 1) {
-            tab[0] = i.degre;
-          } else {
-            tab[0] = 0;
-          }
-
-          console.log(i);
-          tab[i.etatdegre - 3] = i.degre
+          tab[k] = i.degre;
+          k++;
         }
+
+          // if (i.etatdegre === 1) {
+          //   tab[0] = i.degre;
+          // } else {
+          //   tab[0] = 0;
+          // }
+
+
+          //tab[i.etatdegre - 3] = i.degre
+        //}
       } else {
 
         for (let j = 0; j < value.length; j++) {
           tab[j] = value[j].degre;
         }
       }
-
+      console.log(tab);
       const validationDonut = new Chartist.Pie('#ct-chart-pie', {
 
         series: [tab[1], tab[0], tab[3], tab[2]]

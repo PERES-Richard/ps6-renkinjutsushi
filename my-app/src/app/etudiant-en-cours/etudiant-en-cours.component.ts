@@ -16,7 +16,8 @@ import { Pays } from '../models/Pays';
 import { any } from 'codelyzer/util/function';
 import * as Chartist from 'chartist';
 import { StatistiquesService } from '../service/statistiques/statistiques.service';
-import { TupleNameNumber } from '../models/TupleNameNumber';
+import {TupleNameNumber} from "../models/TupleNameNumber";
+import {UserProfileService} from "../service/user-profile/user-profile.service";
 import * as $ from 'jquery';
 import 'bootstrap-notify';
 
@@ -24,7 +25,7 @@ import 'bootstrap-notify';
 
 @Component({
   selector: 'app-etudiant-en-cours',
-  providers: [TableListService, StatistiquesService],
+  providers: [TableListService, StatistiquesService,UserProfileService],
   templateUrl: './etudiant-en-cours.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./etudiant-en-cours.component.css']
@@ -73,6 +74,8 @@ export class EtudiantEnCoursComponent implements OnInit {
 
   dateFinMin2: Date;
   dateFinMax2: Date;
+
+  params: HttpParams = null;
 
   displayedColumns: string[] = [
     'photo',
@@ -303,9 +306,8 @@ export class EtudiantEnCoursComponent implements OnInit {
   }
 
   onSubmit() {
-    const params = this.getParams();
-
-    this.router.navigateByUrl('/etudiant-en-cours?' + params.toString()).then(state => {
+    this.params = this.getParams();
+    this.router.navigateByUrl('/etudiant-en-cours?' + this.params.toString()).then(state => {
       window.location.reload();
     });
   }
@@ -337,6 +339,7 @@ export class EtudiantEnCoursComponent implements OnInit {
       })
     }
 
+
     const semainesRestantes = this.route.snapshot.queryParamMap.getAll('semainesRestantes');
     if (semainesRestantes != null) {
       this.filtreForm.get('semainesRestantes').setValue(semainesRestantes)
@@ -350,6 +353,7 @@ export class EtudiantEnCoursComponent implements OnInit {
   }
 
   getParams(): HttpParams {
+    console.log("passe");
     let params = new HttpParams();
     params = params.append('degre', '1');
 
@@ -360,6 +364,7 @@ export class EtudiantEnCoursComponent implements OnInit {
       const values = Object.keys(promo).map(key => promo[key])
       if (values[i]) {
         params = params.append('promo', Object.keys(promo)[i]);
+
       }
     }
 
@@ -394,7 +399,7 @@ export class EtudiantEnCoursComponent implements OnInit {
       const values = Object.keys(annee).map(key => annee[key])
       params = params.append('annee', values[i]);
     }
-
+    console.log("params"+params);
     return params;
   }
 
@@ -446,23 +451,76 @@ export class EtudiantEnCoursComponent implements OnInit {
    *   Number Of Students For Every Country
    */
   initStudentByCountry() {
-    const countryPro = this.statistiquesService.getNumberStudents('1').toPromise();
+    let promo = null ;
+    let specialite = null;
     let tab1: number[];
     let tab2: number[];
     let tab3: number[];
+
+
+    this.route.queryParams.subscribe(params => {
+      promo = params['promo'];
+      if(promo == undefined){
+        promo=null;
+      }
+      specialite = params['specialite'];
+    });
+
+
+    const idSpecialityPro = this.userProfileService.getIdSpeciality(specialite).toPromise();
+
+
+    //console.log("params "+this.params.toString());
+    console.log("promo "+promo);
+    console.log("specialite "+specialite);
+    let idSpeciality;
+    idSpecialityPro.then((value => {
+      if (specialite == null){
+        idSpeciality = null;
+      }else {
+
+        idSpeciality = value[0].idSpecialite;
+      }
+
+      console.log("id spe "+idSpeciality);
+
+    const countryPro = this.statistiquesService.getNumberStudents('1',promo,idSpeciality).toPromise();
+
+
     Promise.all([countryPro]).then((value) => {
 
-      const country1Name = value[0][0].pays;
-      const country2Name = value[0][1].pays;
-      const country3Name = value[0][2].pays;
+      let country1Name;
+      let country2Name;
+      let country3Name;
 
-      // console.log("country1" + country1);
-      // console.log("country2" + country2);
-      // console.log("country3" + country3);
+      if(value.length==2){
+        country1Name=value[0][0].pays;
+        country2Name=value[0][1].pays;
+        country3Name='';
+      }
+      if(value.length==1){
+        country1Name=value[0][0].pays;
+        country2Name='';
+        country3Name='';
+      }
+      if(value.length==0){
+        country1Name='';
+        country2Name='';
+        country3Name='';
+      }else {
+        country1Name=value[0][0].pays;
+        country2Name=value[0][1].pays;
+        country3Name=value[0][2].pays;
+      }
 
-      const country1Pro = this.statistiquesService.getNumberStudentsWithCountry(country1Name, '1').toPromise();
-      const country2Pro = this.statistiquesService.getNumberStudentsWithCountry(country2Name, '1').toPromise();
-      const country3Pro = this.statistiquesService.getNumberStudentsWithCountry(country3Name, '1').toPromise();
+
+      console.log("country1" + country1Name);
+      console.log("country2" + country2Name);
+      console.log("country3" + country3Name);
+
+      const country1Pro = this.statistiquesService.getNumberStudentsWithCountry(country1Name, '1',promo,idSpeciality).toPromise();
+      const country2Pro = this.statistiquesService.getNumberStudentsWithCountry(country2Name, '1',promo,idSpeciality).toPromise();
+      const country3Pro = this.statistiquesService.getNumberStudentsWithCountry(country3Name, '1',promo,idSpeciality).toPromise();
 
       Promise.all([country1Pro, country2Pro, country3Pro]).then((values) => {
 
@@ -489,8 +547,11 @@ export class EtudiantEnCoursComponent implements OnInit {
             axisX: {
               offset: 20
             },
+          high: 10,
+          onlyInteger: true,
             axisY: {
               offset: 25,
+
               labelInterpolationFnc: function (result) {
                 return result
               },
@@ -499,6 +560,7 @@ export class EtudiantEnCoursComponent implements OnInit {
           });
       });
     });
+    }));
   }
 
   sortByName(elementOne: any, elementTwo: any) {
@@ -613,9 +675,10 @@ export class EtudiantEnCoursComponent implements OnInit {
   }
 
   constructor(private tableListService: TableListService, private statistiquesService: StatistiquesService,
-    private route: ActivatedRoute,
-    private domSanitizer: DomSanitizer,
-    private router: Router,
-    private dialog: MatDialog) { }
+              private userProfileService: UserProfileService,
+              private route: ActivatedRoute,
+              private domSanitizer: DomSanitizer,
+              private router: Router,
+              private dialog: MatDialog) { }
 
 }

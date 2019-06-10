@@ -17,11 +17,12 @@ import { Favoris } from '../models/Favoris';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { HttpParams } from '@angular/common/http';
 import { FavPopupComponent } from 'app/fav-popup/fav-popup.component';
+import {UserProfileService} from "../service/user-profile/user-profile.service";
 
 
 @Component({
   selector: 'app-etudiant-valide',
-  providers: [TableListService, StatistiquesService],
+  providers: [TableListService, StatistiquesService,UserProfileService],
   templateUrl: './etudiant-valide.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./etudiant-valide.component.css']
@@ -379,61 +380,119 @@ export class EtudiantValideComponent implements OnInit {
    *   Number Of Students For Every Country
   */
   initStudentByCountry() {
-    const countryPro = this.statistiquesService.getNumberStudents('0').toPromise();
+    let promo = null;
+    let specialite = null;
     let tab1: number[];
     let tab2: number[];
     let tab3: number[];
-    Promise.all([countryPro]).then((value) => {
-
-      const country1Name = value[0][0].pays;
-      const country2Name = value[0][1].pays;
-      const country3Name = value[0][2].pays;
-
-      // console.log("country1" + country1);
-      // console.log("country2" + country2);
-      // console.log("country3" + country3);
-
-      const country1Pro = this.statistiquesService.getNumberStudentsWithCountry(country1Name, '0').toPromise();
-      const country2Pro = this.statistiquesService.getNumberStudentsWithCountry(country2Name, '0').toPromise();
-      const country3Pro = this.statistiquesService.getNumberStudentsWithCountry(country3Name, '0').toPromise();
-
-      Promise.all([country1Pro, country2Pro, country3Pro]).then((values) => {
 
 
+    this.route.queryParams.subscribe(params => {
+      promo = params['promo'];
+      specialite = params['specialite'];
+    });
 
-        values[0].sort(this.sortByName);
-        values[1].sort(this.sortByName);
-        values[2].sort(this.sortByName);
+    if (promo == undefined){
+      promo=null;
+    }
+    if (specialite == undefined){
+      specialite=null;
+    }
 
-        tab1 = this.verificationOnCountryGraph(values[0]);
-        tab2 = this.verificationOnCountryGraph(values[1]);
-        tab3 = this.verificationOnCountryGraph(values[2]);
-        console.log('values ' + values[1][0].nombre);
-        console.log('values ' + values[1][1].nombre);
-        console.log('values ' + values[1][2].nombre);
+    const idSpecialityPro = this.userProfileService.getIdSpeciality(specialite).toPromise();
 
-        const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
-          labels: [country1Name, country2Name, country3Name],
-          series: [
-            [tab1[0], tab2[0], tab3[0]],
-            [tab1[1], tab2[1], tab3[1]],
-            [tab1[2], tab2[2], tab3[2]]
-          ]
-        }, {
-          seriesBarDistance: 15,
-          axisX: {
-            offset: 20
-          },
-          axisY: {
-            offset: 25,
-            labelInterpolationFnc: function (result) {
-              return result
+
+    //console.log("params "+this.params.toString());
+    console.log("promo "+promo);
+    console.log("specialite "+specialite);
+    let idSpeciality;
+    idSpecialityPro.then((value => {
+      if (specialite == null){
+        idSpeciality = null;
+      }else {
+
+        idSpeciality = value[0].idSpecialite;
+      }
+
+      console.log("id spe "+idSpeciality);
+
+      const countryPro = this.statistiquesService.getNumberStudents('0',promo,idSpeciality).toPromise();
+
+
+      Promise.all([countryPro]).then((value) => {
+
+        let country1Name;
+        let country2Name;
+        let country3Name;
+
+        if(value.length==2){
+          country1Name=value[0][0].pays;
+          country2Name=value[0][1].pays;
+          country3Name='';
+        }
+        if(value.length==1){
+          country1Name=value[0][0].pays;
+          country2Name='';
+          country3Name='';
+        }
+        if(value.length==0){
+          country1Name='';
+          country2Name='';
+          country3Name='';
+        }else {
+          country1Name=value[0][0].pays;
+          country2Name=value[0][1].pays;
+          country3Name=value[0][2].pays;
+        }
+
+
+        console.log("country1" + country1Name);
+        console.log("country2" + country2Name);
+        console.log("country3" + country3Name);
+
+        const country1Pro = this.statistiquesService.getNumberStudentsWithCountry(country1Name, '0',promo,idSpeciality).toPromise();
+        const country2Pro = this.statistiquesService.getNumberStudentsWithCountry(country2Name, '0',promo,idSpeciality).toPromise();
+        const country3Pro = this.statistiquesService.getNumberStudentsWithCountry(country3Name, '0',promo,idSpeciality).toPromise();
+
+        Promise.all([country1Pro, country2Pro, country3Pro]).then((values) => {
+
+          // console.log('values ' + values[2]);
+
+          values[0].sort(this.sortByName);
+          values[1].sort(this.sortByName);
+          values[2].sort(this.sortByName);
+
+          tab1 = this.verificationOnCountryGraph(values[0]);
+          tab2 = this.verificationOnCountryGraph(values[1]);
+          tab3 = this.verificationOnCountryGraph(values[2]);
+
+
+          const numberOfStudents = new Chartist.Bar('#numberOfStudents', {
+            labels: [country1Name, country2Name, country3Name],
+            series: [
+              [tab1[0], tab2[0], tab3[0]],
+              [tab1[1], tab2[1], tab3[1]],
+              [tab1[2], tab2[2], tab3[2]]
+            ]
+          }, {
+            seriesBarDistance: 15,
+            axisX: {
+              offset: 20
             },
-            scaleMinSpace: 20
-          }
+            high: 10,
+            onlyInteger: true,
+            axisY: {
+              offset: 25,
+
+              labelInterpolationFnc: function (result) {
+                return result
+              },
+              scaleMinSpace: 20
+            }
+          });
         });
       });
-    });
+    }));
   }
 
   sortByName(elementOne: any, elementTwo: any) {
@@ -479,7 +538,8 @@ export class EtudiantValideComponent implements OnInit {
 
 
   constructor(private tableListService: TableListService, private statistiquesService: StatistiquesService,
-    private route: ActivatedRoute,
+              private userProfileService: UserProfileService,
+              private route: ActivatedRoute,
     private domSanitizer: DomSanitizer,
     private router: Router,
     private dialog: MatDialog) { }

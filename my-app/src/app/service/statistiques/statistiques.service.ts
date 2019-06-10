@@ -17,14 +17,15 @@ export class StatistiquesService {
   constructor(private http: HttpClient) {
   }
 
-  getNumberStudents(etat: string) {
-
-    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL + '/numberstudents/' + etat);
+  getNumberStudents(etat: string, promo: string, specialite: string) {
+  console.log(promo);
+  console.log(specialite);
+    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL + '/numberstudents/' + etat + "&" + promo + "&" + specialite);
     return rep;
   }
 
-  getNumberStudentsWithCountry(country: string, etat: string) {
-    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL + '/numberstudentswithcountry/' + country + '&' + etat);
+  getNumberStudentsWithCountry(country: string, etat: string,promo: string,specialite: string) {
+    const rep = this.http.get<TupleNameNumber[]>(this.etudiantURL + '/numberstudentswithcountry/' + country + '&' + etat + "&" + promo + "&" + specialite);
     return rep;
   }
 
@@ -34,7 +35,7 @@ export class StatistiquesService {
   }
 
   getPieChartNonValide() {
-    const rep = this.http.get<Degre[]>(this.etudiantURL + '/piechartNonValide/');
+    const rep = this.http.get<Degre[]>(this.etudiantURL + '/piechartnonValide/');
     return rep;
   }
 

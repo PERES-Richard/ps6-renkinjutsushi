@@ -274,7 +274,7 @@ p {
 }
 
 
-/* .card .card-header-info .card-icon, .card .card-header-info .card-text, .card .card-header-info:not(.card-header-icon):not(.card-header-text), .card.bg-info, .card.card-rotate.bg-info .front, .card.card-rotate.bg-info .back {
+.card .card-header-info .card-icon, .card .card-header-info .card-text, .card .card-header-info:not(.card-header-icon):not(.card-header-text), .card.bg-info, .card.card-rotate.bg-info .front, .card.card-rotate.bg-info .back {
   background: linear-gradient(60deg, #9c4747, #d01919);
 }
 
@@ -304,4 +304,4 @@ p {
   margin-right: auto;
   width: 70%;
 }
-*/
+

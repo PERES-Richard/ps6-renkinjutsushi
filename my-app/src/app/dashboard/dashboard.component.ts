@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit {
   initStudentByCountry() {
 
     //Etat -1 doesn't exist so it will return all the students
-    const countryPro = this.statistiquesService.getNumberStudents('-1').toPromise();
+    const countryPro = this.statistiquesService.getNumberStudents('-1',null,null).toPromise();
     let tab1: number[];
     let tab2: number[];
     let tab3: number[];
@@ -119,9 +119,9 @@ export class DashboardComponent implements OnInit {
       const country2Name = value[0][1].pays;
       const country3Name = value[0][2].pays;
 
-      const country1Pro = this.statistiquesService.getNumberStudentsWithCountry(country1Name, '-1').toPromise();
-      const country2Pro = this.statistiquesService.getNumberStudentsWithCountry(country2Name, '-1').toPromise();
-      const country3Pro = this.statistiquesService.getNumberStudentsWithCountry(country3Name, '-1').toPromise();
+      const country1Pro = this.statistiquesService.getNumberStudentsWithCountry(country1Name, '-1',null,"null").toPromise();
+      const country2Pro = this.statistiquesService.getNumberStudentsWithCountry(country2Name, '-1',null,"null").toPromise();
+      const country3Pro = this.statistiquesService.getNumberStudentsWithCountry(country3Name, '-1',null,"null").toPromise();
 
       Promise.all([country1Pro, country2Pro, country3Pro]).then((values) => {
 
@@ -185,21 +185,35 @@ export class DashboardComponent implements OnInit {
    */
   initSucceedByCounty() {
 
-    const japonPro = this.statistiquesService.getNumberSucceedCountry('japon').toPromise();
-    const canadaPro = this.statistiquesService.getNumberSucceedCountry('canada').toPromise();
-    const colombiePro = this.statistiquesService.getNumberSucceedCountry('colombie').toPromise();
+    const countryPro = this.statistiquesService.getNumberStudents('-1',null,null).toPromise();
 
-    Promise.all([japonPro, canadaPro, colombiePro]).then((values) => {
+    countryPro.then((value => {
 
-      const japon = values[0];
-      const canada = values[1];
-      const colombie = values[2];
+      console.log("value "+value[0].pays);
+
+    const country1Pro = this.statistiquesService.getNumberSucceedCountry(value[0].pays).toPromise();
+    const country2Pro = this.statistiquesService.getNumberSucceedCountry(value[1].pays).toPromise();
+    const country3Pro = this.statistiquesService.getNumberSucceedCountry(value[2].pays).toPromise();
+
+    Promise.all([country1Pro, country2Pro, country3Pro]).then((values) => {
+      console.log("values "+values);
+
+      const country1 = values[0];
+      const country2 = values[1];
+      const country3 = values[2];
+
+      console.log("degre " +country1[0].degre);
+      console.log("degre " +country1[1].degre);
+      console.log("degre " +country2[0].degre);
+      console.log("degre " +country2[1].degre);
+      console.log("degre " +country3[0].degre);
+      console.log("degre " +country3[1].degre);
 
       const numberSucceedFailure = new Chartist.Bar('#numberSucceedFailure', {
-        labels: ['Japon', 'Canada', 'Colombie'],
+        labels: [value[0].pays, value[1].pays, value[2].pays],
         series: [
-          [japon[0].degre, canada[0].degre, colombie[0].degre],
-          [japon[1].degre, canada[1].degre, colombie[1].degre],
+          [country1[0].degre, country2[0].degre, country3[0].degre],
+          [country1[1].degre, country2[1].degre, country3[1].degre],
         ]
       }, {
           stackBars: true,
@@ -216,6 +230,7 @@ export class DashboardComponent implements OnInit {
           }
         });
     });
+    }));
 
   }
 

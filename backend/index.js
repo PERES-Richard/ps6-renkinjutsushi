@@ -9,7 +9,7 @@ const app = express();
 var cors = require('cors');
 var mysql = require('mysql');
 var con = mysql.createConnection({
-  port: "3333",
+  port: "3306",
   user: 'ps6_team',
   password: 'ps6_sushi',
   database: 'renkinjutsushi',
@@ -111,22 +111,40 @@ app.get('/getData/piechartnonvalide/', function (req, res) {
 
 
 
-app.get('/getData/numberstudents/:etat', function (req, res) {
+app.get('/getData/numberstudents/:etat&:promo&:specialite', function (req, res) {
   let etat = req.param('etat');
-  console.log("etat", etat);
-  let otherEtat = '';
+  let promo = req.param('promo');
+  let specialite = req.param('specialite');
+
+  let idEtat = '';
+  let idPromo = '';
+  let idSpecialite = '';
+
+
   if (etat === '1') {
-    otherEtat = "where etudiant.etat=2 OR etudiant.etat=4";
+    idEtat = "where (etudiant.etat=2 OR etudiant.etat=4)";
   }
   else if (etat === '0') {
-    otherEtat = "where etudiant.etat=3 OR etudiant.etat=7";
+    idEtat = "where (etudiant.etat=3 OR etudiant.etat=7)";
   }
   else if (etat === '3') {
-    otherEtat = "where etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6";
+    idEtat = "where (etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6)";
   }
 
-  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id " + otherEtat + " group by pays.id order by count(*) DESC limit 3 ; ";
-  console.log(request);
+
+  if (promo !== "null"){
+    idPromo = " AND etudiant.promo = '"+promo+"' ";
+  }
+
+  if (specialite !== "null"){
+    idSpecialite = " AND etudiant.specialite = '"+specialite+"' ";
+  }
+
+
+
+
+  let request = " select pays.nom_fr_fr as pays,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id " + idEtat + idPromo + idSpecialite + " group by pays.id order by count(*) DESC limit 3 ; ";
+
   con.query(request, function (err, result, fields) {
     if (err) {
       console.log('Error 2.2 =\n', err);
@@ -136,21 +154,37 @@ app.get('/getData/numberstudents/:etat', function (req, res) {
   });
 });
 
-app.get('/getData/numberstudentswithcountry/:country&:etat', function (req, res) {
+app.get('/getData/numberstudentswithcountry/:country&:etat&:promo&:specialite', function (req, res) {
   let etat = req.param('etat');
+  let promo = req.param('promo');
+  let specialite = req.param('specialite');
   let country = req.param('country');
-  let otherEtat = '';
+
+  let idEtat = '';
+  let idPromo = '';
+  let idSpecialite = '';
+
+
   if (etat === '1') {
-    otherEtat = "and etudiant.etat=2 OR etudiant.etat=4";
+    idEtat = "and (etudiant.etat=2 OR etudiant.etat=4)";
   }
   else if (etat === '0') {
-    otherEtat = "and etudiant.etat=3 OR etudiant.etat=7";
+    idEtat = "and (etudiant.etat=3 OR etudiant.etat=7)";
   }
   else if (etat === '3') {
-    otherEtat = "and etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6";
+    idEtat = "and (etudiant.etat=1 OR etudiant.etat=5 OR etudiant.etat=6)";
   }
 
-  let request = " select pays.nom_fr_fr as pays, etudiant.annee,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' "+otherEtat+"  group by pays.id,etudiant.annee order by etudiant.annee ; ";
+
+  if (promo !== "null"){
+    idPromo = " AND etudiant.promo = '"+promo+"' ";
+  }
+
+  if (specialite !== "null"){
+    idSpecialite = " AND etudiant.specialite = '"+specialite+"' ";
+  }
+
+  let request = " select pays.nom_fr_fr as pays, etudiant.annee,count(*) as nombre from etudiant INNER JOIN pays ON etudiant.pays = pays.id where pays.nom_fr_fr= '"+country+"' "+idEtat+idPromo+idSpecialite+"  group by pays.id,etudiant.annee order by etudiant.annee ; ";
   console.log(request);
   con.query(request, function (err, result, fields) {
     if (err) {
@@ -194,7 +228,7 @@ app.get('/getData/getidspeciality/:speciality', function (req, res) {
 
   con.query("SELECT idSpecialite FROM renkinjutsushi.specialite where nomSpecialite = ?;; \n\n", params, function (err, result, fields) {
     if (err) {
-      console.log('Error 2.2 =\n', err);
+      console.log('Error 2.3 =\n', err);
     } else {
       res.status(200).json(result);
     }
@@ -380,7 +414,6 @@ app.get('/getData', function (req, res) {
 app.post('/postData/updateStudent', (req, res) => {
 
 
-
   const student = Etudiant.create(req.body);
   console.log("student " + student.nom);
 
@@ -388,7 +421,7 @@ app.post('/postData/updateStudent', (req, res) => {
   let dateD2 = dateD1.replace('Z', '');
 
   let dateF1 = student.dateDebut.toString().replace('T', ' ');
-  let dateF2 = dateD1.replace('Z', '');
+  let dateF2 = dateF1.replace('Z', '');
 
 
 
