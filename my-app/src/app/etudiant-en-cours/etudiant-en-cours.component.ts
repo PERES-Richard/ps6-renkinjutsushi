@@ -547,7 +547,7 @@ export class EtudiantEnCoursComponent implements OnInit {
             axisX: {
               offset: 20
             },
-          high: 10,
+          high: 5,
           onlyInteger: true,
             axisY: {
               offset: 25,

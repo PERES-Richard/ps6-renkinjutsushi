@@ -9,7 +9,7 @@ const app = express();
 var cors = require('cors');
 var mysql = require('mysql');
 var con = mysql.createConnection({
-  port: "3306",
+  port: "3333",
   user: 'ps6_team',
   password: 'ps6_sushi',
   database: 'renkinjutsushi',
@@ -417,13 +417,14 @@ app.post('/postData/updateStudent', (req, res) => {
   const student = Etudiant.create(req.body);
   console.log("student " + student.nom);
 
-  let dateD1 = student.dateDebut.toString().replace('T', ' ');
-  let dateD2 = dateD1.replace('Z', '');
+  let dateD2 = null;
+  let dateF2 = null;
 
-  let dateF1 = student.dateDebut.toString().replace('T', ' ');
-  let dateF2 = dateF1.replace('Z', '');
+    dateD1 = student.dateDebut.toString().replace('T', ' ');
+    dateD2 = dateD1.replace('Z', '');
 
-
+    dateF1 = student.dateFin.toString().replace('T', ' ');
+    dateF2 = dateF1.replace('Z', '');
 
   let params = [student.nom, student.prenom, student.promo, student.specialite.idSpecialite, student.commentaire, student.etat.idEtat, student.semainesRestantes, student.typeValidation, dateD2, dateF2, student.pays.idPays, student.obtenuVia, student.mail, student.annee, student.idEtudiant];
   //res.status(201).json(ticket);
